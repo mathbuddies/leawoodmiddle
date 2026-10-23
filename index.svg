@@ -31,7 +31,7 @@
           100% { transform: translateY(105vh); }
         }
 
-        /* Glassmorphism Blur Effect Header */
+        /* Glassmorphism Header */
         .navbar {
           width: 100%;
           padding: 16px 24px;
@@ -66,7 +66,7 @@
           border: 1px solid rgba(56, 189, 248, 0.3);
         }
 
-        /* Content Hub Area */
+        /* Hub Layout */
         .hub-container {
           position: relative;
           z-index: 2;
@@ -104,7 +104,7 @@
           line-height: 1.5;
         }
 
-        /* Cards Grid with Blur */
+        /* Cards Grid */
         .games-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -133,26 +133,12 @@
           box-shadow: 0 12px 40px rgba(56, 189, 248, 0.15);
         }
 
-        .card-icon {
-          font-size: 2.5rem;
-        }
-
-        .card-title {
-          font-size: 1.3rem;
-          font-weight: 800;
-          color: #f8fafc;
-          margin: 0;
-        }
-
-        .card-desc {
-          font-size: 0.9rem;
-          color: #94a3b8;
-          margin: 0;
-          line-height: 1.4;
-        }
+        .card-icon { font-size: 2.5rem; }
+        .card-title { font-size: 1.3rem; font-weight: 800; color: #f8fafc; margin: 0; }
+        .card-desc { font-size: 0.9rem; color: #94a3b8; margin: 0; line-height: 1.4; }
 
         .play-btn {
-          display: inline-block;
+          display: block;
           text-align: center;
           background: #38bdf8;
           color: #0f172a;
@@ -173,9 +159,7 @@
 
       <!-- Top Nav -->
       <div class="navbar">
-        <div class="brand">
-          🦅 LMS GAMING HUB
-        </div>
+        <div class="brand">🦅 LMS GAMING HUB</div>
         <div class="sub-tag">LEAWOOD MIDDLE</div>
       </div>
 
@@ -190,53 +174,53 @@
         <div class="games-grid">
           
           <!-- 1. Geometry Eagle -->
-          <div class="game-card" onclick="location.href='geometry-eagle.svg?v=2'">
+          <div class="game-card" onclick="window.location.href='geometry-eagle.svg?v=5'">
             <div>
               <div class="card-icon">🟩</div>
               <h3 class="card-title">Geometry Eagle</h3>
               <p class="card-desc">Time your jumps to leap over spikes in this rhythm-based platformer.</p>
             </div>
-            <a class="play-btn" href="geometry-eagle.svg?v=2">Play Game</a>
+            <a class="play-btn" href="geometry-eagle.svg?v=5">Play Game</a>
           </div>
 
           <!-- 2. Eagle Clicker -->
-          <div class="game-card" onclick="location.href='eagle-clicker.svg?v=2'">
+          <div class="game-card" onclick="window.location.href='eagle-clicker.svg?v=5'">
             <div>
               <div class="card-icon">🦅</div>
               <h3 class="card-title">Eagle Clicker</h3>
               <p class="card-desc">Click to gather feathers and buy nest upgrades for passive income.</p>
             </div>
-            <a class="play-btn" href="eagle-clicker.svg?v=2">Play Game</a>
+            <a class="play-btn" href="eagle-clicker.svg?v=5">Play Game</a>
           </div>
 
           <!-- 3. To the Eagles -->
-          <div class="game-card" onclick="location.href='to-the-eagles.svg?v=2'">
+          <div class="game-card" onclick="window.location.href='to-the-eagles.svg?v=5'">
             <div>
               <div class="card-icon">☁️</div>
               <h3 class="card-title">To the Eagles</h3>
               <p class="card-desc">Bounce across moving clouds and climb as high into the sky as you can.</p>
             </div>
-            <a class="play-btn" href="to-the-eagles.svg?v=2">Play Game</a>
+            <a class="play-btn" href="to-the-eagles.svg?v=5">Play Game</a>
           </div>
 
           <!-- 4. Eagle Pizza -->
-          <div class="game-card" onclick="location.href='eagle-pizza.svg?v=2'">
+          <div class="game-card" onclick="window.location.href='eagle-pizza.svg?v=5'">
             <div>
               <div class="card-icon">🍕</div>
               <h3 class="card-title">Eagle Pizza</h3>
               <p class="card-desc">Assemble custom orders, bake pizzas, and manage your pizzeria shop.</p>
             </div>
-            <a class="play-btn" href="eagle-pizza.svg?v=2">Play Game</a>
+            <a class="play-btn" href="eagle-pizza.svg?v=5">Play Game</a>
           </div>
 
           <!-- 5. Teachers Quiz -->
-          <div class="game-card" onclick="location.href='teachers-quiz.svg?v=2'">
+          <div class="game-card" onclick="window.location.href='teachers-quiz.svg?v=5'">
             <div>
               <div class="card-icon">📚</div>
               <h3 class="card-title">Teachers Quiz</h3>
               <p class="card-desc">Test your knowledge on Leawood Middle teachers and school trivia!</p>
             </div>
-            <a class="play-btn" href="teachers-quiz.svg?v=2">Play Quiz</a>
+            <a class="play-btn" href="teachers-quiz.svg?v=5">Play Quiz</a>
           </div>
 
         </div>
