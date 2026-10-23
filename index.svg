@@ -1,102 +1,110 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
   <foreignObject width="100%" height="100%">
-    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100vw; height: 100vh; margin: 0; padding: 0; background: #090d16; font-family: system-ui, -apple-system, sans-serif; color: #f8fafc; display: flex; flex-direction: column; overflow-y: auto; user-select: none; position: relative;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100vw; height: 100vh; margin: 0; padding: 0; background: #070a12; font-family: system-ui, -apple-system, sans-serif; color: #f8fafc; display: flex; flex-direction: column; overflow-x: hidden; overflow-y: auto; user-select: none; position: relative;">
       
       <style>
         * { box-sizing: border-box; }
-        
-        /* Animated Rain Background Effect */
-        .rain-bg {
+
+        /* Animated Rain Background */
+        .rain-container {
           position: fixed;
-          inset: 0;
-          background: linear-gradient(to bottom, #090d16, #111827);
-          z-index: -2;
-        }
-        .rain {
-          position: fixed;
-          inset: 0;
-          background-image: linear-gradient(to bottom, rgba(255,255,255,0), rgba(56,189,248,0.15));
-          background-size: 2px 120px;
-          animation: fall 0.6s linear infinite;
-          z-index: -1;
+          top: 0;
+          left: 0;
+          width: 100vw;
+          height: 100vh;
           pointer-events: none;
-          backdrop-filter: blur(2px);
-        }
-        @keyframes fall {
-          0% { background-position: 0 0; }
-          100% { background-position: 0 120px; }
+          z-index: 1;
+          overflow: hidden;
         }
 
+        .drop {
+          position: absolute;
+          background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(56, 189, 248, 0.6));
+          width: 1px;
+          height: 80px;
+          opacity: 0.5;
+          animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+          0% { transform: translateY(-100px); }
+          100% { transform: translateY(105vh); }
+        }
+
+        /* Glassmorphism Blur Effect Header */
         .navbar {
           width: 100%;
-          padding: 16px 28px;
-          background: rgba(17, 24, 39, 0.85);
-          backdrop-filter: blur(10px);
-          border-bottom: 1px solid rgba(255,255,255,0.1);
+          padding: 16px 24px;
+          background: rgba(15, 23, 42, 0.7);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
           display: flex;
-          align-items: center;
           justify-content: space-between;
+          align-items: center;
           position: sticky;
           top: 0;
-          z-index: 50;
+          z-index: 10;
         }
 
-        .nav-brand {
-          display: flex;
-          align-items: center;
-          gap: 12px;
+        .brand {
           font-weight: 900;
           font-size: 1.4rem;
           color: #38bdf8;
           letter-spacing: 0.5px;
-        }
-
-        .eagle-icon {
-          width: 40px;
-          height: 40px;
-          background: linear-gradient(135deg, #0ea5e9, #2563eb);
-          border-radius: 12px;
           display: flex;
           align-items: center;
-          justify-content: center;
-          font-size: 1.3rem;
-          box-shadow: 0 4px 15px rgba(14, 165, 233, 0.4);
+          gap: 10px;
         }
 
-        .main-container {
-          max-width: 960px;
+        .sub-tag {
+          font-size: 0.85rem;
+          background: rgba(56, 189, 248, 0.15);
+          color: #7dd3fc;
+          padding: 4px 10px;
+          border-radius: 20px;
+          border: 1px solid rgba(56, 189, 248, 0.3);
+        }
+
+        /* Content Hub Area */
+        .hub-container {
+          position: relative;
+          z-index: 2;
+          max-width: 1100px;
           width: 100%;
           margin: 0 auto;
-          padding: 30px 20px;
+          padding: 40px 20px;
           display: flex;
           flex-direction: column;
-          gap: 24px;
-          z-index: 2;
+          gap: 30px;
         }
 
-        .hero-banner {
-          background: rgba(31, 41, 55, 0.7);
-          backdrop-filter: blur(12px);
-          border: 1px solid rgba(255,255,255,0.08);
-          border-radius: 20px;
-          padding: 35px;
+        .hero-section {
           text-align: center;
-          box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 10px;
+          margin-bottom: 10px;
         }
 
-        .hero-banner h1 {
-          margin: 0 0 10px 0;
-          font-size: 2.4rem;
+        .hero-title {
+          font-size: 2.8rem;
           font-weight: 900;
-          color: #ffffff;
+          margin: 0;
+          background: linear-gradient(135deg, #f8fafc, #38bdf8);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
         }
 
-        .hero-banner p {
+        .hero-desc {
           color: #94a3b8;
           font-size: 1.05rem;
-          margin: 0;
+          max-width: 500px;
+          line-height: 1.5;
         }
 
+        /* Cards Grid with Blur */
         .games-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -104,139 +112,154 @@
         }
 
         .game-card {
-          background: rgba(31, 41, 55, 0.65);
-          backdrop-filter: blur(10px);
-          border: 1px solid rgba(255,255,255,0.08);
-          border-radius: 18px;
+          background: rgba(30, 41, 59, 0.55);
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          border-radius: 16px;
           padding: 24px;
           display: flex;
           flex-direction: column;
           justify-content: space-between;
-          transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+          gap: 16px;
           cursor: pointer;
+          transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
 
         .game-card:hover {
           transform: translateY(-4px);
-          border-color: #38bdf8;
-          box-shadow: 0 15px 35px rgba(56, 189, 248, 0.15);
+          border-color: rgba(56, 189, 248, 0.4);
+          box-shadow: 0 12px 40px rgba(56, 189, 248, 0.15);
         }
 
-        .game-icon {
+        .card-icon {
           font-size: 2.5rem;
-          margin-bottom: 12px;
         }
 
-        .game-title {
-          font-size: 1.25rem;
+        .card-title {
+          font-size: 1.3rem;
           font-weight: 800;
           color: #f8fafc;
-          margin: 0 0 6px 0;
+          margin: 0;
         }
 
-        .game-desc {
-          color: #94a3b8;
+        .card-desc {
           font-size: 0.9rem;
+          color: #94a3b8;
+          margin: 0;
           line-height: 1.4;
-          margin-bottom: 20px;
         }
 
         .play-btn {
+          display: inline-block;
+          text-align: center;
           background: #38bdf8;
-          color: #090d16;
-          border: none;
+          color: #0f172a;
+          font-weight: 800;
           padding: 10px 18px;
           border-radius: 10px;
-          font-weight: 800;
-          font-size: 0.95rem;
-          cursor: pointer;
-          transition: background 0.2s, transform 0.1s;
-          text-align: center;
           text-decoration: none;
+          transition: background 0.2s;
         }
-        .play-btn:hover { background: #7dd3fc; }
+
+        .game-card:hover .play-btn {
+          background: #7dd3fc;
+        }
       </style>
 
-      <!-- Background Elements -->
-      <div class="rain-bg"></div>
-      <div class="rain"></div>
+      <!-- Rain Background Layer -->
+      <div class="rain-container" id="rainLayer"></div>
 
-      <!-- Navbar -->
+      <!-- Top Nav -->
       <div class="navbar">
-        <div class="nav-brand">
-          <div class="eagle-icon">🦅</div>
-          <span>LEAWOOD MIDDLE GAMING</span>
+        <div class="brand">
+          🦅 LMS GAMING HUB
         </div>
-        <div style="font-size:0.85rem; font-weight:700; color:#4ade80; background:rgba(22, 101, 52, 0.4); padding:6px 14px; border-radius:10px; border:1px solid rgba(74, 222, 128, 0.3);">
-          ● Secure Link Active
-        </div>
+        <div class="sub-tag">LEAWOOD MIDDLE</div>
       </div>
 
-      <!-- Main Hub Container -->
-      <div class="main-container">
+      <!-- Hub Content -->
+      <div class="hub-container">
         
-        <!-- Hero Banner -->
-        <div class="hero-banner">
-          <h1>LMS Arcade Hub</h1>
-          <p>Select your favorite game below. All high scores and progress save locally to your browser.</p>
+        <div class="hero-section">
+          <h1 class="hero-title">EAGLE ARCADE</h1>
+          <p class="hero-desc">Select a game below to launch directly from your browser hub.</p>
         </div>
 
-        <!-- Games Grid -->
         <div class="games-grid">
           
           <!-- 1. Geometry Eagle -->
-          <div class="game-card" onclick="location.href='geometry-eagle.svg'">
+          <div class="game-card" onclick="location.href='geometry-eagle.svg?v=2'">
             <div>
-              <div class="game-icon">🟩</div>
-              <h3 class="game-title">Geometry Eagle</h3>
-              <p class="game-desc">Rhythm-based platformer. Jump and fly your square across treacherous spike obstacles to epic soundtracks.</p>
+              <div class="card-icon">🟩</div>
+              <h3 class="card-title">Geometry Eagle</h3>
+              <p class="card-desc">Time your jumps to leap over spikes in this rhythm-based platformer.</p>
             </div>
-            <a class="play-btn" href="geometry-eagle.svg">Play Geometry Eagle</a>
+            <a class="play-btn" href="geometry-eagle.svg?v=2">Play Game</a>
           </div>
 
           <!-- 2. Eagle Clicker -->
-          <div class="game-card" onclick="location.href='eagle-clicker.svg'">
+          <div class="game-card" onclick="location.href='eagle-clicker.svg?v=2'">
             <div>
-              <div class="game-icon">🖱️</div>
-              <h3 class="game-title">Eagle Clicker</h3>
-              <p class="game-desc">Click to earn feathers, buy automated upgrades, and unlock powerful multi-pliers in this idle clicker game.</p>
+              <div class="card-icon">🦅</div>
+              <h3 class="card-title">Eagle Clicker</h3>
+              <p class="card-desc">Click to gather feathers and buy nest upgrades for passive income.</p>
             </div>
-            <a class="play-btn" href="eagle-clicker.svg">Play Eagle Clicker</a>
+            <a class="play-btn" href="eagle-clicker.svg?v=2">Play Game</a>
           </div>
 
           <!-- 3. To the Eagles -->
-          <div class="game-card" onclick="location.href='to-the-eagles.svg'">
+          <div class="game-card" onclick="location.href='to-the-eagles.svg?v=2'">
             <div>
-              <div class="game-icon">⛰️</div>
-              <h3 class="game-title">To the Eagles</h3>
-              <p class="game-desc">Jump endlessly on moving platforms high into the sky. Reach the ultimate eagle at the top to win!</p>
+              <div class="card-icon">☁️</div>
+              <h3 class="card-title">To the Eagles</h3>
+              <p class="card-desc">Bounce across moving clouds and climb as high into the sky as you can.</p>
             </div>
-            <a class="play-btn" href="to-the-eagles.svg">Play To the Eagles</a>
+            <a class="play-btn" href="to-the-eagles.svg?v=2">Play Game</a>
           </div>
 
           <!-- 4. Eagle Pizza -->
-          <div class="game-card" onclick="location.href='eagle-pizza.svg'">
+          <div class="game-card" onclick="location.href='eagle-pizza.svg?v=2'">
             <div>
-              <div class="game-icon">🍕</div>
-              <h3 class="game-title">Eagle Pizza</h3>
-              <p class="game-desc">Run your own pizzeria! Fulfill daily customer orders, buy fresh ingredients, and advertise to grow your business.</p>
+              <div class="card-icon">🍕</div>
+              <h3 class="card-title">Eagle Pizza</h3>
+              <p class="card-desc">Assemble custom orders, bake pizzas, and manage your pizzeria shop.</p>
             </div>
-            <a class="play-btn" href="eagle-pizza.svg">Play Eagle Pizza</a>
+            <a class="play-btn" href="eagle-pizza.svg?v=2">Play Game</a>
           </div>
 
-          <!-- 5. Securly Reverse -->
-          <div class="game-card" onclick="alert('Securly Reverse is online and fully secured!')">
+          <!-- 5. Teachers Quiz -->
+          <div class="game-card" onclick="location.href='teachers-quiz.svg?v=2'">
             <div>
-              <div class="game-icon">🛡️</div>
-              <h3 class="game-title">Securly Reverse</h3>
-              <p class="game-desc">Diagnostic tool utility module. Status monitor and network packet route verifier.</p>
+              <div class="card-icon">📚</div>
+              <h3 class="card-title">Teachers Quiz</h3>
+              <p class="card-desc">Test your knowledge on Leawood Middle teachers and school trivia!</p>
             </div>
-            <button class="play-btn" style="background:#334155; color:#f8fafc;">Run Utility</button>
+            <a class="play-btn" href="teachers-quiz.svg?v=2">Play Quiz</a>
           </div>
 
         </div>
 
       </div>
+
+      <!-- Rain Generator Script -->
+      <script type="text/javascript">
+        <![CDATA[
+        const rainLayer = document.getElementById('rainLayer');
+        const dropCount = 45;
+
+        for (let i = 0; i < dropCount; i++) {
+          const drop = document.createElement('div');
+          drop.className = 'drop';
+          drop.style.left = `${Math.random() * 100}vw`;
+          drop.style.animationDuration = `${0.6 + Math.random() * 0.8}s`;
+          drop.style.animationDelay = `${Math.random() * 2}s`;
+          drop.style.opacity = `${0.2 + Math.random() * 0.4}`;
+          rainLayer.appendChild(drop);
+        }
+        ]]>
+      </script>
 
     </div>
   </foreignObject>
