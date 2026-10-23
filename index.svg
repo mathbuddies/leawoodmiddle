@@ -5,37 +5,35 @@
       <style>
         * { box-sizing: border-box; }
 
-        /* Fixed Animated Rain Background Layer */
+        /* Rain Background Layer */
         .rain-container {
           position: fixed;
           top: 0;
           left: 0;
-          width: 100vw;
-          height: 100vh;
+          width: 100%;
+          height: 100%;
           pointer-events: none;
           z-index: 1;
-          overflow: hidden;
         }
 
         .drop {
           position: absolute;
-          background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(56, 189, 248, 0.7));
+          background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(56, 189, 248, 0.75));
           width: 1.5px;
-          height: 90px;
-          opacity: 0.6;
+          height: 85px;
           animation: fall linear infinite;
         }
 
         @keyframes fall {
-          0% { transform: translateY(-120px); }
-          100% { transform: translateY(110vh); }
+          0% { transform: translateY(-100px); }
+          100% { transform: translateY(105vh); }
         }
 
         /* Glassmorphism Header */
         .navbar {
           width: 100%;
-          padding: 16px 24px;
-          background: rgba(15, 23, 42, 0.75);
+          padding: 16px 32px;
+          background: rgba(15, 23, 42, 0.8);
           backdrop-filter: blur(12px);
           -webkit-backdrop-filter: blur(12px);
           border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -61,7 +59,7 @@
           font-size: 0.85rem;
           background: rgba(56, 189, 248, 0.15);
           color: #7dd3fc;
-          padding: 4px 10px;
+          padding: 4px 12px;
           border-radius: 20px;
           border: 1px solid rgba(56, 189, 248, 0.3);
         }
@@ -70,13 +68,13 @@
         .hub-container {
           position: relative;
           z-index: 2;
-          max-width: 1100px;
+          max-width: 1200px;
           width: 100%;
           margin: 0 auto;
-          padding: 40px 20px;
+          padding: 50px 30px;
           display: flex;
           flex-direction: column;
-          gap: 30px;
+          gap: 40px;
         }
 
         .hero-section {
@@ -84,12 +82,11 @@
           display: flex;
           flex-direction: column;
           align-items: center;
-          gap: 10px;
-          margin-bottom: 10px;
+          gap: 12px;
         }
 
         .hero-title {
-          font-size: 2.8rem;
+          font-size: 3.2rem;
           font-weight: 900;
           margin: 0;
           background: linear-gradient(135deg, #f8fafc, #38bdf8);
@@ -99,43 +96,43 @@
 
         .hero-desc {
           color: #94a3b8;
-          font-size: 1.05rem;
-          max-width: 500px;
+          font-size: 1.1rem;
+          max-width: 550px;
           line-height: 1.5;
         }
 
-        /* Cards Grid */
+        /* Desktop Optimized Grid */
         .games-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-          gap: 20px;
+          grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+          gap: 24px;
         }
 
         .game-card {
-          background: rgba(30, 41, 59, 0.55);
+          background: rgba(30, 41, 59, 0.6);
           backdrop-filter: blur(16px);
           -webkit-backdrop-filter: blur(16px);
           border: 1px solid rgba(255, 255, 255, 0.08);
           border-radius: 16px;
-          padding: 24px;
+          padding: 28px;
           display: flex;
           flex-direction: column;
           justify-content: space-between;
-          gap: 16px;
+          gap: 20px;
           cursor: pointer;
           transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
         }
 
         .game-card:hover {
-          transform: translateY(-4px);
-          border-color: rgba(56, 189, 248, 0.4);
-          box-shadow: 0 12px 40px rgba(56, 189, 248, 0.15);
+          transform: translateY(-6px);
+          border-color: rgba(56, 189, 248, 0.5);
+          box-shadow: 0 16px 45px rgba(56, 189, 248, 0.2);
         }
 
-        .card-icon { font-size: 2.5rem; }
-        .card-title { font-size: 1.3rem; font-weight: 800; color: #f8fafc; margin: 0; }
-        .card-desc { font-size: 0.9rem; color: #94a3b8; margin: 0; line-height: 1.4; }
+        .card-icon { font-size: 2.8rem; }
+        .card-title { font-size: 1.4rem; font-weight: 800; color: #f8fafc; margin: 0 0 8px 0; }
+        .card-desc { font-size: 0.95rem; color: #94a3b8; margin: 0; line-height: 1.5; }
 
         .play-btn {
           display: block;
@@ -143,7 +140,7 @@
           background: #38bdf8;
           color: #0f172a;
           font-weight: 800;
-          padding: 10px 18px;
+          padding: 12px 20px;
           border-radius: 10px;
           text-decoration: none;
           transition: background 0.2s;
@@ -154,20 +151,22 @@
         }
       </style>
 
-      <!-- Auto-Redirect Cache Guard Script -->
+      <!-- Reliable Auto-Redirect Guard -->
       <script type="text/javascript">
         <![CDATA[
-        (function() {
-          const urlParams = new URLSearchParams(window.location.search);
-          const v = urlParams.get('v');
-          if (v !== '7' && !window.location.hostname.includes('localhost') && !window.location.protocol.includes('file')) {
-            window.location.replace("https://cdn.statically.io/gh/mathbuddies/leawoodmiddle@main/index.svg?v=7");
+        window.addEventListener('DOMContentLoaded', () => {
+          const params = new URLSearchParams(window.location.search);
+          const v = params.get('v');
+          const isLocal = window.location.hostname.includes('localhost') || window.location.protocol.includes('file');
+          
+          if (v !== '8' && !isLocal) {
+            window.location.href = "https://cdn.statically.io/gh/mathbuddies/leawoodmiddle@main/index.svg?v=8";
           }
-        })();
+        });
         ]]>
       </script>
 
-      <!-- Rain Background Layer -->
+      <!-- Rain Background Container -->
       <div class="rain-container" id="rainLayer"></div>
 
       <!-- Top Nav -->
@@ -187,74 +186,76 @@
         <div class="games-grid">
           
           <!-- 1. Geometry Eagle -->
-          <div class="game-card" onclick="window.location.href='geometry-eagle.svg?v=7'">
+          <div class="game-card" onclick="window.location.href='geometry-eagle.svg?v=8'">
             <div>
               <div class="card-icon">🟩</div>
               <h3 class="card-title">Geometry Eagle</h3>
               <p class="card-desc">Time your jumps to leap over spikes in this rhythm-based platformer.</p>
             </div>
-            <a class="play-btn" href="geometry-eagle.svg?v=7">Play Game</a>
+            <a class="play-btn" href="geometry-eagle.svg?v=8">Play Game</a>
           </div>
 
           <!-- 2. Eagle Clicker -->
-          <div class="game-card" onclick="window.location.href='eagle-clicker.svg?v=7'">
+          <div class="game-card" onclick="window.location.href='eagle-clicker.svg?v=8'">
             <div>
               <div class="card-icon">🦅</div>
               <h3 class="card-title">Eagle Clicker</h3>
               <p class="card-desc">Click to gather feathers and buy nest upgrades for passive income.</p>
             </div>
-            <a class="play-btn" href="eagle-clicker.svg?v=7">Play Game</a>
+            <a class="play-btn" href="eagle-clicker.svg?v=8">Play Game</a>
           </div>
 
           <!-- 3. To the Eagles -->
-          <div class="game-card" onclick="window.location.href='to-the-eagles.svg?v=7'">
+          <div class="game-card" onclick="window.location.href='to-the-eagles.svg?v=8'">
             <div>
               <div class="card-icon">☁️</div>
               <h3 class="card-title">To the Eagles</h3>
               <p class="card-desc">Bounce across moving clouds and climb as high into the sky as you can.</p>
             </div>
-            <a class="play-btn" href="to-the-eagles.svg?v=7">Play Game</a>
+            <a class="play-btn" href="to-the-eagles.svg?v=8">Play Game</a>
           </div>
 
           <!-- 4. Eagle Pizza -->
-          <div class="game-card" onclick="window.location.href='eagle-pizza.svg?v=7'">
+          <div class="game-card" onclick="window.location.href='eagle-pizza.svg?v=8'">
             <div>
               <div class="card-icon">🍕</div>
               <h3 class="card-title">Eagle Pizza</h3>
               <p class="card-desc">Assemble custom orders, bake pizzas, and manage your pizzeria shop.</p>
             </div>
-            <a class="play-btn" href="eagle-pizza.svg?v=7">Play Game</a>
+            <a class="play-btn" href="eagle-pizza.svg?v=8">Play Game</a>
           </div>
 
           <!-- 5. Teachers Quiz -->
-          <div class="game-card" onclick="window.location.href='teachers-quiz.svg?v=7'">
+          <div class="game-card" onclick="window.location.href='teachers-quiz.svg?v=8'">
             <div>
               <div class="card-icon">📚</div>
               <h3 class="card-title">Teachers Quiz</h3>
               <p class="card-desc">Test your knowledge on Leawood Middle teachers and school trivia!</p>
             </div>
-            <a class="play-btn" href="teachers-quiz.svg?v=7">Play Quiz</a>
+            <a class="play-btn" href="teachers-quiz.svg?v=8">Play Quiz</a>
           </div>
 
         </div>
 
       </div>
 
-      <!-- Rain Generator Script -->
+      <!-- Desktop Rain Generator Script -->
       <script type="text/javascript">
         <![CDATA[
-        const rainLayer = document.getElementById('rainLayer');
-        const dropCount = 50;
+        window.addEventListener('DOMContentLoaded', () => {
+          const rainLayer = document.getElementById('rainLayer');
+          const dropCount = 60;
 
-        for (let i = 0; i < dropCount; i++) {
-          const drop = document.createElement('div');
-          drop.className = 'drop';
-          drop.style.left = `${Math.random() * 100}vw`;
-          drop.style.animationDuration = `${0.5 + Math.random() * 0.7}s`;
-          drop.style.animationDelay = `${Math.random() * 3}s`;
-          drop.style.opacity = `${0.3 + Math.random() * 0.4}`;
-          rainLayer.appendChild(drop);
-        }
+          for (let i = 0; i < dropCount; i++) {
+            const drop = document.createElement('div');
+            drop.className = 'drop';
+            drop.style.left = `${Math.random() * 100}%`;
+            drop.style.animationDuration = `${0.4 + Math.random() * 0.6}s`;
+            drop.style.animationDelay = `${Math.random() * 3}s`;
+            drop.style.opacity = `${0.25 + Math.random() * 0.45}`;
+            rainLayer.appendChild(drop);
+          }
+        });
         ]]>
       </script>
 
