@@ -7,7 +7,7 @@
         
         .navbar {
           width: 100%;
-          padding: 14px 20px;
+          padding: 12px 20px;
           background: #1e293b;
           border-bottom: 1px solid #334155;
           display: flex;
@@ -16,8 +16,31 @@
           z-index: 10;
         }
 
+        .nav-left {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+        }
+
+        .back-btn {
+          background: #334155;
+          color: #f8fafc;
+          border: 1px solid #475569;
+          padding: 8px 14px;
+          border-radius: 8px;
+          font-weight: 700;
+          font-size: 0.85rem;
+          cursor: pointer;
+          text-decoration: none;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          transition: background 0.2s, transform 0.1s;
+        }
+        .back-btn:hover { background: #475569; transform: translateX(-2px); }
+
         .title { font-weight: 900; font-size: 1.3rem; color: #f97316; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px; }
-        .stats-bar { display: flex; gap: 16px; font-weight: 800; font-size: 0.95rem; }
+        .stats-bar { display: flex; gap: 14px; font-weight: 800; font-size: 0.95rem; }
         .stat-item { background: #0f172a; padding: 6px 12px; border-radius: 8px; border: 1px solid #334155; }
         .stat-val { color: #22c55e; }
 
@@ -33,7 +56,7 @@
           height: calc(100vh - 65px);
         }
 
-        /* Order Side Panel */
+        /* Panels */
         .panel {
           background: #1e293b;
           border-radius: 14px;
@@ -90,7 +113,7 @@
           display: flex;
           align-items: center;
           justify-content: center;
-          margin: 20px 0;
+          margin: 15px 0;
         }
 
         .pizza-crust {
@@ -173,7 +196,10 @@
 
       <!-- Top Header Nav -->
       <div class="navbar">
-        <div class="title">🍕 EAGLE PIZZA</div>
+        <div class="nav-left">
+          <a class="back-btn" href="index.svg">◀ HUB</a>
+          <div class="title">🍕 EAGLE PIZZA</div>
+        </div>
         <div class="stats-bar">
           <div class="stat-item">DAY: <span class="stat-val" id="dayDisplay" style="color:#38bdf8;">1</span></div>
           <div class="stat-item">BANK: $<span class="stat-val" id="moneyDisplay">15.00</span></div>
@@ -311,13 +337,11 @@
           if (unlockedToppings.mushroom) possibleToppings.push('mushroom');
           if (unlockedToppings.pepper) possibleToppings.push('pepper');
 
-          // Pick 2-4 toppings randomly
           let orderReq = { sauce: true, cheese: true };
           if (possibleToppings.length > 2 && Math.random() > 0.4) orderReq.pepperoni = true;
           if (unlockedToppings.mushroom && Math.random() > 0.5) orderReq.mushroom = true;
           if (unlockedToppings.pepper && Math.random() > 0.5) orderReq.pepper = true;
 
-          // Calculate payout
           let basePayout = 8.00;
           if (orderReq.pepperoni) basePayout += 3.50;
           if (orderReq.mushroom) basePayout += 4.50;
@@ -348,7 +372,7 @@
             if (ord.toppings.pepper) tagsHtml += '<span class="topping-tag">🫑 Pepper</span>';
 
             ticket.innerHTML = `
-              <div style="display:flex; justify-shadow:space-between; font-weight:800; font-size:0.85rem; color:#38bdf8;">
+              <div style="display:flex; justify-content:space-between; font-weight:800; font-size:0.85rem; color:#38bdf8;">
                 <span>ORDER #${idx + 1}</span>
                 <span style="color:#22c55e;">+$${ord.payout.toFixed(2)}</span>
               </div>
@@ -403,7 +427,6 @@
         function bakeAndServe() {
           if (activeOrders.length === 0) return;
 
-          // Find matching order
           let matchIdx = -1;
           for (let i = 0; i < activeOrders.length; i++) {
             const req = activeOrders[i].toppings;
@@ -449,7 +472,6 @@
           updateUI();
         }
 
-        // Main Day Loop Timer
         setInterval(() => {
           if (!dayActive) return;
 
@@ -474,7 +496,6 @@
           }
         }, 1000);
 
-        // Init Game
         updateUI();
         generateOrder();
         generateOrder();
