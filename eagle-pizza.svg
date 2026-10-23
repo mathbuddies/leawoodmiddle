@@ -1,0 +1,485 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+  <foreignObject width="100%" height="100%">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100vw; height: 100vh; margin: 0; padding: 0; background: #0f172a; font-family: system-ui, -apple-system, sans-serif; color: #f8fafc; display: flex; flex-direction: column; overflow: hidden; user-select: none;">
+      
+      <style>
+        * { box-sizing: border-box; }
+        
+        .navbar {
+          width: 100%;
+          padding: 14px 20px;
+          background: #1e293b;
+          border-bottom: 1px solid #334155;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          z-index: 10;
+        }
+
+        .title { font-weight: 900; font-size: 1.3rem; color: #f97316; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px; }
+        .stats-bar { display: flex; gap: 16px; font-weight: 800; font-size: 0.95rem; }
+        .stat-item { background: #0f172a; padding: 6px 12px; border-radius: 8px; border: 1px solid #334155; }
+        .stat-val { color: #22c55e; }
+
+        .game-layout {
+          flex: 1;
+          display: grid;
+          grid-template-columns: 300px 1fr 280px;
+          gap: 16px;
+          padding: 16px;
+          max-width: 1200px;
+          width: 100%;
+          margin: 0 auto;
+          height: calc(100vh - 65px);
+        }
+
+        /* Order Side Panel */
+        .panel {
+          background: #1e293b;
+          border-radius: 14px;
+          border: 1px solid #334155;
+          padding: 16px;
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          overflow-y: auto;
+        }
+
+        .panel-title { font-size: 1.1rem; font-weight: 800; color: #f8fafc; border-bottom: 1px solid #334155; padding-bottom: 8px; margin: 0; }
+
+        .ticket {
+          background: #0f172a;
+          border-left: 4px solid #f97316;
+          border-radius: 8px;
+          padding: 12px;
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+        }
+
+        .topping-tag {
+          display: inline-block;
+          background: #334155;
+          font-size: 0.8rem;
+          padding: 3px 8px;
+          border-radius: 6px;
+          margin-right: 4px;
+          margin-bottom: 4px;
+        }
+
+        /* Kitchen Area */
+        .kitchen {
+          background: #1e293b;
+          border-radius: 14px;
+          border: 1px solid #334155;
+          padding: 20px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: space-between;
+          position: relative;
+        }
+
+        .pizza-canvas-wrap {
+          position: relative;
+          width: 260px;
+          height: 260px;
+          background: #0f172a;
+          border-radius: 50%;
+          border: 4px dashed #334155;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 20px 0;
+        }
+
+        .pizza-crust {
+          width: 220px;
+          height: 220px;
+          border-radius: 50%;
+          background: #d97706;
+          box-shadow: inset 0 0 10px rgba(0,0,0,0.4);
+          position: relative;
+          transition: background 0.3s;
+        }
+
+        .pizza-sauce {
+          position: absolute;
+          inset: 12px;
+          border-radius: 50%;
+          background: transparent;
+          transition: background 0.2s;
+        }
+        .pizza-sauce.active { background: #dc2626; }
+
+        .pizza-cheese {
+          position: absolute;
+          inset: 22px;
+          border-radius: 50%;
+          background: transparent;
+          transition: background 0.2s;
+        }
+        .pizza-cheese.active { background: #facc15; }
+
+        .topping-overlay {
+          position: absolute;
+          inset: 22px;
+          border-radius: 50%;
+          pointer-events: none;
+        }
+
+        .prep-controls {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 10px;
+          justify-content: center;
+          width: 100%;
+        }
+
+        .btn {
+          background: #38bdf8;
+          color: #0f172a;
+          border: none;
+          padding: 10px 16px;
+          border-radius: 10px;
+          font-weight: 800;
+          font-size: 0.9rem;
+          cursor: pointer;
+          transition: transform 0.1s, background 0.2s;
+        }
+        .btn:hover { background: #7dd3fc; transform: translateY(-1px); }
+        .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+        .btn-action { background: #22c55e; color: #0f172a; padding: 12px 24px; font-size: 1rem; }
+        .btn-action:hover { background: #4ade80; }
+
+        .btn-danger { background: #ef4444; color: white; }
+        .btn-danger:hover { background: #f87171; }
+
+        /* Shop Cards */
+        .shop-item {
+          background: #0f172a;
+          border: 1px solid #334155;
+          border-radius: 10px;
+          padding: 12px;
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+        }
+        .shop-item-title { font-weight: 800; font-size: 0.95rem; color: #f8fafc; }
+        .shop-item-desc { font-size: 0.8rem; color: #94a3b8; }
+        .shop-item-cost { font-weight: 800; color: #facc15; font-size: 0.85rem; }
+      </style>
+
+      <!-- Top Header Nav -->
+      <div class="navbar">
+        <div class="title">🍕 EAGLE PIZZA</div>
+        <div class="stats-bar">
+          <div class="stat-item">DAY: <span class="stat-val" id="dayDisplay" style="color:#38bdf8;">1</span></div>
+          <div class="stat-item">BANK: $<span class="stat-val" id="moneyDisplay">15.00</span></div>
+          <div class="stat-item">TIME: <span class="stat-val" id="timeDisplay" style="color:#facc15;">60s</span></div>
+        </div>
+      </div>
+
+      <!-- Main Layout Grid -->
+      <div class="game-layout">
+        
+        <!-- Left Panel: Current Orders -->
+        <div class="panel">
+          <h3 class="panel-title">📋 ACTIVE ORDERS</h3>
+          <div id="ordersList" style="display:flex; flex-direction:column; gap:10px;">
+            <!-- Dynamic Order Tickets -->
+          </div>
+        </div>
+
+        <!-- Center Panel: Kitchen Prep Area -->
+        <div class="kitchen">
+          <div style="text-align:center;">
+            <h2 style="margin:0; font-weight:900;" id="kitchenHeader">PREPARE PIZZA</h2>
+            <p style="margin:4px 0 0 0; font-size:0.85rem; color:#94a3b8;">Click ingredients below to assemble the pizza!</p>
+          </div>
+
+          <!-- Interactive Pizza Canvas -->
+          <div class="pizza-canvas-wrap">
+            <div class="pizza-crust" id="pizzaCrust">
+              <div class="pizza-sauce" id="pizzaSauce"></div>
+              <div class="pizza-cheese" id="pizzaCheese"></div>
+              <div class="topping-overlay" id="toppingOverlay"></div>
+            </div>
+          </div>
+
+          <!-- Ingredient Buttons -->
+          <div class="prep-controls">
+            <button class="btn" onclick="addIngredient('sauce')">🥫 Sauce</button>
+            <button class="btn" onclick="addIngredient('cheese')">🧀 Cheese</button>
+            <button class="btn" id="btnPepperoni" onclick="addIngredient('pepperoni')" disabled="disabled">🥓 Pepperoni</button>
+            <button class="btn" id="btnMushroom" onclick="addIngredient('mushroom')" disabled="disabled">🍄 Mushroom</button>
+            <button class="btn" id="btnPepper" onclick="addIngredient('pepper')" disabled="disabled">🫑 Pepper</button>
+          </div>
+
+          <!-- Action Buttons -->
+          <div style="display:flex; gap:12px; margin-top:10px;">
+            <button class="btn btn-danger" onclick="clearPizza()">Trash</button>
+            <button class="btn btn-action" onclick="bakeAndServe()">BAKE &amp; SERVE 🍕</button>
+          </div>
+        </div>
+
+        <!-- Right Panel: Pizzeria Shop & Upgrades -->
+        <div class="panel">
+          <h3 class="panel-title">🏬 SHOP &amp; UPGRADES</h3>
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            
+            <div class="shop-item">
+              <div class="shop-item-title">Pepperoni License</div>
+              <div class="shop-item-desc">Unlock Pepperoni topping for higher customer payouts.</div>
+              <div class="shop-item-cost">$30.00</div>
+              <button class="btn" id="buyPepBtn" onclick="buyUpgrade('pep', 30)">Unlock</button>
+            </div>
+
+            <div class="shop-item">
+              <div class="shop-item-title">Mushroom License</div>
+              <div class="shop-item-desc">Unlock Fresh Mushroom topping for gourmet orders.</div>
+              <div class="shop-item-cost">$50.00</div>
+              <button class="btn" id="buyMushBtn" onclick="buyUpgrade('mush', 50)">Unlock</button>
+            </div>
+
+            <div class="shop-item">
+              <div class="shop-item-title">Green Pepper License</div>
+              <div class="shop-item-desc">Unlock Green Peppers for supreme pizza recipes.</div>
+              <div class="shop-item-cost">$75.00</div>
+              <button class="btn" id="buyPep2Btn" onclick="buyUpgrade('pepper', 75)">Unlock</button>
+            </div>
+
+            <div class="shop-item">
+              <div class="shop-item-title">Local Flyer Ads</div>
+              <div class="shop-item-desc">Attract customers faster each day (+15% revenue bonus).</div>
+              <div class="shop-item-cost">$100.00</div>
+              <button class="btn" id="buyAdBtn" onclick="buyUpgrade('ad', 100)">Buy Ads</button>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <script type="text/javascript">
+        <![CDATA[
+        // State management
+        let money = parseFloat(localStorage.getItem('ep_money') || '15.00');
+        let day = parseInt(localStorage.getItem('ep_day') || '1', 10);
+        let timeRemaining = 60;
+        let dayActive = true;
+
+        let unlockedToppings = JSON.parse(localStorage.getItem('ep_toppings') || '{"sauce":true,"cheese":true,"pepperoni":false,"mushroom":false,"pepper":false}');
+        let hasAds = localStorage.getItem('ep_ads') === 'true';
+
+        let currentPizza = { sauce: false, cheese: false, pepperoni: false, mushroom: false, pepper: false };
+        let activeOrders = [];
+
+        // UI References
+        const moneyDisplay = document.getElementById('moneyDisplay');
+        const dayDisplay = document.getElementById('dayDisplay');
+        const timeDisplay = document.getElementById('timeDisplay');
+        const ordersList = document.getElementById('ordersList');
+
+        function saveGame() {
+          localStorage.setItem('ep_money', money.toFixed(2));
+          localStorage.setItem('ep_day', day.toString());
+          localStorage.setItem('ep_toppings', JSON.stringify(unlockedToppings));
+          localStorage.setItem('ep_ads', hasAds.toString());
+        }
+
+        function updateUI() {
+          moneyDisplay.textContent = money.toFixed(2);
+          dayDisplay.textContent = day;
+
+          document.getElementById('btnPepperoni').disabled = !unlockedToppings.pepperoni;
+          document.getElementById('btnMushroom').disabled = !unlockedToppings.mushroom;
+          document.getElementById('btnPepper').disabled = !unlockedToppings.pepper;
+
+          if (unlockedToppings.pepperoni) document.getElementById('buyPepBtn').disabled = true;
+          if (unlockedToppings.mushroom) document.getElementById('buyMushBtn').disabled = true;
+          if (unlockedToppings.pepper) document.getElementById('buyPep2Btn').disabled = true;
+          if (hasAds) document.getElementById('buyAdBtn').disabled = true;
+        }
+
+        function generateOrder() {
+          if (activeOrders.length >= 3) return;
+
+          const possibleToppings = ['sauce', 'cheese'];
+          if (unlockedToppings.pepperoni) possibleToppings.push('pepperoni');
+          if (unlockedToppings.mushroom) possibleToppings.push('mushroom');
+          if (unlockedToppings.pepper) possibleToppings.push('pepper');
+
+          // Pick 2-4 toppings randomly
+          let orderReq = { sauce: true, cheese: true };
+          if (possibleToppings.length > 2 && Math.random() > 0.4) orderReq.pepperoni = true;
+          if (unlockedToppings.mushroom && Math.random() > 0.5) orderReq.mushroom = true;
+          if (unlockedToppings.pepper && Math.random() > 0.5) orderReq.pepper = true;
+
+          // Calculate payout
+          let basePayout = 8.00;
+          if (orderReq.pepperoni) basePayout += 3.50;
+          if (orderReq.mushroom) basePayout += 4.50;
+          if (orderReq.pepper) basePayout += 5.00;
+          if (hasAds) basePayout *= 1.15;
+
+          const newOrder = {
+            id: Date.now(),
+            toppings: orderReq,
+            payout: basePayout
+          };
+
+          activeOrders.push(newOrder);
+          renderOrders();
+        }
+
+        function renderOrders() {
+          ordersList.innerHTML = '';
+          activeOrders.forEach((ord, idx) => {
+            const ticket = document.createElement('div');
+            ticket.className = 'ticket';
+            
+            let tagsHtml = '';
+            if (ord.toppings.sauce) tagsHtml += '<span class="topping-tag">🥫 Sauce</span>';
+            if (ord.toppings.cheese) tagsHtml += '<span class="topping-tag">🧀 Cheese</span>';
+            if (ord.toppings.pepperoni) tagsHtml += '<span class="topping-tag">🥓 Pepperoni</span>';
+            if (ord.toppings.mushroom) tagsHtml += '<span class="topping-tag">🍄 Mushroom</span>';
+            if (ord.toppings.pepper) tagsHtml += '<span class="topping-tag">🫑 Pepper</span>';
+
+            ticket.innerHTML = `
+              <div style="display:flex; justify-shadow:space-between; font-weight:800; font-size:0.85rem; color:#38bdf8;">
+                <span>ORDER #${idx + 1}</span>
+                <span style="color:#22c55e;">+$${ord.payout.toFixed(2)}</span>
+              </div>
+              <div style="margin-top:4px;">${tagsHtml}</div>
+            `;
+            ordersList.appendChild(ticket);
+          });
+        }
+
+        function addIngredient(type) {
+          currentPizza[type] = true;
+          renderPizza();
+        }
+
+        function clearPizza() {
+          currentPizza = { sauce: false, cheese: false, pepperoni: false, mushroom: false, pepper: false };
+          renderPizza();
+        }
+
+        function renderPizza() {
+          document.getElementById('pizzaSauce').className = `pizza-sauce ${currentPizza.sauce ? 'active' : ''}`;
+          document.getElementById('pizzaCheese').className = `pizza-cheese ${currentPizza.cheese ? 'active' : ''}`;
+
+          const overlay = document.getElementById('toppingOverlay');
+          overlay.innerHTML = '';
+
+          if (currentPizza.pepperoni) {
+            for (let i = 0; i < 6; i++) {
+              const pep = document.createElement('div');
+              pep.style.cssText = `position:absolute; width:28px; height:28px; background:#b91c1c; border-radius:50%; border:2px solid #991b1b; top:${20 + (i*25)%120}px; left:${30 + (i*35)%130}px;`;
+              overlay.appendChild(pep);
+            }
+          }
+
+          if (currentPizza.mushroom) {
+            for (let i = 0; i < 5; i++) {
+              const mush = document.createElement('div');
+              mush.style.cssText = `position:absolute; width:22px; height:22px; background:#e2e8f0; border-radius:40%; top:${40 + (i*30)%110}px; left:${25 + (i*40)%120}px;`;
+              overlay.appendChild(mush);
+            }
+          }
+
+          if (currentPizza.pepper) {
+            for (let i = 0; i < 5; i++) {
+              const pep = document.createElement('div');
+              pep.style.cssText = `position:absolute; width:10px; height:26px; background:#16a34a; border-radius:6px; transform:rotate(${i*35}deg); top:${35 + (i*28)%110}px; left:${45 + (i*30)%110}px;`;
+              overlay.appendChild(pep);
+            }
+          }
+        }
+
+        function bakeAndServe() {
+          if (activeOrders.length === 0) return;
+
+          // Find matching order
+          let matchIdx = -1;
+          for (let i = 0; i < activeOrders.length; i++) {
+            const req = activeOrders[i].toppings;
+            const matches = 
+              Boolean(req.sauce) === Boolean(currentPizza.sauce) &&
+              Boolean(req.cheese) === Boolean(currentPizza.cheese) &&
+              Boolean(req.pepperoni) === Boolean(currentPizza.pepperoni) &&
+              Boolean(req.mushroom) === Boolean(currentPizza.mushroom) &&
+              Boolean(req.pepper) === Boolean(currentPizza.pepper);
+
+            if (matches) {
+              matchIdx = i;
+              break;
+            }
+          }
+
+          if (matchIdx !== -1) {
+            money += activeOrders[matchIdx].payout;
+            activeOrders.splice(matchIdx, 1);
+            clearPizza();
+            renderOrders();
+            saveGame();
+            updateUI();
+            generateOrder();
+          } else {
+            alert('Recipe mismatch! Check order ticket ingredients.');
+          }
+        }
+
+        function buyUpgrade(type, cost) {
+          if (money < cost) {
+            alert('Not enough funds in bank!');
+            return;
+          }
+
+          money -= cost;
+          if (type === 'pep') unlockedToppings.pepperoni = true;
+          if (type === 'mush') unlockedToppings.mushroom = true;
+          if (type === 'pepper') unlockedToppings.pepper = true;
+          if (type === 'ad') hasAds = true;
+
+          saveGame();
+          updateUI();
+        }
+
+        // Main Day Loop Timer
+        setInterval(() => {
+          if (!dayActive) return;
+
+          timeRemaining--;
+          timeDisplay.textContent = timeRemaining + 's';
+
+          if (timeRemaining % 7 === 0) {
+            generateOrder();
+          }
+
+          if (timeRemaining <= 0) {
+            dayActive = false;
+            alert(`Day ${day} Completed! Starting Day ${day + 1}...`);
+            day++;
+            timeRemaining = 60;
+            activeOrders = [];
+            clearPizza();
+            saveGame();
+            updateUI();
+            dayActive = true;
+            generateOrder();
+          }
+        }, 1000);
+
+        // Init Game
+        updateUI();
+        generateOrder();
+        generateOrder();
+        ]]>
+      </script>
+    </div>
+  </foreignObject>
+</svg>
