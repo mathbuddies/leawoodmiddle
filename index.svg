@@ -1,80 +1,307 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 1200 800" style="background: #070a12; font-family: system-ui, sans-serif;">
-  <defs>
-    <style>
-      .bg { fill: #070a12; }
-      .banner { fill: #0284c7; }
-      .banner-text { fill: #ffffff; font-size: 14px; font-weight: bold; text-anchor: middle; }
-      .nav-bg { fill: rgba(15, 23, 42, 0.9); stroke: rgba(255,255,255,0.1); }
-      .nav-title { fill: #38bdf8; font-size: 24px; font-weight: 900; }
-      .nav-version { fill: #94a3b8; font-size: 14px; font-family: monospace; }
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+  <foreignObject width="100%" height="100%">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100vw; height: 100vh; margin: 0; padding: 0; background: #070a12; font-family: system-ui, -apple-system, sans-serif; color: #f8fafc; display: flex; flex-direction: column; overflow-x: hidden; overflow-y: auto; user-select: none; position: relative;">
       
-      .card-bg { fill: rgba(30, 41, 59, 0.6); stroke: rgba(255, 255, 255, 0.1); rx: 16px; transition: 0.2s; }
-      .card-title { fill: #f8fafc; font-size: 22px; font-weight: bold; }
-      .card-desc { fill: #94a3b8; font-size: 14px; }
-      .card-btn { fill: #38bdf8; rx: 8px; }
-      .card-btn-text { fill: #0f172a; font-size: 14px; font-weight: bold; text-anchor: middle; }
-    </style>
-  </defs>
+      <style>
+        * { box-sizing: border-box; }
 
-  <!-- Background -->
-  <rect width="1200" height="800" class="bg" />
+        .top-banner {
+          width: 100%;
+          background: #0284c7;
+          color: #f8fafc;
+          text-align: center;
+          font-size: 0.75rem;
+          font-weight: 800;
+          padding: 6px;
+          letter-spacing: 0.5px;
+          z-index: 12;
+          position: sticky;
+          top: 0;
+        }
 
-  <!-- Top Banner -->
-  <rect width="1200" height="35" class="banner" />
-  <text x="600" y="22" class="banner-text">🦅 EAGLE ARCADE - VERSION 22 (FINAL FIX) 🦅</text>
+        .navbar {
+          width: 100%;
+          padding: 16px 32px;
+          background: rgba(15, 23, 42, 0.85);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          position: sticky;
+          top: 27px;
+          z-index: 10;
+        }
 
-  <!-- Navbar -->
-  <rect x="0" y="35" width="1200" height="70" class="nav-bg" />
-  <text x="40" y="77" class="nav-title">LMS GAMING HUB</text>
-  <text x="1120" y="75" class="nav-version">v22</text>
+        .nav-left-group, .nav-right-group {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+        }
 
-  <!-- Game Card 1: Geometry Eagle -->
-  <g transform="translate(60, 140)" cursor="pointer" onclick="window.location.href='geometry-eagle.svg?v=22'">
-    <rect width="340" height="250" class="card-bg" />
-    <text x="30" y="55" font-size="36">🟩</text>
-    <text x="30" y="110" class="card-title">Geometry Eagle</text>
-    <text x="30" y="140" class="card-desc">Leap over spikes in this rhythm platformer.</text>
-    <rect x="30" y="175" width="280" height="40" class="card-btn" />
-    <text x="170" y="200" class="card-btn-text">Play Game</text>
-  </g>
+        .liquid-btn {
+          background: rgba(30, 41, 59, 0.6);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          color: #f8fafc;
+          padding: 8px 14px;
+          border-radius: 12px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: bold;
+        }
+        .liquid-btn:hover { background: rgba(56, 189, 248, 0.2); border-color: #38bdf8; }
 
-  <!-- Game Card 2: Eagle Clicker -->
-  <g transform="translate(430, 140)" cursor="pointer" onclick="window.location.href='eagle-clicker.svg?v=22'">
-    <rect width="340" height="250" class="card-bg" />
-    <text x="30" y="55" font-size="36">🦅</text>
-    <text x="30" y="110" class="card-title">Eagle Clicker</text>
-    <text x="30" y="140" class="card-desc">Gather feathers and buy nest upgrades.</text>
-    <rect x="30" y="175" width="280" height="40" class="card-btn" />
-    <text x="170" y="200" class="card-btn-text">Play Game</text>
-  </g>
+        .brand { font-weight: 900; font-size: 1.3rem; color: #38bdf8; display: flex; align-items: center; gap: 8px; }
+        .meta-info { font-size: 0.75rem; color: #94a3b8; font-family: monospace; display: flex; gap: 10px; }
 
-  <!-- Game Card 3: To the Eagles -->
-  <g transform="translate(800, 140)" cursor="pointer" onclick="window.location.href='to-the-eagles.svg?v=22'">
-    <rect width="340" height="250" class="card-bg" />
-    <text x="30" y="55" font-size="36">☁️</text>
-    <text x="30" y="110" class="card-title">To the Eagles</text>
-    <text x="30" y="140" class="card-desc">Bounce across moving clouds into the sky.</text>
-    <rect x="30" y="175" width="280" height="40" class="card-btn" />
-    <text x="170" y="200" class="card-btn-text">Play Game</text>
-  </g>
+        .weather-pill {
+          background: rgba(30, 41, 59, 0.6);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          color: #7dd3fc;
+          padding: 6px 14px;
+          border-radius: 20px;
+          font-size: 0.8rem;
+          font-weight: 700;
+        }
 
-  <!-- Game Card 4: Eagle Pizza -->
-  <g transform="translate(60, 430)" cursor="pointer" onclick="window.location.href='eagle-pizza.svg?v=22'">
-    <rect width="340" height="250" class="card-bg" />
-    <text x="30" y="55" font-size="36">🍕</text>
-    <text x="30" y="110" class="card-title">Eagle Pizza</text>
-    <text x="30" y="140" class="card-desc">Bake pizzas and manage your shop.</text>
-    <rect x="30" y="175" width="280" height="40" class="card-btn" />
-    <text x="170" y="200" class="card-btn-text">Play Game</text>
-  </g>
+        /* Slide Drawer */
+        .drawer-overlay {
+          position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+          background: rgba(0, 0, 0, 0.6); z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.2s;
+        }
+        .drawer-overlay.open { opacity: 1; pointer-events: auto; }
 
-  <!-- Game Card 5: Teachers Quiz -->
-  <g transform="translate(430, 430)" cursor="pointer" onclick="window.location.href='teachers-quiz.svg?v=22'">
-    <rect width="340" height="250" class="card-bg" />
-    <text x="30" y="55" font-size="36">📚</text>
-    <text x="30" y="110" class="card-title">Teachers Quiz</text>
-    <text x="30" y="140" class="card-desc">Test your knowledge on LMS teachers.</text>
-    <rect x="30" y="175" width="280" height="40" class="card-btn" />
-    <text x="170" y="200" class="card-btn-text">Play Quiz</text>
-  </g>
+        .drawer {
+          position: fixed; top: 0; left: -320px; width: 320px; height: 100vh;
+          background: #0f172a; border-right: 1px solid rgba(255, 255, 255, 0.1);
+          z-index: 101; display: flex; flex-direction: column; transition: left 0.2s; padding: 24px; gap: 20px;
+        }
+        .drawer.open { left: 0; }
+
+        .drawer-item {
+          background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(255, 255, 255, 0.08);
+          color: #f8fafc; padding: 14px 16px; border-radius: 12px; font-weight: 700;
+          text-decoration: none; display: flex; justify-content: space-between; align-items: center; cursor: pointer;
+        }
+        .drawer-item:hover { background: rgba(56, 189, 248, 0.2); }
+
+        /* Modals */
+        .modal-overlay {
+          position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+          background: rgba(0, 0, 0, 0.7); z-index: 200; display: none; align-items: center; justify-content: center;
+        }
+        .modal-overlay.open { display: flex; }
+
+        .modal-card {
+          background: #1e293b; border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 20px; padding: 24px; width: 90%; max-width: 400px; display: flex; flex-direction: column; gap: 16px;
+        }
+
+        .modal-input {
+          width: 100%; background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.1);
+          color: #f8fafc; padding: 12px; border-radius: 10px; outline: none;
+        }
+
+        .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .key-btn { background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.1); color: #f8fafc; padding: 14px; border-radius: 10px; font-size: 1.2rem; font-weight: 800; cursor: pointer; }
+        .key-btn:hover { background: #38bdf8; color: #0f172a; }
+
+        .hub-container { max-width: 1200px; width: 100%; margin: 0 auto; padding: 40px 30px; display: flex; flex-direction: column; gap: 30px; }
+        .hero-title { font-size: 3rem; font-weight: 900; margin: 0; text-align: center; color: #38bdf8; }
+        
+        .games-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+        .game-card {
+          background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(255, 255, 255, 0.08);
+          border-radius: 18px; padding: 24px; display: flex; flex-direction: column; gap: 16px; text-decoration: none; color: inherit; transition: 0.2s;
+        }
+        .game-card:hover { border-color: #38bdf8; transform: translateY(-4px); }
+        .play-btn { background: #38bdf8; color: #0f172a; font-weight: 800; padding: 12px; border-radius: 12px; text-align: center; }
+      </style>
+
+      <div class="top-banner">🦅 EAGLE ARCADE v23 🦅</div>
+
+      <!-- Slide-out Drawer -->
+      <div class="drawer-overlay" id="drawerOverlay"></div>
+      <div class="drawer" id="drawer">
+        <div style="display:flex; justify-style:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:12px;">
+          <div style="font-weight:900; color:#38bdf8;">⚙️ MENU</div>
+          <button id="closeDrawer" style="background:none; border:none; color:#94a3b8; font-size:1.4rem; cursor:pointer;">✕</button>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:12px; margin-top:10px;">
+          <div class="drawer-item" id="ownerMenuBtn"><span>Owners Only</span> <span>🔒</span></div>
+          <a class="drawer-item" href="https://bluevalleyk12.nutrislice.com/menu/leawood-middle/lunch/" target="_blank"><span>Lunch Menu</span> <span>🍕</span></a>
+          <div class="drawer-item" id="reportBtn"><span>Report Bug</span> <span>🐛</span></div>
+          <a class="drawer-item" href="https://maps.app.goo.gl/pXXP9qisj1fXQJqX8?g_st=ic" target="_blank"><span>LMS Map</span> <span>📍</span></a>
+        </div>
+      </div>
+
+      <!-- Owner Modal -->
+      <div class="modal-overlay" id="ownerModal">
+        <div class="modal-card">
+          <h3 style="margin:0; color:#facc15;">🔒 OWNER ACCESS</h3>
+          <div id="codeDisplay" style="background:#0f172a; color:#38bdf8; font-size:1.8rem; font-weight:900; text-align:center; padding:10px; border-radius:10px; letter-spacing:8px;">____</div>
+          <div class="keypad">
+            <button class="key-btn" onclick="pressKey('1')">1</button>
+            <button class="key-btn" onclick="pressKey('2')">2</button>
+            <button class="key-btn" onclick="pressKey('3')">3</button>
+            <button class="key-btn" onclick="pressKey('4')">4</button>
+            <button class="key-btn" onclick="pressKey('5')">5</button>
+            <button class="key-btn" onclick="pressKey('6')">6</button>
+            <button class="key-btn" onclick="pressKey('7')">7</button>
+            <button class="key-btn" onclick="pressKey('8')">8</button>
+            <button class="key-btn" onclick="pressKey('9')">9</button>
+            <button class="key-btn" onclick="pressKey('0')" style="grid-column: 2;">0</button>
+          </div>
+          <button id="cancelOwner" style="background:rgba(51, 65, 85, 0.6); color:#fff; border:none; padding:10px; border-radius:10px; font-weight:bold; cursor:pointer;">Close</button>
+        </div>
+      </div>
+
+      <!-- Bug Modal -->
+      <div class="modal-overlay" id="bugModal">
+        <div class="modal-card">
+          <h3 style="margin:0; color:#38bdf8;">🐛 REPORT A BUG</h3>
+          <input type="text" class="modal-input" id="bugInput" placeholder="Describe the issue..." />
+          <div style="display:flex; gap:10px; justify-content:flex-end;">
+            <button id="cancelBug" style="background:rgba(51,65,85,0.6); color:#fff; border:none; padding:8px 16px; border-radius:10px; cursor:pointer;">Cancel</button>
+            <button id="submitBug" style="background:#38bdf8; color:#0f172a; border:none; padding:8px 16px; border-radius:10px; font-weight:bold; cursor:pointer;">Submit</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top Nav -->
+      <div class="navbar">
+        <div class="nav-left-group">
+          <button class="liquid-btn" id="menuBtn">☰</button>
+          <div>
+            <div class="brand">🦅 LMS GAMING HUB</div>
+            <div class="meta-info"><span>v23</span> • <span id="liveClock">00:00:00</span></div>
+          </div>
+        </div>
+        <div class="nav-right-group">
+          <div class="weather-pill">🌙 56°F Clear</div>
+        </div>
+      </div>
+
+      <!-- Hub Content -->
+      <div class="hub-container">
+        <h1 class="hero-title">EAGLE ARCADE</h1>
+
+        <div class="games-grid">
+          <a class="game-card" href="geometry-eagle.svg?v=23">
+            <div style="font-size:2.5rem;">🟩</div>
+            <div style="font-size:1.3rem; font-weight:800;">Geometry Eagle</div>
+            <div style="color:#94a3b8; font-size:0.95rem;">Time your jumps to leap over spikes in this rhythm-based platformer.</div>
+            <div class="play-btn">Play Game</div>
+          </a>
+
+          <a class="game-card" href="eagle-clicker.svg?v=23">
+            <div style="font-size:2.5rem;">🦅</div>
+            <div style="font-size:1.3rem; font-weight:800;">Eagle Clicker</div>
+            <div style="color:#94a3b8; font-size:0.95rem;">Click to gather feathers and buy nest upgrades for passive income.</div>
+            <div class="play-btn">Play Game</div>
+          </a>
+
+          <a class="game-card" href="to-the-eagles.svg?v=23">
+            <div style="font-size:2.5rem;">☁️</div>
+            <div style="font-size:1.3rem; font-weight:800;">To the Eagles</div>
+            <div style="color:#94a3b8; font-size:0.95rem;">Bounce across moving clouds and climb as high as you can.</div>
+            <div class="play-btn">Play Game</div>
+          </a>
+
+          <a class="game-card" href="eagle-pizza.svg?v=23">
+            <div style="font-size:2.5rem;">🍕</div>
+            <div style="font-size:1.3rem; font-weight:800;">Eagle Pizza</div>
+            <div style="color:#94a3b8; font-size:0.95rem;">Assemble custom orders, bake pizzas, and manage your pizzeria shop.</div>
+            <div class="play-btn">Play Game</div>
+          </a>
+
+          <a class="game-card" href="teachers-quiz.svg?v=23">
+            <div style="font-size:2.5rem;">📚</div>
+            <div style="font-size:1.3rem; font-weight:800;">Teachers Quiz</div>
+            <div style="color:#94a3b8; font-size:0.95rem;">Test your knowledge on Leawood Middle teachers and school trivia!</div>
+            <div class="play-btn">Play Quiz</div>
+          </a>
+        </div>
+      </div>
+
+      <script type="text/javascript">
+        <![CDATA[
+        window.addEventListener('DOMContentLoaded', () => {
+          // Clock
+          const clockEl = document.getElementById('liveClock');
+          setInterval(() => {
+            clockEl.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+          }, 1000);
+
+          // Drawer Controls
+          const menuBtn = document.getElementById('menuBtn');
+          const drawer = document.getElementById('drawer');
+          const drawerOverlay = document.getElementById('drawerOverlay');
+          const closeDrawer = document.getElementById('closeDrawer');
+
+          function toggleDrawer(open) {
+            drawer.classList.toggle('open', open);
+            drawerOverlay.classList.toggle('open', open);
+          }
+
+          menuBtn.onclick = () => toggleDrawer(true);
+          closeDrawer.onclick = () => toggleDrawer(false);
+          drawerOverlay.onclick = () => toggleDrawer(false);
+
+          // Owner Keypad
+          const ownerMenuBtn = document.getElementById('ownerMenuBtn');
+          const ownerModal = document.getElementById('ownerModal');
+          const cancelOwner = document.getElementById('cancelOwner');
+          const codeDisplay = document.getElementById('codeDisplay');
+          let enteredCode = '';
+
+          ownerMenuBtn.onclick = () => {
+            toggleDrawer(false);
+            enteredCode = '';
+            codeDisplay.textContent = '____';
+            ownerModal.classList.add('open');
+          };
+          cancelOwner.onclick = () => ownerModal.classList.remove('open');
+
+          window.pressKey = function(num) {
+            if (enteredCode.length < 4) {
+              enteredCode += num;
+              codeDisplay.textContent = enteredCode.padEnd(4, '_');
+              if (enteredCode.length === 4) {
+                if (enteredCode === '3166') {
+                  alert('Access Granted, Owner!');
+                  ownerModal.classList.remove('open');
+                } else {
+                  alert('Incorrect Code!');
+                  enteredCode = '';
+                  codeDisplay.textContent = '____';
+                }
+              }
+            }
+          };
+
+          // Bug Report
+          const reportBtn = document.getElementById('reportBtn');
+          const bugModal = document.getElementById('bugModal');
+          const cancelBug = document.getElementById('cancelBug');
+          const submitBug = document.getElementById('submitBug');
+
+          reportBtn.onclick = () => { toggleDrawer(false); bugModal.classList.add('open'); };
+          cancelBug.onclick = () => bugModal.classList.remove('open');
+          submitBug.onclick = () => {
+            alert('Bug report submitted!');
+            bugModal.classList.remove('open');
+          };
+
+          // Escape key redirect
+          window.addEventListener('keydown', (e) => {
+            if (e.key === '`') window.location.href = "https://www.google.com";
+          });
+        });
+        ]]>
+      </script>
+
+    </div>
+  </foreignObject>
 </svg>
