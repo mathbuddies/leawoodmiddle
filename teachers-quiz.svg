@@ -1,0 +1,298 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+  <foreignObject width="100%" height="100%">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100vw; height: 100vh; margin: 0; padding: 0; background: #0f172a; font-family: system-ui, -apple-system, sans-serif; color: #f8fafc; display: flex; flex-direction: column; overflow: hidden; user-select: none;">
+      
+      <style>
+        * { box-sizing: border-box; }
+        
+        .navbar {
+          width: 100%;
+          padding: 12px 20px;
+          background: #1e293b;
+          border-bottom: 1px solid #334155;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          z-index: 10;
+        }
+
+        .nav-left {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+        }
+
+        .back-btn {
+          background: #334155;
+          color: #f8fafc;
+          border: 1px solid #475569;
+          padding: 8px 14px;
+          border-radius: 8px;
+          font-weight: 700;
+          font-size: 0.85rem;
+          cursor: pointer;
+          text-decoration: none;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          transition: background 0.2s, transform 0.1s;
+        }
+        .back-btn:hover { background: #475569; transform: translateX(-2px); }
+
+        .title { font-weight: 900; font-size: 1.3rem; color: #a855f7; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px; }
+
+        .quiz-container {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          padding: 20px;
+          max-width: 600px;
+          width: 100%;
+          margin: 0 auto;
+        }
+
+        .card {
+          background: #1e293b;
+          border: 1px solid #334155;
+          border-radius: 16px;
+          padding: 28px;
+          width: 100%;
+          box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+        }
+
+        .quiz-header {
+          display: flex;
+          justify-content: space-between;
+          font-weight: 800;
+          font-size: 0.95rem;
+          color: #94a3b8;
+          border-bottom: 1px solid #334155;
+          padding-bottom: 12px;
+        }
+
+        .question-text {
+          font-size: 1.25rem;
+          font-weight: 800;
+          color: #f8fafc;
+          line-height: 1.4;
+        }
+
+        .options-grid {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+        }
+
+        .option-btn {
+          background: #0f172a;
+          border: 2px solid #334155;
+          color: #f8fafc;
+          padding: 14px;
+          border-radius: 12px;
+          font-weight: 700;
+          font-size: 1rem;
+          cursor: pointer;
+          text-align: left;
+          transition: border-color 0.2s, background 0.2s;
+        }
+
+        .option-btn:hover {
+          border-color: #a855f7;
+          background: #1e1b4b;
+        }
+
+        .option-btn.correct {
+          border-color: #22c55e !important;
+          background: #14532d !important;
+        }
+
+        .option-btn.wrong {
+          border-color: #ef4444 !important;
+          background: #7f1d1d !important;
+        }
+
+        .results-box {
+          text-align: center;
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+          align-items: center;
+        }
+
+        .score-big {
+          font-size: 3rem;
+          font-weight: 900;
+          color: #a855f7;
+        }
+
+        .btn-restart {
+          background: #a855f7;
+          color: #f8fafc;
+          border: none;
+          padding: 12px 24px;
+          border-radius: 10px;
+          font-weight: 800;
+          font-size: 1rem;
+          cursor: pointer;
+          transition: background 0.2s;
+        }
+        .btn-restart:hover { background: #c084fc; }
+      </style>
+
+      <!-- Header Nav -->
+      <div class="navbar">
+        <div class="nav-left">
+          <a class="back-btn" href="index.svg?v=2">◀ HUB</a>
+          <div class="title">📚 TEACHERS QUIZ</div>
+        </div>
+      </div>
+
+      <!-- Main Quiz Area -->
+      <div class="quiz-container">
+        <div class="card" id="quizCard">
+          
+          <div class="quiz-header">
+            <span id="questionProgress">QUESTION 1 OF 5</span>
+            <span>SCORE: <span id="scoreText" style="color:#a855f7;">0</span></span>
+          </div>
+
+          <div class="question-text" id="questionText">Loading Question...</div>
+
+          <div class="options-grid" id="optionsGrid">
+            <!-- Dynamic Answer Buttons -->
+          </div>
+
+        </div>
+      </div>
+
+      <script type="text/javascript">
+        <![CDATA[
+        const questions = [
+          {
+            q: "What does Mr. Whetzel teach?",
+            options: ["Computer", "Math", "Science", "History"],
+            answer: 0
+          },
+          {
+            q: "What does Ms. Rutland teach?",
+            options: ["Art and Music", "Sewing and Cooking", "Physical Education", "Spanish"],
+            answer: 1
+          },
+          {
+            q: "Who is the Principal?",
+            options: ["Mr. Whetzel", "Mr. F", "Mr. Colburn", "Mr. Davis"],
+            answer: 2
+          },
+          {
+            q: "What does Mr. F teach?",
+            options: ["Biology", "Engineering", "English", "Drama"],
+            answer: 1
+          },
+          {
+            q: "How much is one lunch meal?",
+            options: ["$2.50", "$3.00", "$2.75", "$3.25"],
+            answer: 2
+          }
+        ];
+
+        let currentIdx = 0;
+        let score = 0;
+        let bestScore = parseInt(localStorage.getItem('tq_best') || '0', 10);
+        let acceptAnswers = true;
+
+        const quizCard = document.getElementById('quizCard');
+        const questionProgress = document.getElementById('questionProgress');
+        const scoreText = document.getElementById('scoreText');
+        const questionText = document.getElementById('questionText');
+        const optionsGrid = document.getElementById('optionsGrid');
+
+        function loadQuestion() {
+          acceptAnswers = true;
+          const current = questions[currentIdx];
+
+          questionProgress.textContent = `QUESTION ${currentIdx + 1} OF ${questions.length}`;
+          questionText.textContent = current.q;
+          optionsGrid.innerHTML = '';
+
+          current.options.forEach((opt, index) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.textContent = opt;
+            btn.onclick = () => checkAnswer(index, btn);
+            optionsGrid.appendChild(btn);
+          });
+        }
+
+        function checkAnswer(selectedIdx, btn) {
+          if (!acceptAnswers) return;
+          acceptAnswers = false;
+
+          const current = questions[currentIdx];
+          const allBtns = optionsGrid.children;
+
+          if (selectedIdx === current.answer) {
+            btn.classList.add('correct');
+            score++;
+            scoreText.textContent = score;
+          } else {
+            btn.classList.add('wrong');
+            allBtns[current.answer].classList.add('correct');
+          }
+
+          setTimeout(() => {
+            currentIdx++;
+            if (currentIdx < questions.length) {
+              loadQuestion();
+            } else {
+              showResults();
+            }
+          }, 1200);
+        }
+
+        function showResults() {
+          if (score > bestScore) {
+            bestScore = score;
+            localStorage.setItem('tq_best', bestScore.toString());
+          }
+
+          quizCard.innerHTML = `
+            <div class="results-box">
+              <h2 style="margin:0; font-size:1.8rem; font-weight:900;">QUIZ COMPLETE!</h2>
+              <div class="score-big">${score} / ${questions.length}</div>
+              <p style="margin:0; color:#94a3b8; font-size:0.95rem;">Personal Best: ${bestScore} / ${questions.length}</p>
+              <button class="btn-restart" onclick="restartQuiz()">TRY AGAIN</button>
+            </div>
+          `;
+        }
+
+        function restartQuiz() {
+          currentIdx = 0;
+          score = 0;
+          scoreText.textContent = '0';
+          
+          quizCard.innerHTML = `
+            <div class="quiz-header">
+              <span id="questionProgress">QUESTION 1 OF 5</span>
+              <span>SCORE: <span id="scoreText" style="color:#a855f7;">0</span></span>
+            </div>
+            <div class="question-text" id="questionText">Loading...</div>
+            <div class="options-grid" id="optionsGrid"></div>
+          `;
+
+          // Re-bind dynamic references
+          document.getElementById('scoreText').textContent = score;
+          loadQuestion();
+        }
+
+        // Initialize First Question
+        loadQuestion();
+        ]]>
+      </script>
+    </div>
+  </foreignObject>
+</svg>
