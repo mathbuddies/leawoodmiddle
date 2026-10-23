@@ -1,15 +1,38 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
   <foreignObject width="100%" height="100%">
-    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100vw; height: 100vh; margin: 0; padding: 0; background: #0b0f19; font-family: system-ui, -apple-system, sans-serif; color: #f8fafc; display: flex; flex-direction: column; overflow-y: auto; user-select: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100vw; height: 100vh; margin: 0; padding: 0; background: #090d16; font-family: system-ui, -apple-system, sans-serif; color: #f8fafc; display: flex; flex-direction: column; overflow-y: auto; user-select: none; position: relative;">
       
       <style>
         * { box-sizing: border-box; }
         
+        /* Animated Rain Background Effect */
+        .rain-bg {
+          position: fixed;
+          inset: 0;
+          background: linear-gradient(to bottom, #090d16, #111827);
+          z-index: -2;
+        }
+        .rain {
+          position: fixed;
+          inset: 0;
+          background-image: linear-gradient(to bottom, rgba(255,255,255,0), rgba(56,189,248,0.15));
+          background-size: 2px 120px;
+          animation: fall 0.6s linear infinite;
+          z-index: -1;
+          pointer-events: none;
+          backdrop-filter: blur(2px);
+        }
+        @keyframes fall {
+          0% { background-position: 0 0; }
+          100% { background-position: 0 120px; }
+        }
+
         .navbar {
           width: 100%;
-          padding: 16px 24px;
-          background: #111827;
-          border-bottom: 1px solid #1f2937;
+          padding: 16px 28px;
+          background: rgba(17, 24, 39, 0.85);
+          backdrop-filter: blur(10px);
+          border-bottom: 1px solid rgba(255,255,255,0.1);
           display: flex;
           align-items: center;
           justify-content: space-between;
@@ -23,65 +46,68 @@
           align-items: center;
           gap: 12px;
           font-weight: 900;
-          font-size: 1.35rem;
-          color: #f97316;
+          font-size: 1.4rem;
+          color: #38bdf8;
           letter-spacing: 0.5px;
         }
 
         .eagle-icon {
-          width: 38px;
-          height: 38px;
-          background: linear-gradient(135deg, #f97316, #ea580c);
-          border-radius: 10px;
+          width: 40px;
+          height: 40px;
+          background: linear-gradient(135deg, #0ea5e9, #2563eb);
+          border-radius: 12px;
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 1.2rem;
-          box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
+          font-size: 1.3rem;
+          box-shadow: 0 4px 15px rgba(14, 165, 233, 0.4);
         }
 
         .main-container {
-          max-width: 900px;
+          max-width: 960px;
           width: 100%;
           margin: 0 auto;
           padding: 30px 20px;
           display: flex;
           flex-direction: column;
           gap: 24px;
+          z-index: 2;
         }
 
         .hero-banner {
-          background: linear-gradient(135deg, #1f2937, #111827);
-          border: 1px solid #374151;
-          border-radius: 16px;
-          padding: 30px;
+          background: rgba(31, 41, 55, 0.7);
+          backdrop-filter: blur(12px);
+          border: 1px solid rgba(255,255,255,0.08);
+          border-radius: 20px;
+          padding: 35px;
           text-align: center;
-          box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+          box-shadow: 0 20px 40px rgba(0,0,0,0.5);
         }
 
         .hero-banner h1 {
-          margin: 0 0 8px 0;
-          font-size: 2.2rem;
+          margin: 0 0 10px 0;
+          font-size: 2.4rem;
           font-weight: 900;
           color: #ffffff;
         }
 
         .hero-banner p {
           color: #94a3b8;
-          font-size: 1rem;
+          font-size: 1.05rem;
           margin: 0;
         }
 
         .games-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
           gap: 20px;
         }
 
         .game-card {
-          background: #1f2937;
-          border: 1px solid #374151;
-          border-radius: 16px;
+          background: rgba(31, 41, 55, 0.65);
+          backdrop-filter: blur(10px);
+          border: 1px solid rgba(255,255,255,0.08);
+          border-radius: 18px;
           padding: 24px;
           display: flex;
           flex-direction: column;
@@ -92,8 +118,8 @@
 
         .game-card:hover {
           transform: translateY(-4px);
-          border-color: #f97316;
-          box-shadow: 0 12px 30px rgba(249, 115, 22, 0.2);
+          border-color: #38bdf8;
+          box-shadow: 0 15px 35px rgba(56, 189, 248, 0.15);
         }
 
         .game-icon {
@@ -116,29 +142,33 @@
         }
 
         .play-btn {
-          background: #f97316;
-          color: white;
+          background: #38bdf8;
+          color: #090d16;
           border: none;
           padding: 10px 18px;
-          border-radius: 8px;
-          font-weight: 700;
+          border-radius: 10px;
+          font-weight: 800;
           font-size: 0.95rem;
           cursor: pointer;
-          transition: background 0.2s;
+          transition: background 0.2s, transform 0.1s;
           text-align: center;
           text-decoration: none;
         }
-        .play-btn:hover { background: #ea580c; }
+        .play-btn:hover { background: #7dd3fc; }
       </style>
+
+      <!-- Background Elements -->
+      <div class="rain-bg"></div>
+      <div class="rain"></div>
 
       <!-- Navbar -->
       <div class="navbar">
         <div class="nav-brand">
           <div class="eagle-icon">🦅</div>
-          <span>LMS GAMING HUB</span>
+          <span>LEAWOOD MIDDLE GAMING</span>
         </div>
-        <div id="statusBadge" style="font-size:0.85rem; font-weight:700; color:#38bdf8; background:#0f172a; padding:6px 12px; border-radius:8px; border:1px solid #334155;">
-          Online • Ready
+        <div style="font-size:0.85rem; font-weight:700; color:#4ade80; background:rgba(22, 101, 52, 0.4); padding:6px 14px; border-radius:10px; border:1px solid rgba(74, 222, 128, 0.3);">
+          ● Secure Link Active
         </div>
       </div>
 
@@ -147,31 +177,61 @@
         
         <!-- Hero Banner -->
         <div class="hero-banner">
-          <h1>Welcome to LMS Arcade</h1>
-          <p>Select an arcade game below to play instantly. All scores save locally to your browser.</p>
+          <h1>LMS Arcade Hub</h1>
+          <p>Select your favorite game below. All high scores and progress save locally to your browser.</p>
         </div>
 
         <!-- Games Grid -->
         <div class="games-grid">
           
-          <!-- Game 1: Flappy Square -->
-          <div class="game-card" onclick="location.href='flappy.svg'">
+          <!-- 1. Geometry Eagle -->
+          <div class="game-card" onclick="location.href='geometry-eagle.svg'">
             <div>
               <div class="game-icon">🟩</div>
-              <h3 class="game-title">Flappy Square</h3>
-              <p class="game-desc">Test your timing by navigating your custom-colored square through narrow pipe gaps in an endless arcade run.</p>
+              <h3 class="game-title">Geometry Eagle</h3>
+              <p class="game-desc">Rhythm-based platformer. Jump and fly your square across treacherous spike obstacles to epic soundtracks.</p>
             </div>
-            <a class="play-btn" href="flappy.svg">Play Flappy Square</a>
+            <a class="play-btn" href="geometry-eagle.svg">Play Geometry Eagle</a>
           </div>
 
-          <!-- Game 2: NFL 17-0 Challenge -->
-          <div class="game-card" onclick="location.href='1leawoodms.svg'">
+          <!-- 2. Eagle Clicker -->
+          <div class="game-card" onclick="location.href='eagle-clicker.svg'">
             <div>
-              <div class="game-icon">🏈</div>
-              <h3 class="game-title">17-0 NFL Challenge</h3>
-              <p class="game-desc">Draft key player positions across football eras, build your elite roster, and simulate an undefeated championship run.</p>
+              <div class="game-icon">🖱️</div>
+              <h3 class="game-title">Eagle Clicker</h3>
+              <p class="game-desc">Click to earn feathers, buy automated upgrades, and unlock powerful multi-pliers in this idle clicker game.</p>
             </div>
-            <a class="play-btn" href="1leawoodms.svg">Play NFL Challenge</a>
+            <a class="play-btn" href="eagle-clicker.svg">Play Eagle Clicker</a>
+          </div>
+
+          <!-- 3. To the Eagles -->
+          <div class="game-card" onclick="location.href='to-the-eagles.svg'">
+            <div>
+              <div class="game-icon">⛰️</div>
+              <h3 class="game-title">To the Eagles</h3>
+              <p class="game-desc">Jump endlessly on moving platforms high into the sky. Reach the ultimate eagle at the top to win!</p>
+            </div>
+            <a class="play-btn" href="to-the-eagles.svg">Play To the Eagles</a>
+          </div>
+
+          <!-- 4. Eagle Pizza -->
+          <div class="game-card" onclick="location.href='eagle-pizza.svg'">
+            <div>
+              <div class="game-icon">🍕</div>
+              <h3 class="game-title">Eagle Pizza</h3>
+              <p class="game-desc">Run your own pizzeria! Fulfill daily customer orders, buy fresh ingredients, and advertise to grow your business.</p>
+            </div>
+            <a class="play-btn" href="eagle-pizza.svg">Play Eagle Pizza</a>
+          </div>
+
+          <!-- 5. Securly Reverse -->
+          <div class="game-card" onclick="alert('Securly Reverse is online and fully secured!')">
+            <div>
+              <div class="game-icon">🛡️</div>
+              <h3 class="game-title">Securly Reverse</h3>
+              <p class="game-desc">Diagnostic tool utility module. Status monitor and network packet route verifier.</p>
+            </div>
+            <button class="play-btn" style="background:#334155; color:#f8fafc;">Run Utility</button>
           </div>
 
         </div>
