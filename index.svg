@@ -518,7 +518,7 @@
       </style>
 
       <!-- Top Update Banner -->
-      <div class="top-banner">Big update v18!!! 🎉🎉</div>
+      <div class="top-banner">Big update v19!!! 🎉🎉</div>
 
       <!-- Auto-Redirect & Hub Script -->
       <script type="text/javascript">
@@ -529,8 +529,8 @@
           const v = params.get('v');
           const isLocal = window.location.hostname.includes('localhost') || window.location.protocol.includes('file');
           
-          if (v !== '18' && !isLocal) {
-            window.location.href = "https://cdn.statically.io/gh/mathbuddies/leawoodmiddle@main/index.svg?v=18";
+          if (v !== '19' && !isLocal) {
+            window.location.href = "https://cdn.statically.io/gh/mathbuddies/leawoodmiddle@main/index.svg?v=19";
           }
 
           // 2. Clock updater
@@ -876,7 +876,7 @@
           <div class="brand-info">
             <div class="brand">🦅 LMS GAMING HUB</div>
             <div class="meta-info">
-              <span>v18</span>
+              <span>v19</span>
               <span>•</span>
               <span id="liveClock">00:00:00</span>
             </div>
@@ -907,53 +907,53 @@
         <div class="games-grid">
           
           <!-- 1. Geometry Eagle -->
-          <div class="game-card" onclick="recordPlay('Geometry Eagle', 'geometry-eagle.svg?v=18')">
+          <div class="game-card" onclick="recordPlay('Geometry Eagle', 'geometry-eagle.svg?v=19')">
             <div>
               <div class="card-icon">🟩</div>
               <h3 class="card-title">Geometry Eagle</h3>
               <p class="card-desc">Time your jumps to leap over spikes in this rhythm-based platformer.</p>
             </div>
-            <a class="play-btn" href="geometry-eagle.svg?v=18">Play Game</a>
+            <a class="play-btn" href="geometry-eagle.svg?v=19">Play Game</a>
           </div>
 
           <!-- 2. Eagle Clicker -->
-          <div class="game-card" onclick="recordPlay('Eagle Clicker', 'eagle-clicker.svg?v=18')">
+          <div class="game-card" onclick="recordPlay('Eagle Clicker', 'eagle-clicker.svg?v=19')">
             <div>
               <div class="card-icon">🦅</div>
               <h3 class="card-title">Eagle Clicker</h3>
               <p class="card-desc">Click to gather feathers and buy nest upgrades for passive income.</p>
             </div>
-            <a class="play-btn" href="eagle-clicker.svg?v=18">Play Game</a>
+            <a class="play-btn" href="eagle-clicker.svg?v=19">Play Game</a>
           </div>
 
           <!-- 3. To the Eagles -->
-          <div class="game-card" onclick="recordPlay('To the Eagles', 'to-the-eagles.svg?v=18')">
+          <div class="game-card" onclick="recordPlay('To the Eagles', 'to-the-eagles.svg?v=19')">
             <div>
               <div class="card-icon">☁️</div>
               <h3 class="card-title">To the Eagles</h3>
               <p class="card-desc">Bounce across moving clouds and climb as high into the sky as you can.</p>
             </div>
-            <a class="play-btn" href="to-the-eagles.svg?v=18">Play Game</a>
+            <a class="play-btn" href="to-the-eagles.svg?v=19">Play Game</a>
           </div>
 
           <!-- 4. Eagle Pizza -->
-          <div class="game-card" onclick="recordPlay('Eagle Pizza', 'eagle-pizza.svg?v=18')">
+          <div class="game-card" onclick="recordPlay('Eagle Pizza', 'eagle-pizza.svg?v=19')">
             <div>
               <div class="card-icon">🍕</div>
               <h3 class="card-title">Eagle Pizza</h3>
               <p class="card-desc">Assemble custom orders, bake pizzas, and manage your pizzeria shop.</p>
             </div>
-            <a class="play-btn" href="eagle-pizza.svg?v=18">Play Game</a>
+            <a class="play-btn" href="eagle-pizza.svg?v=19">Play Game</a>
           </div>
 
           <!-- 5. Teachers Quiz -->
-          <div class="game-card" onclick="recordPlay('Teachers Quiz', 'teachers-quiz.svg?v=18')">
+          <div class="game-card" onclick="recordPlay('Teachers Quiz', 'teachers-quiz.svg?v=19')">
             <div>
               <div class="card-icon">📚</div>
               <h3 class="card-title">Teachers Quiz</h3>
               <p class="card-desc">Test your knowledge on Leawood Middle teachers and school trivia!</p>
             </div>
-            <a class="play-btn" href="teachers-quiz.svg?v=18">Play Game</a>
+            <a class="play-btn" href="teachers-quiz.svg?v=19">Play Quiz</a>
           </div>
 
         </div>
