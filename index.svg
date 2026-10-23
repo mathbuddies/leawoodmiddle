@@ -544,7 +544,7 @@
 
           // 3. Fetch Live JSONBin Announcement
           const BIN_URL = "https://api.jsonbin.io/v3/b/6adafef5ac6210605a4b0a6d";
-          const MASTER_KEY = "YOUR_MASTER_KEY_HERE"; // Put your JSONBin Master Key here
+          const MASTER_KEY = "YOUR_MASTER_KEY_HERE";
 
           async function fetchGlobalAnnouncement() {
             try {
