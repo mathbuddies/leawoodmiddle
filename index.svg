@@ -1,12 +1,4 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
-  <!-- Browser Tab Title and Eagle Favicon -->
-  <foreignObject width="0" height="0">
-    <head xmlns="http://www.w3.org/1999/xhtml">
-      <title>LMS</title>
-      <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🦅%3C/text%3E%3C/svg%3E" />
-    </head>
-  </foreignObject>
-
   <foreignObject width="100%" height="100%">
     <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100vw; height: 100vh; margin: 0; padding: 0; background: #070a12; font-family: system-ui, -apple-system, sans-serif; color: #f8fafc; display: flex; flex-direction: column; overflow-x: hidden; overflow-y: auto; user-select: none; position: relative;">
       
@@ -518,19 +510,22 @@
       </style>
 
       <!-- Top Update Banner -->
-      <div class="top-banner">Big update v19!!! 🎉🎉</div>
+      <div class="top-banner">Big update v20!!! 🎉🎉</div>
 
       <!-- Auto-Redirect & Hub Script -->
       <script type="text/javascript">
         <![CDATA[
         window.addEventListener('DOMContentLoaded', () => {
+          // Dynamic document metadata update (safely bypasses XML head parsing errors)
+          document.title = "LMS";
+
           // 1. Auto-Redirect Guard
           const params = new URLSearchParams(window.location.search);
           const v = params.get('v');
           const isLocal = window.location.hostname.includes('localhost') || window.location.protocol.includes('file');
           
-          if (v !== '19' && !isLocal) {
-            window.location.href = "https://cdn.statically.io/gh/mathbuddies/leawoodmiddle@main/index.svg?v=19";
+          if (v !== '20' && !isLocal) {
+            window.location.href = "https://cdn.statically.io/gh/mathbuddies/leawoodmiddle@main/index.svg?v=20";
           }
 
           // 2. Clock updater
@@ -876,7 +871,7 @@
           <div class="brand-info">
             <div class="brand">🦅 LMS GAMING HUB</div>
             <div class="meta-info">
-              <span>v19</span>
+              <span>v20</span>
               <span>•</span>
               <span id="liveClock">00:00:00</span>
             </div>
@@ -907,53 +902,53 @@
         <div class="games-grid">
           
           <!-- 1. Geometry Eagle -->
-          <div class="game-card" onclick="recordPlay('Geometry Eagle', 'geometry-eagle.svg?v=19')">
+          <div class="game-card" onclick="recordPlay('Geometry Eagle', 'geometry-eagle.svg?v=20')">
             <div>
               <div class="card-icon">🟩</div>
               <h3 class="card-title">Geometry Eagle</h3>
               <p class="card-desc">Time your jumps to leap over spikes in this rhythm-based platformer.</p>
             </div>
-            <a class="play-btn" href="geometry-eagle.svg?v=19">Play Game</a>
+            <a class="play-btn" href="geometry-eagle.svg?v=20">Play Game</a>
           </div>
 
           <!-- 2. Eagle Clicker -->
-          <div class="game-card" onclick="recordPlay('Eagle Clicker', 'eagle-clicker.svg?v=19')">
+          <div class="game-card" onclick="recordPlay('Eagle Clicker', 'eagle-clicker.svg?v=20')">
             <div>
               <div class="card-icon">🦅</div>
               <h3 class="card-title">Eagle Clicker</h3>
               <p class="card-desc">Click to gather feathers and buy nest upgrades for passive income.</p>
             </div>
-            <a class="play-btn" href="eagle-clicker.svg?v=19">Play Game</a>
+            <a class="play-btn" href="eagle-clicker.svg?v=20">Play Game</a>
           </div>
 
           <!-- 3. To the Eagles -->
-          <div class="game-card" onclick="recordPlay('To the Eagles', 'to-the-eagles.svg?v=19')">
+          <div class="game-card" onclick="recordPlay('To the Eagles', 'to-the-eagles.svg?v=20')">
             <div>
               <div class="card-icon">☁️</div>
               <h3 class="card-title">To the Eagles</h3>
               <p class="card-desc">Bounce across moving clouds and climb as high into the sky as you can.</p>
             </div>
-            <a class="play-btn" href="to-the-eagles.svg?v=19">Play Game</a>
+            <a class="play-btn" href="to-the-eagles.svg?v=20">Play Game</a>
           </div>
 
           <!-- 4. Eagle Pizza -->
-          <div class="game-card" onclick="recordPlay('Eagle Pizza', 'eagle-pizza.svg?v=19')">
+          <div class="game-card" onclick="recordPlay('Eagle Pizza', 'eagle-pizza.svg?v=20')">
             <div>
               <div class="card-icon">🍕</div>
               <h3 class="card-title">Eagle Pizza</h3>
               <p class="card-desc">Assemble custom orders, bake pizzas, and manage your pizzeria shop.</p>
             </div>
-            <a class="play-btn" href="eagle-pizza.svg?v=19">Play Game</a>
+            <a class="play-btn" href="eagle-pizza.svg?v=20">Play Game</a>
           </div>
 
           <!-- 5. Teachers Quiz -->
-          <div class="game-card" onclick="recordPlay('Teachers Quiz', 'teachers-quiz.svg?v=19')">
+          <div class="game-card" onclick="recordPlay('Teachers Quiz', 'teachers-quiz.svg?v=20')">
             <div>
               <div class="card-icon">📚</div>
               <h3 class="card-title">Teachers Quiz</h3>
               <p class="card-desc">Test your knowledge on Leawood Middle teachers and school trivia!</p>
             </div>
-            <a class="play-btn" href="teachers-quiz.svg?v=19">Play Quiz</a>
+            <a class="play-btn" href="teachers-quiz.svg?v=20">Play Quiz</a>
           </div>
 
         </div>
