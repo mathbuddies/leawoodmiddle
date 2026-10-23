@@ -1,0 +1,299 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+  <foreignObject width="100%" height="100%">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100vw; height: 100vh; margin: 0; padding: 0; background: #0b0f19; font-family: system-ui, -apple-system, sans-serif; color: #f8fafc; display: flex; flex-direction: column; overflow: hidden; user-select: none;">
+      
+      <style>
+        * { box-sizing: border-box; }
+        
+        .navbar {
+          width: 100%;
+          padding: 12px 20px;
+          background: #111827;
+          border-bottom: 1px solid #1f2937;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          z-index: 10;
+        }
+
+        .nav-left {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+        }
+
+        .back-btn {
+          background: #1f2937;
+          color: #f8fafc;
+          border: 1px solid #374151;
+          padding: 8px 14px;
+          border-radius: 8px;
+          font-weight: 700;
+          font-size: 0.85rem;
+          cursor: pointer;
+          text-decoration: none;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          transition: background 0.2s, transform 0.1s;
+        }
+        .back-btn:hover { background: #374151; transform: translateX(-2px); }
+
+        .title { font-weight: 900; font-size: 1.3rem; color: #38bdf8; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px; }
+
+        .game-container {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          padding: 20px;
+          position: relative;
+        }
+
+        canvas {
+          background: linear-gradient(to bottom, #0284c7, #0b0f19);
+          border: 2px solid #1f2937;
+          border-radius: 12px;
+          box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+          max-width: 100%;
+        }
+
+        .score-board {
+          position: absolute;
+          top: 30px;
+          display: flex;
+          gap: 20px;
+          font-weight: 900;
+          font-size: 1.2rem;
+          color: #f8fafc;
+          z-index: 5;
+          pointer-events: none;
+        }
+      </style>
+
+      <!-- Header Nav -->
+      <div class="navbar">
+        <div class="nav-left">
+          <a class="back-btn" href="index.svg?v=2">◀ HUB</a>
+          <div class="title">🦅 TO THE EAGLES</div>
+        </div>
+      </div>
+
+      <!-- Main Game Area -->
+      <div class="game-container">
+        <div class="score-board">
+          <div>HEIGHT: <span id="heightVal" style="color:#38bdf8;">0</span>m</div>
+          <div>BEST: <span id="bestVal" style="color:#facc15;">0</span>m</div>
+        </div>
+        <canvas id="gameCanvas" width="480" height="600"></canvas>
+      </div>
+
+      <script type="text/javascript">
+        <![CDATA[
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const heightVal = document.getElementById('heightVal');
+        const bestVal = document.getElementById('bestVal');
+
+        let highScore = parseInt(localStorage.getItem('tte_high') || '0', 10);
+        bestVal.textContent = highScore;
+
+        // Player state
+        let player = {
+          x: 240,
+          y: 450,
+          w: 36,
+          h: 36,
+          vx: 0,
+          vy: 0,
+          speed: 6,
+          gravity: 0.35,
+          jumpStrength: -11
+        };
+
+        let platforms = [];
+        let cameraY = 0;
+        let maxScore = 0;
+        let isGameOver = false;
+
+        let keys = { left: false, right: false };
+
+        window.addEventListener('keydown', (e) => {
+          if (e.code === 'ArrowLeft' || e.code === 'KeyA') keys.left = true;
+          if (e.code === 'ArrowRight' || e.code === 'KeyD') keys.right = true;
+        });
+
+        window.addEventListener('keyup', (e) => {
+          if (e.code === 'ArrowLeft' || e.code === 'KeyA') keys.left = false;
+          if (e.code === 'ArrowRight' || e.code === 'KeyD') keys.right = false;
+        });
+
+        function initPlatforms() {
+          platforms = [
+            { x: 200, y: 520, w: 90, h: 16, type: 'normal' },
+            { x: 100, y: 420, w: 80, h: 16, type: 'normal' },
+            { x: 300, y: 320, w: 80, h: 16, type: 'normal' },
+            { x: 150, y: 220, w: 80, h: 16, type: 'normal' },
+            { x: 250, y: 120, w: 80, h: 16, type: 'normal' },
+            { x: 120, y: 20, w: 80, h: 16, type: 'normal' }
+          ];
+        }
+
+        function resetGame() {
+          player.x = 240;
+          player.y = 450;
+          player.vx = 0;
+          player.vy = 0;
+          cameraY = 0;
+          maxScore = 0;
+          isGameOver = false;
+          initPlatforms();
+          loop();
+        }
+
+        function update() {
+          if (isGameOver) return;
+
+          // Input movement
+          if (keys.left) player.vx = -player.speed;
+          else if (keys.right) player.vx = player.speed;
+          else player.vx *= 0.8;
+
+          player.x += player.vx;
+
+          // Screen wrap
+          if (player.x < -player.w) player.x = canvas.width;
+          if (player.x > canvas.width) player.x = -player.w;
+
+          // Gravity & physics
+          player.vy += player.gravity;
+          player.y += player.vy;
+
+          // Platform collisions (only when falling)
+          if (player.vy > 0) {
+            platforms.forEach(p => {
+              if (
+                player.x + player.w > p.x &&
+                player.x < p.x + p.w &&
+                player.y + player.h >= p.y &&
+                player.y + player.h <= p.y + p.h + player.vy
+              ) {
+                player.vy = player.jumpStrength;
+              }
+            });
+          }
+
+          // Camera follow upwards
+          if (player.y < cameraY + 250) {
+            let diff = (cameraY + 250) - player.y;
+            cameraY -= diff;
+            let currentHeight = Math.floor(-cameraY / 10);
+            if (currentHeight > maxScore) {
+              maxScore = currentHeight;
+              heightVal.textContent = maxScore;
+              if (maxScore > highScore) {
+                highScore = maxScore;
+                localStorage.setItem('tte_high', highScore.toString());
+                bestVal.textContent = highScore;
+              }
+            }
+          }
+
+          // Generate platforms dynamically above
+          let highestPlatformY = Math.min(...platforms.map(p => p.y));
+          if (highestPlatformY > cameraY - 50) {
+            platforms.push({
+              x: Math.random() * (canvas.width - 90),
+              y: highestPlatformY - (70 + Math.random() * 40),
+              w: 75 + Math.random() * 20,
+              h: 16,
+              type: 'normal'
+            });
+          }
+
+          // Remove platforms far below camera
+          platforms = platforms.filter(p => p.y < cameraY + canvas.height + 100);
+
+          // Game over condition (falling below screen)
+          if (player.y > cameraY + canvas.height + 50) {
+            isGameOver = true;
+          }
+        }
+
+        function draw() {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+          ctx.save();
+          ctx.translate(0, -cameraY);
+
+          // Draw Platforms
+          platforms.forEach(p => {
+            ctx.fillStyle = '#38bdf8';
+            ctx.strokeStyle = '#0284c7';
+            ctx.lineWidth = 2;
+            ctx.fillRect(p.x, p.y, p.w, p.h);
+            ctx.strokeRect(p.x, p.y, p.w, p.h);
+          });
+
+          // Draw Player (Eagle Character)
+          ctx.fillStyle = '#f59e0b';
+          ctx.strokeStyle = '#d97706';
+          ctx.lineWidth = 2;
+          ctx.fillRect(player.x, player.y, player.w, player.h);
+          ctx.strokeRect(player.x, player.y, player.w, player.h);
+
+          // Simple Eagle Eyes / Beak details
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(player.x + 20, player.y + 8, 8, 8);
+          ctx.fillStyle = '#0f172a';
+          ctx.fillRect(player.x + 24, player.y + 10, 4, 4);
+
+          ctx.fillStyle = '#ea580c'; // Beak
+          ctx.beginPath();
+          ctx.moveTo(player.x + player.w, player.y + 14);
+          ctx.lineTo(player.x + player.w + 10, player.y + 18);
+          ctx.lineTo(player.x + player.w, player.y + 22);
+          ctx.closePath();
+          ctx.fill();
+
+          ctx.restore();
+
+          // Game Over Overlay
+          if (isGameOver) {
+            ctx.fillStyle = 'rgba(11, 15, 25, 0.85)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#f8fafc';
+            ctx.font = '900 36px system-ui';
+            ctx.textAlign = 'center';
+            ctx.fillText('FELL DOWN!', canvas.width / 2, canvas.height / 2 - 20);
+
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '700 18px system-ui';
+            ctx.fillText('Click anywhere to Retry', canvas.width / 2, canvas.height / 2 + 25);
+          }
+        }
+
+        canvas.addEventListener('click', () => {
+          if (isGameOver) {
+            resetGame();
+          }
+        });
+
+        function loop() {
+          update();
+          draw();
+          if (!isGameOver) {
+            requestAnimationFrame(loop);
+          }
+        }
+
+        initPlatforms();
+        loop();
+        ]]>
+      </script>
+    </div>
+  </foreignObject>
+</svg>
