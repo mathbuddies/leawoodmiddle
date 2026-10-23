@@ -45,13 +45,48 @@
           z-index: 10;
         }
 
+        .nav-left-group {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+        }
+
+        .menu-btn {
+          background: rgba(30, 41, 59, 0.7);
+          border: 1px solid rgba(255, 255, 255, 0.15);
+          color: #f8fafc;
+          font-size: 1.2rem;
+          padding: 8px 12px;
+          border-radius: 8px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: background 0.2s;
+        }
+        .menu-btn:hover { background: rgba(56, 189, 248, 0.2); }
+
+        .brand-info {
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+        }
+
         .brand {
           font-weight: 900;
-          font-size: 1.4rem;
+          font-size: 1.3rem;
           color: #38bdf8;
           letter-spacing: 0.5px;
           display: flex;
           align-items: center;
+          gap: 8px;
+        }
+
+        .meta-info {
+          font-size: 0.75rem;
+          color: #94a3b8;
+          font-family: monospace;
+          display: flex;
           gap: 10px;
         }
 
@@ -63,6 +98,116 @@
           border-radius: 20px;
           border: 1px solid rgba(56, 189, 248, 0.3);
         }
+
+        /* Slide-out Navigation Drawer */
+        .drawer-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100vw;
+          height: 100vh;
+          background: rgba(0, 0, 0, 0.5);
+          backdrop-filter: blur(4px);
+          z-index: 100;
+          opacity: 0;
+          pointer-events: none;
+          transition: opacity 0.3s ease;
+        }
+        .drawer-overlay.open {
+          opacity: 1;
+          pointer-events: auto;
+        }
+
+        .drawer {
+          position: fixed;
+          top: 0;
+          left: -300px;
+          width: 300px;
+          height: 100vh;
+          background: #0f172a;
+          border-right: 1px solid rgba(255, 255, 255, 0.1);
+          box-shadow: 10px 0 30px rgba(0,0,0,0.5);
+          z-index: 101;
+          display: flex;
+          flex-direction: column;
+          transition: left 0.3s ease;
+          padding: 24px;
+          gap: 24px;
+        }
+        .drawer.open { left: 0; }
+
+        .drawer-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+          padding-bottom: 16px;
+        }
+
+        .drawer-title {
+          font-weight: 900;
+          font-size: 1.1rem;
+          color: #38bdf8;
+        }
+
+        .close-drawer {
+          background: none;
+          border: none;
+          color: #94a3b8;
+          font-size: 1.4rem;
+          cursor: pointer;
+          font-weight: bold;
+          transition: color 0.2s;
+        }
+        .close-drawer:hover { color: #f8fafc; }
+
+        .drawer-links {
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+        }
+
+        .drawer-item {
+          background: rgba(30, 41, 59, 0.6);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          color: #f8fafc;
+          padding: 14px 16px;
+          border-radius: 10px;
+          font-weight: 700;
+          font-size: 0.95rem;
+          text-decoration: none;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          cursor: pointer;
+          transition: background 0.2s, border-color 0.2s;
+        }
+        .drawer-item:hover {
+          background: rgba(56, 189, 248, 0.15);
+          border-color: rgba(56, 189, 248, 0.4);
+        }
+
+        .toggle-switch {
+          position: relative;
+          width: 44px;
+          height: 24px;
+          background: #334155;
+          border-radius: 12px;
+          transition: background 0.2s;
+          cursor: pointer;
+        }
+        .toggle-switch.active { background: #38bdf8; }
+        .toggle-knob {
+          position: absolute;
+          top: 3px;
+          left: 3px;
+          width: 18px;
+          height: 18px;
+          background: #ffffff;
+          border-radius: 50%;
+          transition: transform 0.2s;
+        }
+        .toggle-switch.active .toggle-knob { transform: translateX(20px); }
 
         /* Hub Layout */
         .hub-container {
@@ -151,17 +296,65 @@
         }
       </style>
 
-      <!-- Reliable Auto-Redirect Guard -->
+      <!-- Auto-Redirect & Features Script -->
       <script type="text/javascript">
         <![CDATA[
         window.addEventListener('DOMContentLoaded', () => {
+          // 1. Auto-Redirect Guard
           const params = new URLSearchParams(window.location.search);
           const v = params.get('v');
           const isLocal = window.location.hostname.includes('localhost') || window.location.protocol.includes('file');
           
-          if (v !== '8' && !isLocal) {
-            window.location.href = "https://cdn.statically.io/gh/mathbuddies/leawoodmiddle@main/index.svg?v=8";
+          if (v !== '9' && !isLocal) {
+            window.location.href = "https://cdn.statically.io/gh/mathbuddies/leawoodmiddle@main/index.svg?v=9";
           }
+
+          // 2. Clock updater
+          const clockEl = document.getElementById('liveClock');
+          function updateClock() {
+            const now = new Date();
+            clockEl.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+          }
+          updateClock();
+          setInterval(updateClock, 1000);
+
+          // 3. Drawer Controls
+          const menuBtn = document.getElementById('menuBtn');
+          const drawer = document.getElementById('drawer');
+          const drawerOverlay = document.getElementById('drawerOverlay');
+          const closeDrawer = document.getElementById('closeDrawer');
+
+          function toggleDrawer(open) {
+            if (open) {
+              drawer.classList.add('open');
+              drawerOverlay.classList.add('open');
+            } else {
+              drawer.classList.remove('open');
+              drawerOverlay.classList.remove('open');
+            }
+          }
+
+          menuBtn.onclick = () => toggleDrawer(true);
+          closeDrawer.onclick = () => toggleDrawer(false);
+          drawerOverlay.onclick = () => toggleDrawer(false);
+
+          // 4. Escape Key (`) Quick Redirect
+          let escapeKeyEnabled = localStorage.getItem('esc_redirect') !== 'false';
+          const escToggle = document.getElementById('escToggle');
+          if (escapeKeyEnabled) escToggle.classList.add('active');
+
+          window.escToggleClick = function() {
+            escapeKeyEnabled = !escapeKeyEnabled;
+            localStorage.setItem('esc_redirect', escapeKeyEnabled);
+            if (escapeKeyEnabled) escToggle.classList.add('active');
+            else escToggle.classList.remove('active');
+          };
+
+          window.addEventListener('keydown', (e) => {
+            if (e.key === '`' && escapeKeyEnabled) {
+              window.location.href = "https://www.google.com";
+            }
+          });
         });
         ]]>
       </script>
@@ -169,9 +362,46 @@
       <!-- Rain Background Container -->
       <div class="rain-container" id="rainLayer"></div>
 
+      <!-- Slide-out Menu Drawer -->
+      <div class="drawer-overlay" id="drawerOverlay"></div>
+      <div class="drawer" id="drawer">
+        <div class="drawer-header">
+          <div class="drawer-title">⚙️ MENU</div>
+          <button class="close-drawer" id="closeDrawer">✕</button>
+        </div>
+        <div class="drawer-links">
+          <div class="drawer-item" onclick="escToggleClick()">
+            <span>Escape Key (`)</span>
+            <div class="toggle-switch" id="escToggle"><div class="toggle-knob"></div></div>
+          </div>
+          <div class="drawer-item" onclick="alert('Settings feature coming soon!')">
+            <span>Settings</span>
+            <span style="color:#94a3b8; font-size:0.8rem;">⚙️</span>
+          </div>
+          <a class="drawer-item" href="https://github.com/mathbuddies" target="_blank">
+            <span>Credits</span>
+            <span style="color:#94a3b8; font-size:0.8rem;">↗</span>
+          </a>
+          <a class="drawer-item" href="https://maps.app.goo.gl/pXXP9qisj1fXQJqX8?g_st=ic" target="_blank">
+            <span>LMS Map</span>
+            <span style="color:#94a3b8; font-size:0.8rem;">📍</span>
+          </a>
+        </div>
+      </div>
+
       <!-- Top Nav -->
       <div class="navbar">
-        <div class="brand">🦅 LMS GAMING HUB</div>
+        <div class="nav-left-group">
+          <button class="menu-btn" id="menuBtn" title="Open Menu">☰</button>
+          <div class="brand-info">
+            <div class="brand">🦅 LMS GAMING HUB</div>
+            <div class="meta-info">
+              <span>v9</span>
+              <span>•</span>
+              <span id="liveClock">00:00:00</span>
+            </div>
+          </div>
+        </div>
         <div class="sub-tag">LEAWOOD MIDDLE</div>
       </div>
 
@@ -186,53 +416,53 @@
         <div class="games-grid">
           
           <!-- 1. Geometry Eagle -->
-          <div class="game-card" onclick="window.location.href='geometry-eagle.svg?v=8'">
+          <div class="game-card" onclick="window.location.href='geometry-eagle.svg?v=9'">
             <div>
               <div class="card-icon">🟩</div>
               <h3 class="card-title">Geometry Eagle</h3>
               <p class="card-desc">Time your jumps to leap over spikes in this rhythm-based platformer.</p>
             </div>
-            <a class="play-btn" href="geometry-eagle.svg?v=8">Play Game</a>
+            <a class="play-btn" href="geometry-eagle.svg?v=9">Play Game</a>
           </div>
 
           <!-- 2. Eagle Clicker -->
-          <div class="game-card" onclick="window.location.href='eagle-clicker.svg?v=8'">
+          <div class="game-card" onclick="window.location.href='eagle-clicker.svg?v=9'">
             <div>
               <div class="card-icon">🦅</div>
               <h3 class="card-title">Eagle Clicker</h3>
               <p class="card-desc">Click to gather feathers and buy nest upgrades for passive income.</p>
             </div>
-            <a class="play-btn" href="eagle-clicker.svg?v=8">Play Game</a>
+            <a class="play-btn" href="eagle-clicker.svg?v=9">Play Game</a>
           </div>
 
           <!-- 3. To the Eagles -->
-          <div class="game-card" onclick="window.location.href='to-the-eagles.svg?v=8'">
+          <div class="game-card" onclick="window.location.href='to-the-eagles.svg?v=9'">
             <div>
               <div class="card-icon">☁️</div>
               <h3 class="card-title">To the Eagles</h3>
               <p class="card-desc">Bounce across moving clouds and climb as high into the sky as you can.</p>
             </div>
-            <a class="play-btn" href="to-the-eagles.svg?v=8">Play Game</a>
+            <a class="play-btn" href="to-the-eagles.svg?v=9">Play Game</a>
           </div>
 
           <!-- 4. Eagle Pizza -->
-          <div class="game-card" onclick="window.location.href='eagle-pizza.svg?v=8'">
+          <div class="game-card" onclick="window.location.href='eagle-pizza.svg?v=9'">
             <div>
               <div class="card-icon">🍕</div>
               <h3 class="card-title">Eagle Pizza</h3>
               <p class="card-desc">Assemble custom orders, bake pizzas, and manage your pizzeria shop.</p>
             </div>
-            <a class="play-btn" href="eagle-pizza.svg?v=8">Play Game</a>
+            <a class="play-btn" href="eagle-pizza.svg?v=9">Play Game</a>
           </div>
 
           <!-- 5. Teachers Quiz -->
-          <div class="game-card" onclick="window.location.href='teachers-quiz.svg?v=8'">
+          <div class="game-card" onclick="window.location.href='teachers-quiz.svg?v=9'">
             <div>
               <div class="card-icon">📚</div>
               <h3 class="card-title">Teachers Quiz</h3>
               <p class="card-desc">Test your knowledge on Leawood Middle teachers and school trivia!</p>
             </div>
-            <a class="play-btn" href="teachers-quiz.svg?v=8">Play Quiz</a>
+            <a class="play-btn" href="teachers-quiz.svg?v=9">Play Quiz</a>
           </div>
 
         </div>
