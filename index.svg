@@ -121,8 +121,8 @@
         .drawer {
           position: fixed;
           top: 0;
-          left: -300px;
-          width: 300px;
+          left: -320px;
+          width: 320px;
           height: 100vh;
           background: #0f172a;
           border-right: 1px solid rgba(255, 255, 255, 0.1);
@@ -132,7 +132,8 @@
           flex-direction: column;
           transition: left 0.3s ease;
           padding: 24px;
-          gap: 24px;
+          gap: 20px;
+          overflow-y: auto;
         }
         .drawer.open { left: 0; }
 
@@ -164,7 +165,7 @@
         .drawer-links {
           display: flex;
           flex-direction: column;
-          gap: 16px;
+          gap: 12px;
         }
 
         .drawer-item {
@@ -208,6 +209,66 @@
           transition: transform 0.2s;
         }
         .toggle-switch.active .toggle-knob { transform: translateX(20px); }
+
+        /* Modal Overlay for Bug Report */
+        .modal-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100vw;
+          height: 100vh;
+          background: rgba(0, 0, 0, 0.6);
+          backdrop-filter: blur(5px);
+          z-index: 200;
+          display: none;
+          align-items: center;
+          justify-content: center;
+        }
+        .modal-overlay.open { display: flex; }
+
+        .modal-card {
+          background: #1e293b;
+          border: 1px solid rgba(255, 255, 255, 0.15);
+          border-radius: 16px;
+          padding: 24px;
+          width: 90%;
+          max-width: 400px;
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+          box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+        }
+
+        .modal-textarea {
+          width: 100%;
+          height: 100px;
+          background: #0f172a;
+          border: 1px solid #334155;
+          color: #f8fafc;
+          padding: 12px;
+          border-radius: 8px;
+          resize: none;
+          font-family: inherit;
+          font-size: 0.95rem;
+        }
+        .modal-textarea:focus { outline: none; border-color: #38bdf8; }
+
+        .modal-btns {
+          display: flex;
+          justify-content: flex-end;
+          gap: 10px;
+        }
+
+        .modal-btn {
+          padding: 8px 16px;
+          border-radius: 8px;
+          font-weight: 700;
+          cursor: pointer;
+          border: none;
+          font-size: 0.9rem;
+        }
+        .modal-btn.cancel { background: #334155; color: #f8fafc; }
+        .modal-btn.submit { background: #38bdf8; color: #0f172a; }
 
         /* Hub Layout */
         .hub-container {
@@ -305,8 +366,8 @@
           const v = params.get('v');
           const isLocal = window.location.hostname.includes('localhost') || window.location.protocol.includes('file');
           
-          if (v !== '9' && !isLocal) {
-            window.location.href = "https://cdn.statically.io/gh/mathbuddies/leawoodmiddle@main/index.svg?v=9";
+          if (v !== '11' && !isLocal) {
+            window.location.href = "https://cdn.statically.io/gh/mathbuddies/leawoodmiddle@main/index.svg?v=11";
           }
 
           // 2. Clock updater
@@ -338,7 +399,33 @@
           closeDrawer.onclick = () => toggleDrawer(false);
           drawerOverlay.onclick = () => toggleDrawer(false);
 
-          // 4. Escape Key (`) Quick Redirect
+          // 4. Bug Report Modal Logic (Moderator message)
+          const reportBtn = document.getElementById('reportBtn');
+          const bugModal = document.getElementById('bugModal');
+          const cancelBug = document.getElementById('cancelBug');
+          const submitBug = document.getElementById('submitBug');
+          const bugInput = document.getElementById('bugInput');
+
+          reportBtn.onclick = () => {
+            toggleDrawer(false);
+            bugInput.value = '';
+            bugModal.classList.add('open');
+          };
+
+          cancelBug.onclick = () => {
+            bugModal.classList.remove('open');
+          };
+
+          submitBug.onclick = () => {
+            if(bugInput.value.trim() !== '') {
+              alert('Bug submitted! Sent to the moderator for review.');
+              bugModal.classList.remove('open');
+            } else {
+              alert('Please type something first!');
+            }
+          };
+
+          // 5. Escape Key (`) Quick Redirect
           let escapeKeyEnabled = localStorage.getItem('esc_redirect') !== 'false';
           const escToggle = document.getElementById('escToggle');
           if (escapeKeyEnabled) escToggle.classList.add('active');
@@ -374,6 +461,14 @@
             <span>Escape Key (`)</span>
             <div class="toggle-switch" id="escToggle"><div class="toggle-knob"></div></div>
           </div>
+          <a class="drawer-item" href="https://bluevalleyk12.nutrislice.com/menu/leawood-middle/lunch/" target="_blank">
+            <span>Lunch Menu</span>
+            <span style="color:#94a3b8; font-size:0.8rem;">🍕</span>
+          </a>
+          <div class="drawer-item" id="reportBtn">
+            <span>Report Bug</span>
+            <span style="color:#94a3b8; font-size:0.8rem;">🐛</span>
+          </div>
           <div class="drawer-item" onclick="alert('Settings feature coming soon!')">
             <span>Settings</span>
             <span style="color:#94a3b8; font-size:0.8rem;">⚙️</span>
@@ -389,6 +484,19 @@
         </div>
       </div>
 
+      <!-- Bug Report Modal -->
+      <div class="modal-overlay" id="bugModal">
+        <div class="modal-card">
+          <h3 style="margin:0; color:#38bdf8; font-size:1.2rem; font-weight:900;">🐛 REPORT A BUG</h3>
+          <p style="margin:0; color:#94a3b8; font-size:0.9rem;">Describe the issue for the moderator:</p>
+          <textarea class="modal-textarea" id="bugInput" placeholder="Type your bug report here..."></textarea>
+          <div class="modal-btns">
+            <button class="modal-btn cancel" id="cancelBug">Cancel</button>
+            <button class="modal-btn submit" id="submitBug">Submit Bug</button>
+          </div>
+        </div>
+      </div>
+
       <!-- Top Nav -->
       <div class="navbar">
         <div class="nav-left-group">
@@ -396,7 +504,7 @@
           <div class="brand-info">
             <div class="brand">🦅 LMS GAMING HUB</div>
             <div class="meta-info">
-              <span>v9</span>
+              <span>v11</span>
               <span>•</span>
               <span id="liveClock">00:00:00</span>
             </div>
@@ -416,53 +524,53 @@
         <div class="games-grid">
           
           <!-- 1. Geometry Eagle -->
-          <div class="game-card" onclick="window.location.href='geometry-eagle.svg?v=9'">
+          <div class="game-card" onclick="window.location.href='geometry-eagle.svg?v=11'">
             <div>
               <div class="card-icon">🟩</div>
               <h3 class="card-title">Geometry Eagle</h3>
               <p class="card-desc">Time your jumps to leap over spikes in this rhythm-based platformer.</p>
             </div>
-            <a class="play-btn" href="geometry-eagle.svg?v=9">Play Game</a>
+            <a class="play-btn" href="geometry-eagle.svg?v=11">Play Game</a>
           </div>
 
           <!-- 2. Eagle Clicker -->
-          <div class="game-card" onclick="window.location.href='eagle-clicker.svg?v=9'">
+          <div class="game-card" onclick="window.location.href='eagle-clicker.svg?v=11'">
             <div>
               <div class="card-icon">🦅</div>
               <h3 class="card-title">Eagle Clicker</h3>
               <p class="card-desc">Click to gather feathers and buy nest upgrades for passive income.</p>
             </div>
-            <a class="play-btn" href="eagle-clicker.svg?v=9">Play Game</a>
+            <a class="play-btn" href="eagle-clicker.svg?v=11">Play Game</a>
           </div>
 
           <!-- 3. To the Eagles -->
-          <div class="game-card" onclick="window.location.href='to-the-eagles.svg?v=9'">
+          <div class="game-card" onclick="window.location.href='to-the-eagles.svg?v=11'">
             <div>
               <div class="card-icon">☁️</div>
               <h3 class="card-title">To the Eagles</h3>
               <p class="card-desc">Bounce across moving clouds and climb as high into the sky as you can.</p>
             </div>
-            <a class="play-btn" href="to-the-eagles.svg?v=9">Play Game</a>
+            <a class="play-btn" href="to-the-eagles.svg?v=11">Play Game</a>
           </div>
 
           <!-- 4. Eagle Pizza -->
-          <div class="game-card" onclick="window.location.href='eagle-pizza.svg?v=9'">
+          <div class="game-card" onclick="window.location.href='eagle-pizza.svg?v=11'">
             <div>
               <div class="card-icon">🍕</div>
               <h3 class="card-title">Eagle Pizza</h3>
               <p class="card-desc">Assemble custom orders, bake pizzas, and manage your pizzeria shop.</p>
             </div>
-            <a class="play-btn" href="eagle-pizza.svg?v=9">Play Game</a>
+            <a class="play-btn" href="eagle-pizza.svg?v=11">Play Game</a>
           </div>
 
           <!-- 5. Teachers Quiz -->
-          <div class="game-card" onclick="window.location.href='teachers-quiz.svg?v=9'">
+          <div class="game-card" onclick="window.location.href='teachers-quiz.svg?v=11'">
             <div>
               <div class="card-icon">📚</div>
               <h3 class="card-title">Teachers Quiz</h3>
               <p class="card-desc">Test your knowledge on Leawood Middle teachers and school trivia!</p>
             </div>
-            <a class="play-btn" href="teachers-quiz.svg?v=9">Play Quiz</a>
+            <a class="play-btn" href="teachers-quiz.svg?v=11">Play Quiz</a>
           </div>
 
         </div>
