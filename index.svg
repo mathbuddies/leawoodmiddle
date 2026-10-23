@@ -490,8 +490,8 @@
           const v = params.get('v');
           const isLocal = window.location.hostname.includes('localhost') || window.location.protocol.includes('file');
           
-          if (v !== '12' && !isLocal) {
-            window.location.href = "https://cdn.statically.io/gh/mathbuddies/leawoodmiddle@main/index.svg?v=12";
+          if (v !== '13' && !isLocal) {
+            window.location.href = "https://cdn.statically.io/gh/mathbuddies/leawoodmiddle@main/index.svg?v=13";
           }
 
           // 2. Clock updater
@@ -503,7 +503,27 @@
           updateClock();
           setInterval(updateClock, 1000);
 
-          // 3. Drawer Controls
+          // 3. Fetch Live JSONBin Announcement
+          const BIN_URL = "https://api.jsonbin.io/v3/b/YOUR_BIN_ID_HERE";
+          const MASTER_KEY = "YOUR_MASTER_KEY_HERE";
+
+          async function fetchGlobalAnnouncement() {
+            try {
+              const res = await fetch(BIN_URL, {
+                headers: { 'X-Master-Key': MASTER_KEY }
+              });
+              const json = await res.json();
+              if (json && json.record && json.record.message) {
+                document.querySelector('.top-banner').textContent = `📢 Announcement: ${json.record.message}`;
+              }
+            } catch (err) {
+              console.log("Could not load global announcement");
+            }
+          }
+          fetchGlobalAnnouncement();
+          setInterval(fetchGlobalAnnouncement, 30000); // Check every 30s
+
+          // 4. Drawer Controls
           const menuBtn = document.getElementById('menuBtn');
           const drawer = document.getElementById('drawer');
           const drawerOverlay = document.getElementById('drawerOverlay');
@@ -523,7 +543,7 @@
           closeDrawer.onclick = () => toggleDrawer(false);
           drawerOverlay.onclick = () => toggleDrawer(false);
 
-          // 4. Search Filter
+          // 5. Search Filter
           const searchInput = document.getElementById('searchInput');
           const gameCards = document.querySelectorAll('.game-card');
 
@@ -540,7 +560,7 @@
             });
           };
 
-          // 5. Account & Recently Played Logic
+          // 6. Account & Recently Played Logic
           const profileBtn = document.getElementById('profileBtn');
           const authModal = document.getElementById('authModal');
           const cancelAuth = document.getElementById('cancelAuth');
@@ -603,7 +623,7 @@
             }
           }
 
-          // 6. Owner's Only Keypad Menu
+          // 7. Owner's Only Keypad Menu with Live JSONBin Broadcast
           const ownerMenuBtn = document.getElementById('ownerMenuBtn');
           const ownerModal = document.getElementById('ownerModal');
           const cancelOwner = document.getElementById('cancelOwner');
@@ -640,26 +660,31 @@
             }
           };
 
-          broadcastBtn.onclick = () => {
+          broadcastBtn.onclick = async () => {
             const msg = globalAnnouncementInput.value.trim();
             if(msg) {
-              localStorage.setItem('global_announcement', msg);
-              alert('Global announcement broadcasted successfully!');
-              ownerModal.classList.remove('open');
-              checkAnnouncement();
+              try {
+                broadcastBtn.textContent = "Broadcasting...";
+                await fetch(BIN_URL, {
+                  method: 'PUT',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'X-Master-Key': MASTER_KEY
+                  },
+                  body: JSON.stringify({ message: msg })
+                });
+                alert('Global announcement successfully broadcasted to all players via JSONBin!');
+                ownerModal.classList.remove('open');
+                fetchGlobalAnnouncement();
+              } catch (err) {
+                alert('Failed to broadcast to JSONBin.');
+              } finally {
+                broadcastBtn.textContent = "Broadcast to All Players";
+              }
             }
           };
 
-          function checkAnnouncement() {
-            const ann = localStorage.getItem('global_announcement');
-            if(ann) {
-              const banner = document.querySelector('.top-banner');
-              banner.textContent = `📢 Announcement: ${ann}`;
-            }
-          }
-          checkAnnouncement();
-
-          // 7. Bug Report Modal Logic
+          // 8. Bug Report Modal Logic
           const reportBtn = document.getElementById('reportBtn');
           const bugModal = document.getElementById('bugModal');
           const cancelBug = document.getElementById('cancelBug');
@@ -683,7 +708,7 @@
             }
           };
 
-          // 8. Escape Key (`) Quick Redirect
+          // 9. Escape Key (`) Quick Redirect
           let escapeKeyEnabled = localStorage.getItem('esc_redirect') !== 'false';
           const escToggle = document.getElementById('escToggle');
           if (escapeKeyEnabled) escToggle.classList.add('active');
@@ -781,7 +806,7 @@
           </div>
 
           <div id="ownerPanel" style="display:none; flex-direction:column; gap:12px; margin-top:10px; border-top:1px solid #334155; padding-top:12px;">
-            <p style="margin:0; color:#22c55e; font-weight:800; font-size:0.9rem;">Access Granted! Broadcast Announcement:</p>
+            <p style="margin:0; color:#22c55e; font-weight:800; font-size:0.9rem;">Access Granted! Live JSONBin Broadcast:</p>
             <input type="text" class="modal-input" id="globalAnnouncementInput" placeholder="Type global announcement..." />
             <button class="modal-btn submit" id="broadcastBtn" style="width:100%;">Broadcast to All Players</button>
           </div>
@@ -812,7 +837,7 @@
           <div class="brand-info">
             <div class="brand">🦅 LMS GAMING HUB</div>
             <div class="meta-info">
-              <span>v12</span>
+              <span>v13</span>
               <span>•</span>
               <span id="liveClock">00:00:00</span>
             </div>
@@ -842,53 +867,53 @@
         <div class="games-grid">
           
           <!-- 1. Geometry Eagle -->
-          <div class="game-card" onclick="recordPlay('Geometry Eagle', 'geometry-eagle.svg?v=12')">
+          <div class="game-card" onclick="recordPlay('Geometry Eagle', 'geometry-eagle.svg?v=13')">
             <div>
               <div class="card-icon">🟩</div>
               <h3 class="card-title">Geometry Eagle</h3>
               <p class="card-desc">Time your jumps to leap over spikes in this rhythm-based platformer.</p>
             </div>
-            <a class="play-btn" href="geometry-eagle.svg?v=12">Play Game</a>
+            <a class="play-btn" href="geometry-eagle.svg?v=13">Play Game</a>
           </div>
 
           <!-- 2. Eagle Clicker -->
-          <div class="game-card" onclick="recordPlay('Eagle Clicker', 'eagle-clicker.svg?v=12')">
+          <div class="game-card" onclick="recordPlay('Eagle Clicker', 'eagle-clicker.svg?v=13')">
             <div>
               <div class="card-icon">🦅</div>
               <h3 class="card-title">Eagle Clicker</h3>
               <p class="card-desc">Click to gather feathers and buy nest upgrades for passive income.</p>
             </div>
-            <a class="play-btn" href="eagle-clicker.svg?v=12">Play Game</a>
+            <a class="play-btn" href="eagle-clicker.svg?v=13">Play Game</a>
           </div>
 
           <!-- 3. To the Eagles -->
-          <div class="game-card" onclick="recordPlay('To the Eagles', 'to-the-eagles.svg?v=12')">
+          <div class="game-card" onclick="recordPlay('To the Eagles', 'to-the-eagles.svg?v=13')">
             <div>
               <div class="card-icon">☁️</div>
               <h3 class="card-title">To the Eagles</h3>
               <p class="card-desc">Bounce across moving clouds and climb as high into the sky as you can.</p>
             </div>
-            <a class="play-btn" href="to-the-eagles.svg?v=12">Play Game</a>
+            <a class="play-btn" href="to-the-eagles.svg?v=13">Play Game</a>
           </div>
 
           <!-- 4. Eagle Pizza -->
-          <div class="game-card" onclick="recordPlay('Eagle Pizza', 'eagle-pizza.svg?v=12')">
+          <div class="game-card" onclick="recordPlay('Eagle Pizza', 'eagle-pizza.svg?v=13')">
             <div>
               <div class="card-icon">🍕</div>
               <h3 class="card-title">Eagle Pizza</h3>
               <p class="card-desc">Assemble custom orders, bake pizzas, and manage your pizzeria shop.</p>
             </div>
-            <a class="play-btn" href="eagle-pizza.svg?v=12">Play Game</a>
+            <a class="play-btn" href="eagle-pizza.svg?v=13">Play Game</a>
           </div>
 
           <!-- 5. Teachers Quiz -->
-          <div class="game-card" onclick="recordPlay('Teachers Quiz', 'teachers-quiz.svg?v=12')">
+          <div class="game-card" onclick="recordPlay('Teachers Quiz', 'teachers-quiz.svg?v=13')">
             <div>
               <div class="card-icon">📚</div>
               <h3 class="card-title">Teachers Quiz</h3>
               <p class="card-desc">Test your knowledge on Leawood Middle teachers and school trivia!</p>
             </div>
-            <a class="play-btn" href="teachers-quiz.svg?v=12">Play Quiz</a>
+            <a class="play-btn" href="teachers-quiz.svg?v=13">Play Quiz</a>
           </div>
 
         </div>
