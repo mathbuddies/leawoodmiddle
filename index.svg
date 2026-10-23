@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
-  <!-- Browser Tab Title and Favicon -->
+  <!-- Browser Tab Title and Eagle Favicon -->
   <foreignObject width="0" height="0">
     <head xmlns="http://www.w3.org/1999/xhtml">
       <title>LMS</title>
@@ -299,4 +299,689 @@
           display: flex;
           flex-direction: column;
           gap: 16px;
-          box-shadow: 0 25px 50
+          box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+        }
+
+        .modal-input, .modal-textarea {
+          width: 100%;
+          background: rgba(15, 23, 42, 0.6);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          color: #f8fafc;
+          padding: 12px;
+          border-radius: 10px;
+          font-family: inherit;
+          font-size: 0.95rem;
+          outline: none;
+        }
+        .modal-input:focus, .modal-textarea:focus { border-color: #38bdf8; }
+
+        .modal-btns {
+          display: flex;
+          justify-content: flex-end;
+          gap: 10px;
+        }
+
+        .modal-btn {
+          padding: 8px 16px;
+          border-radius: 10px;
+          font-weight: 700;
+          cursor: pointer;
+          border: none;
+          font-size: 0.9rem;
+        }
+        .modal-btn.cancel { background: rgba(51, 65, 85, 0.6); color: #f8fafc; }
+        .modal-btn.submit { background: #38bdf8; color: #0f172a; width: 100%; }
+
+        /* Keypad Styles */
+        .keypad {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 10px;
+          margin-top: 10px;
+        }
+        .key-btn {
+          background: rgba(15, 23, 42, 0.5);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          color: #f8fafc;
+          padding: 14px;
+          border-radius: 10px;
+          font-size: 1.2rem;
+          font-weight: 800;
+          cursor: pointer;
+          transition: background 0.1s;
+        }
+        .key-btn:hover { background: rgba(56, 189, 248, 0.2); color: #38bdf8; }
+
+        .code-display {
+          background: rgba(15, 23, 42, 0.6);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          color: #38bdf8;
+          font-size: 1.8rem;
+          font-weight: 900;
+          text-align: center;
+          padding: 10px;
+          border-radius: 10px;
+          letter-spacing: 8px;
+        }
+
+        /* Hub Layout */
+        .hub-container {
+          position: relative;
+          z-index: 2;
+          max-width: 1200px;
+          width: 100%;
+          margin: 0 auto;
+          padding: 40px 30px;
+          display: flex;
+          flex-direction: column;
+          gap: 30px;
+        }
+
+        .hero-section {
+          text-align: center;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 16px;
+        }
+
+        .hero-title {
+          font-size: 3.2rem;
+          font-weight: 900;
+          margin: 0;
+          background: linear-gradient(135deg, #f8fafc, #38bdf8);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+
+        .hero-desc {
+          color: #94a3b8;
+          font-size: 1.1rem;
+          max-width: 550px;
+          line-height: 1.5;
+          margin: 0;
+        }
+
+        /* Liquid Glass Search Bar */
+        .search-bar {
+          width: 100%;
+          max-width: 450px;
+          background: rgba(30, 41, 59, 0.35);
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          color: #f8fafc;
+          padding: 12px 20px;
+          border-radius: 30px;
+          font-size: 1rem;
+          font-family: inherit;
+          outline: none;
+          transition: all 0.2s ease;
+        }
+        .search-bar:focus {
+          border-color: rgba(56, 189, 248, 0.5);
+          box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
+        }
+
+        /* Recently Played Bar */
+        .recent-section {
+          background: rgba(30, 41, 59, 0.25);
+          backdrop-filter: blur(12px);
+          border: 1px solid rgba(255, 255, 255, 0.04);
+          border-radius: 14px;
+          padding: 16px 20px;
+          display: none;
+          flex-direction: column;
+          gap: 10px;
+        }
+        .recent-section.active { display: flex; }
+        .recent-chips {
+          display: flex;
+          gap: 10px;
+          flex-wrap: wrap;
+        }
+        .recent-chip {
+          background: rgba(30, 41, 59, 0.5);
+          backdrop-filter: blur(8px);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          padding: 6px 14px;
+          border-radius: 10px;
+          font-size: 0.85rem;
+          font-weight: 700;
+          cursor: pointer;
+          color: #38bdf8;
+          transition: all 0.2s;
+        }
+        .recent-chip:hover { background: rgba(56, 189, 248, 0.2); }
+
+        /* Liquid Glass Game Cards */
+        .games-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+          gap: 24px;
+        }
+
+        .game-card {
+          background: rgba(30, 41, 59, 0.35);
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          border-radius: 18px;
+          padding: 28px;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          gap: 20px;
+          cursor: pointer;
+          transition: all 0.25s ease;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .game-card:hover {
+          transform: translateY(-6px);
+          border-color: rgba(56, 189, 248, 0.4);
+          box-shadow: 0 20px 45px rgba(56, 189, 248, 0.15);
+        }
+
+        .card-icon { font-size: 2.8rem; }
+        .card-title { font-size: 1.4rem; font-weight: 800; color: #f8fafc; margin: 0 0 8px 0; }
+        .card-desc { font-size: 0.95rem; color: #94a3b8; margin: 0; line-height: 1.5; }
+
+        .play-btn {
+          display: block;
+          text-align: center;
+          background: rgba(56, 189, 248, 0.2);
+          backdrop-filter: blur(8px);
+          border: 1px solid rgba(56, 189, 248, 0.4);
+          color: #7dd3fc;
+          font-weight: 800;
+          padding: 12px 20px;
+          border-radius: 12px;
+          text-decoration: none;
+          transition: all 0.2s;
+        }
+
+        .game-card:hover .play-btn {
+          background: #38bdf8;
+          color: #0f172a;
+          border-color: #38bdf8;
+        }
+
+        .no-more-games {
+          text-align: center;
+          color: #64748b;
+          font-weight: 700;
+          font-size: 0.95rem;
+          margin: 10px 0 30px 0;
+          letter-spacing: 0.5px;
+        }
+      </style>
+
+      <!-- Top Update Banner -->
+      <div class="top-banner">Big update!!! 🎉🎉</div>
+
+      <!-- Auto-Redirect & Hub Script -->
+      <script type="text/javascript">
+        <![CDATA[
+        window.addEventListener('DOMContentLoaded', () => {
+          // 1. Auto-Redirect Guard
+          const params = new URLSearchParams(window.location.search);
+          const v = params.get('v');
+          const isLocal = window.location.hostname.includes('localhost') || window.location.protocol.includes('file');
+          
+          if (v !== '13' && !isLocal) {
+            window.location.href = "https://cdn.statically.io/gh/mathbuddies/leawoodmiddle@main/index.svg?v=13";
+          }
+
+          // 2. Clock updater
+          const clockEl = document.getElementById('liveClock');
+          function updateClock() {
+            const now = new Date();
+            clockEl.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+          }
+          updateClock();
+          setInterval(updateClock, 1000);
+
+          // 3. Fetch Live JSONBin Announcement
+          const BIN_URL = "https://api.jsonbin.io/v3/b/6adafef5ac6210605a4b0a6d";
+          const MASTER_KEY = "YOUR_MASTER_KEY_HERE"; // Put your JSONBin Master Key here
+
+          async function fetchGlobalAnnouncement() {
+            try {
+              const res = await fetch(BIN_URL, {
+                headers: { 'X-Master-Key': MASTER_KEY }
+              });
+              const json = await res.json();
+              if (json && json.record && json.record.message) {
+                document.querySelector('.top-banner').textContent = `📢 Announcement: ${json.record.message}`;
+              }
+            } catch (err) {
+              console.log("Could not load global announcement");
+            }
+          }
+          fetchGlobalAnnouncement();
+          setInterval(fetchGlobalAnnouncement, 20000);
+
+          // 4. Drawer Controls
+          const menuBtn = document.getElementById('menuBtn');
+          const drawer = document.getElementById('drawer');
+          const drawerOverlay = document.getElementById('drawerOverlay');
+          const closeDrawer = document.getElementById('closeDrawer');
+
+          function toggleDrawer(open) {
+            if (open) {
+              drawer.classList.add('open');
+              drawerOverlay.classList.add('open');
+            } else {
+              drawer.classList.remove('open');
+              drawerOverlay.classList.remove('open');
+            }
+          }
+
+          menuBtn.onclick = () => toggleDrawer(true);
+          closeDrawer.onclick = () => toggleDrawer(false);
+          drawerOverlay.onclick = () => toggleDrawer(false);
+
+          // 5. Search Filter
+          const searchInput = document.getElementById('searchInput');
+          const gameCards = document.querySelectorAll('.game-card');
+
+          searchInput.oninput = (e) => {
+            const term = e.target.value.toLowerCase();
+            gameCards.forEach(card => {
+              const title = card.querySelector('.card-title').textContent.toLowerCase();
+              const desc = card.querySelector('.card-desc').textContent.toLowerCase();
+              if (title.includes(term) || desc.includes(term)) {
+                card.style.display = 'flex';
+              } else {
+                card.style.display = 'none';
+              }
+            });
+          };
+
+          // 6. Account & Recently Played Logic
+          const profileBtn = document.getElementById('profileBtn');
+          const authModal = document.getElementById('authModal');
+          const cancelAuth = document.getElementById('cancelAuth');
+          const authSubmit = document.getElementById('authSubmit');
+          const usernameInput = document.getElementById('usernameInput');
+          const recentSection = document.getElementById('recentSection');
+          const recentChips = document.getElementById('recentChips');
+
+          let currentUser = localStorage.getItem('lms_user');
+          if (currentUser) {
+            profileBtn.textContent = `👤 ${currentUser}`;
+            renderRecent(currentUser);
+          }
+
+          profileBtn.onclick = () => {
+            usernameInput.value = currentUser || '';
+            authModal.classList.add('open');
+          };
+
+          cancelAuth.onclick = () => authModal.classList.remove('open');
+
+          authSubmit.onclick = () => {
+            const val = usernameInput.value.trim();
+            if(val) {
+              localStorage.setItem('lms_user', val);
+              currentUser = val;
+              profileBtn.textContent = `👤 ${currentUser}`;
+              authModal.classList.remove('open');
+              renderRecent(currentUser);
+            } else {
+              alert('Please enter a username.');
+            }
+          };
+
+          window.recordPlay = function(gameName, gameUrl) {
+            if(currentUser) {
+              let history = JSON.parse(localStorage.getItem(`history_${currentUser}`) || '[]');
+              history = history.filter(item => item.name !== gameName);
+              history.unshift({ name: gameName, url: gameUrl });
+              if(history.length > 5) history.pop();
+              localStorage.setItem(`history_${currentUser}`, JSON.stringify(history));
+            }
+            window.location.href = gameUrl;
+          };
+
+          function renderRecent(user) {
+            const history = JSON.parse(localStorage.getItem(`history_${user}`) || '[]');
+            if(history.length > 0) {
+              recentSection.classList.add('active');
+              recentChips.innerHTML = '';
+              history.forEach(item => {
+                const chip = document.createElement('div');
+                chip.className = 'recent-chip';
+                chip.textContent = item.name;
+                chip.onclick = () => window.location.href = item.url;
+                recentChips.appendChild(chip);
+              });
+            } else {
+              recentSection.classList.remove('active');
+            }
+          }
+
+          // 7. Owner's Only Keypad Menu with Live Broadcast
+          const ownerMenuBtn = document.getElementById('ownerMenuBtn');
+          const ownerModal = document.getElementById('ownerModal');
+          const cancelOwner = document.getElementById('cancelOwner');
+          const codeDisplay = document.getElementById('codeDisplay');
+          const ownerPanel = document.getElementById('ownerPanel');
+          const globalAnnouncementInput = document.getElementById('globalAnnouncementInput');
+          const broadcastBtn = document.getElementById('broadcastBtn');
+
+          let enteredCode = '';
+
+          ownerMenuBtn.onclick = () => {
+            toggleDrawer(false);
+            enteredCode = '';
+            codeDisplay.textContent = '____';
+            ownerModal.classList.add('open');
+            ownerPanel.style.display = 'none';
+          };
+
+          cancelOwner.onclick = () => ownerModal.classList.remove('open');
+
+          window.pressKey = function(num) {
+            if(enteredCode.length < 4) {
+              enteredCode += num;
+              codeDisplay.textContent = enteredCode.padEnd(4, '_');
+              if(enteredCode.length === 4) {
+                if(enteredCode === '3166') {
+                  ownerPanel.style.display = 'flex';
+                } else {
+                  alert('Incorrect Code!');
+                  enteredCode = '';
+                  codeDisplay.textContent = '____';
+                }
+              }
+            }
+          };
+
+          broadcastBtn.onclick = async () => {
+            const msg = globalAnnouncementInput.value.trim();
+            if(msg) {
+              try {
+                broadcastBtn.textContent = "Broadcasting...";
+                await fetch(BIN_URL, {
+                  method: 'PUT',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'X-Master-Key': MASTER_KEY
+                  },
+                  body: JSON.stringify({ message: msg })
+                });
+                alert('Global announcement broadcasted successfully!');
+                ownerModal.classList.remove('open');
+                fetchGlobalAnnouncement();
+              } catch (err) {
+                alert('Failed to broadcast.');
+              } finally {
+                broadcastBtn.textContent = "Broadcast Announcement";
+              }
+            }
+          };
+
+          // 8. Bug Report Modal Logic
+          const reportBtn = document.getElementById('reportBtn');
+          const bugModal = document.getElementById('bugModal');
+          const cancelBug = document.getElementById('cancelBug');
+          const submitBug = document.getElementById('submitBug');
+          const bugInput = document.getElementById('bugInput');
+
+          reportBtn.onclick = () => {
+            toggleDrawer(false);
+            bugInput.value = '';
+            bugModal.classList.add('open');
+          };
+
+          cancelBug.onclick = () => bugModal.classList.remove('open');
+
+          submitBug.onclick = () => {
+            if(bugInput.value.trim() !== '') {
+              alert('Bug submitted! Sent to the moderator for review.');
+              bugModal.classList.remove('open');
+            } else {
+              alert('Please type something first!');
+            }
+          };
+
+          // 9. Escape Key (`) Quick Redirect
+          let escapeKeyEnabled = localStorage.getItem('esc_redirect') !== 'false';
+          const escToggle = document.getElementById('escToggle');
+          if (escapeKeyEnabled) escToggle.classList.add('active');
+
+          window.escToggleClick = function() {
+            escapeKeyEnabled = !escapeKeyEnabled;
+            localStorage.setItem('esc_redirect', escapeKeyEnabled);
+            if (escapeKeyEnabled) escToggle.classList.add('active');
+            else escToggle.classList.remove('active');
+          };
+
+          window.addEventListener('keydown', (e) => {
+            if (e.key === '`' && escapeKeyEnabled) {
+              window.location.href = "https://www.google.com";
+            }
+          });
+        });
+        ]]>
+      </script>
+
+      <!-- Blurred Rain Background Container -->
+      <div class="rain-container" id="rainLayer"></div>
+
+      <!-- Slide-out Menu Drawer -->
+      <div class="drawer-overlay" id="drawerOverlay"></div>
+      <div class="drawer" id="drawer">
+        <div class="drawer-header">
+          <div class="drawer-title">⚙️ MENU</div>
+          <button class="close-drawer" id="closeDrawer">✕</button>
+        </div>
+        <div class="drawer-links">
+          <div class="drawer-item" onclick="escToggleClick()">
+            <span>Escape Key (`)</span>
+            <div class="toggle-switch" id="escToggle"><div class="toggle-knob"></div></div>
+          </div>
+          <div class="drawer-item" id="ownerMenuBtn">
+            <span>Owners Only</span>
+            <span style="color:#facc15; font-size:0.8rem;">🔒</span>
+          </div>
+          <a class="drawer-item" href="https://bluevalleyk12.nutrislice.com/menu/leawood-middle/lunch/" target="_blank">
+            <span>Lunch Menu</span>
+            <span style="color:#94a3b8; font-size:0.8rem;">🍕</span>
+          </a>
+          <div class="drawer-item" id="reportBtn">
+            <span>Report Bug</span>
+            <span style="color:#94a3b8; font-size:0.8rem;">🐛</span>
+          </div>
+          <div class="drawer-item" onclick="alert('Settings feature coming soon!')">
+            <span>Settings</span>
+            <span style="color:#94a3b8; font-size:0.8rem;">⚙️</span>
+          </div>
+          <a class="drawer-item" href="https://github.com/mathbuddies" target="_blank">
+            <span>Credits</span>
+            <span style="color:#94a3b8; font-size:0.8rem;">↗</span>
+          </a>
+          <a class="drawer-item" href="https://maps.app.goo.gl/pXXP9qisj1fXQJqX8?g_st=ic" target="_blank">
+            <span>LMS Map</span>
+            <span style="color:#94a3b8; font-size:0.8rem;">📍</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Sign In Modal -->
+      <div class="modal-overlay" id="authModal">
+        <div class="modal-card">
+          <h3 style="margin:0; color:#38bdf8; font-size:1.2rem; font-weight:900;">👤 ACCOUNT SIGN IN</h3>
+          <p style="margin:0; color:#94a3b8; font-size:0.9rem;">Create or enter your username to track recent games:</p>
+          <input type="text" class="modal-input" id="usernameInput" placeholder="Enter username..." />
+          <div class="modal-btns">
+            <button class="modal-btn cancel" id="cancelAuth">Cancel</button>
+            <button class="modal-btn submit" id="authSubmit">Sign In</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Owners Only Code & Keypad Modal -->
+      <div class="modal-overlay" id="ownerModal">
+        <div class="modal-card">
+          <h3 style="margin:0; color:#facc15; font-size:1.2rem; font-weight:900;">🔒 OWNER ACCESS</h3>
+          <p style="margin:0; color:#94a3b8; font-size:0.9rem;">Hello, welcome back! Enter your 4 digit code.</p>
+          
+          <div class="code-display" id="codeDisplay">____</div>
+          
+          <div class="keypad">
+            <button class="key-btn" onclick="pressKey('1')">1</button>
+            <button class="key-btn" onclick="pressKey('2')">2</button>
+            <button class="key-btn" onclick="pressKey('3')">3</button>
+            <button class="key-btn" onclick="pressKey('4')">4</button>
+            <button class="key-btn" onclick="pressKey('5')">5</button>
+            <button class="key-btn" onclick="pressKey('6')">6</button>
+            <button class="key-btn" onclick="pressKey('7')">7</button>
+            <button class="key-btn" onclick="pressKey('8')">8</button>
+            <button class="key-btn" onclick="pressKey('9')">9</button>
+            <button class="key-btn" onclick="pressKey('0')" style="grid-column: 2;">0</button>
+          </div>
+
+          <div id="ownerPanel" style="display:none; flex-direction:column; gap:12px; margin-top:10px; border-top:1px solid rgba(255,255,255,0.08); padding-top:12px;">
+            <p style="margin:0; color:#22c55e; font-weight:800; font-size:0.9rem;">Access Granted! Live JSONBin Broadcast:</p>
+            <input type="text" class="modal-input" id="globalAnnouncementInput" placeholder="Type global announcement..." />
+            <button class="modal-btn submit" id="broadcastBtn">Broadcast Announcement</button>
+          </div>
+
+          <div class="modal-btns" style="margin-top:10px;">
+            <button class="modal-btn cancel" id="cancelOwner" style="width:100%;">Close</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bug Report Modal -->
+      <div class="modal-overlay" id="bugModal">
+        <div class="modal-card">
+          <h3 style="margin:0; color:#38bdf8; font-size:1.2rem; font-weight:900;">🐛 REPORT A BUG</h3>
+          <p style="margin:0; color:#94a3b8; font-size:0.9rem;">Describe the issue for the moderator:</p>
+          <textarea class="modal-textarea" id="bugInput" placeholder="Type your bug report here..."></textarea>
+          <div class="modal-btns">
+            <button class="modal-btn cancel" id="cancelBug">Cancel</button>
+            <button class="modal-btn submit" id="submitBug">Submit Bug</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top Nav -->
+      <div class="navbar">
+        <div class="nav-left-group">
+          <button class="liquid-btn menu-btn" id="menuBtn" title="Open Menu">☰</button>
+          <div class="brand-info">
+            <div class="brand">🦅 LMS GAMING HUB</div>
+            <div class="meta-info">
+              <span>v13</span>
+              <span>•</span>
+              <span id="liveClock">00:00:00</span>
+            </div>
+          </div>
+        </div>
+        <div class="nav-right-group">
+          <div class="weather-pill" title="Weather for 66209">🌧️ 56°F</div>
+          <button class="liquid-btn profile-btn" id="profileBtn">👤 Sign In</button>
+          <div class="sub-tag">LEAWOOD MIDDLE</div>
+        </div>
+      </div>
+
+      <!-- Hub Content -->
+      <div class="hub-container">
+        
+        <div class="hero-section">
+          <h1 class="hero-title">EAGLE ARCADE</h1>
+          <p class="hero-desc">Select a game below or search for your favorite arcade title.</p>
+          <input type="text" class="search-bar" id="searchInput" placeholder="🔍 Search games..." />
+        </div>
+
+        <!-- Recently Played Section -->
+        <div class="recent-section" id="recentSection">
+          <span style="font-size:0.85rem; font-weight:800; color:#94a3b8; letter-spacing:0.5px;">RECENTLY PLAYED</span>
+          <div class="recent-chips" id="recentChips"></div>
+        </div>
+
+        <div class="games-grid">
+          
+          <!-- 1. Geometry Eagle -->
+          <div class="game-card" onclick="recordPlay('Geometry Eagle', 'geometry-eagle.svg?v=13')">
+            <div>
+              <div class="card-icon">🟩</div>
+              <h3 class="card-title">Geometry Eagle</h3>
+              <p class="card-desc">Time your jumps to leap over spikes in this rhythm-based platformer.</p>
+            </div>
+            <a class="play-btn" href="geometry-eagle.svg?v=13">Play Game</a>
+          </div>
+
+          <!-- 2. Eagle Clicker -->
+          <div class="game-card" onclick="recordPlay('Eagle Clicker', 'eagle-clicker.svg?v=13')">
+            <div>
+              <div class="card-icon">🦅</div>
+              <h3 class="card-title">Eagle Clicker</h3>
+              <p class="card-desc">Click to gather feathers and buy nest upgrades for passive income.</p>
+            </div>
+            <a class="play-btn" href="eagle-clicker.svg?v=13">Play Game</a>
+          </div>
+
+          <!-- 3. To the Eagles -->
+          <div class="game-card" onclick="recordPlay('To the Eagles', 'to-the-eagles.svg?v=13')">
+            <div>
+              <div class="card-icon">☁️</div>
+              <h3 class="card-title">To the Eagles</h3>
+              <p class="card-desc">Bounce across moving clouds and climb as high into the sky as you can.</p>
+            </div>
+            <a class="play-btn" href="to-the-eagles.svg?v=13">Play Game</a>
+          </div>
+
+          <!-- 4. Eagle Pizza -->
+          <div class="game-card" onclick="recordPlay('Eagle Pizza', 'eagle-pizza.svg?v=13')">
+            <div>
+              <div class="card-icon">🍕</div>
+              <h3 class="card-title">Eagle Pizza</h3>
+              <p class="card-desc">Assemble custom orders, bake pizzas, and manage your pizzeria shop.</p>
+            </div>
+            <a class="play-btn" href="eagle-pizza.svg?v=13">Play Game</a>
+          </div>
+
+          <!-- 5. Teachers Quiz -->
+          <div class="game-card" onclick="recordPlay('Teachers Quiz', 'teachers-quiz.svg?v=13')">
+            <div>
+              <div class="card-icon">📚</div>
+              <h3 class="card-title">Teachers Quiz</h3>
+              <p class="card-desc">Test your knowledge on Leawood Middle teachers and school trivia!</p>
+            </div>
+            <a class="play-btn" href="teachers-quiz.svg?v=13">Play Quiz</a>
+          </div>
+
+        </div>
+
+        <div class="no-more-games">No more games.</div>
+
+      </div>
+
+      <!-- Raindrops Generator Script -->
+      <script type="text/javascript">
+        <![CDATA[
+        window.addEventListener('DOMContentLoaded', () => {
+          const rainLayer = document.getElementById('rainLayer');
+          const dropCount = 70;
+
+          for (let i = 0; i < dropCount; i++) {
+            const drop = document.createElement('div');
+            drop.className = 'drop';
+            drop.style.left = `${Math.random() * 100}%`;
+            drop.style.animationDuration = `${0.5 + Math.random() * 0.7}s`;
+            drop.style.animationDelay = `${Math.random() * 3}s`;
+            drop.style.opacity = `${0.2 + Math.random() * 0.5}`;
+            rainLayer.appendChild(drop);
+          }
+        });
+        ]]>
+      </script>
+
+    </div>
+  </foreignObject>
+</svg>
