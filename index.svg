@@ -16,9 +16,9 @@
         /* Top Announcement Banner */
         .top-banner {
           width: 100%;
-          background: linear-gradient(90deg, rgba(2,132,199,0.8), rgba(56,189,248,0.8), rgba(2,132,199,0.8));
-          backdrop-filter: blur(8px);
-          -webkit-backdrop-filter: blur(8px);
+          background: linear-gradient(90deg, rgba(2,132,199,0.85), rgba(56,189,248,0.85), rgba(2,132,199,0.85));
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
           color: #f8fafc;
           text-align: center;
           font-size: 0.75rem;
@@ -28,7 +28,7 @@
           z-index: 12;
           position: sticky;
           top: 0;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.12);
         }
 
         /* Fixed & Blurred Rain Background Layer */
@@ -63,9 +63,9 @@
           width: 100%;
           padding: 16px 32px;
           background: rgba(15, 23, 42, 0.45);
-          backdrop-filter: blur(16px);
-          -webkit-backdrop-filter: blur(16px);
-          border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+          backdrop-filter: blur(18px);
+          -webkit-backdrop-filter: blur(18px);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
           display: flex;
           justify-content: space-between;
           align-items: center;
@@ -96,9 +96,9 @@
           transition: all 0.2s ease;
         }
         .liquid-btn:hover {
-          background: rgba(56, 189, 248, 0.15);
-          border-color: rgba(56, 189, 248, 0.3);
-          box-shadow: 0 0 20px rgba(56, 189, 248, 0.15);
+          background: rgba(56, 189, 248, 0.18);
+          border-color: rgba(56, 189, 248, 0.35);
+          box-shadow: 0 0 20px rgba(56, 189, 248, 0.18);
         }
 
         .brand-info {
@@ -149,12 +149,12 @@
 
         .sub-tag {
           font-size: 0.8rem;
-          background: rgba(56, 189, 248, 0.1);
+          background: rgba(56, 189, 248, 0.12);
           backdrop-filter: blur(8px);
           color: #7dd3fc;
           padding: 6px 12px;
           border-radius: 20px;
-          border: 1px solid rgba(56, 189, 248, 0.2);
+          border: 1px solid rgba(56, 189, 248, 0.25);
         }
 
         /* Slide-out Navigation Drawer */
@@ -164,7 +164,7 @@
           left: 0;
           width: 100vw;
           height: 100vh;
-          background: rgba(0, 0, 0, 0.5);
+          background: rgba(0, 0, 0, 0.55);
           backdrop-filter: blur(6px);
           z-index: 100;
           opacity: 0;
@@ -182,7 +182,7 @@
           left: -320px;
           width: 320px;
           height: 100vh;
-          background: rgba(15, 23, 42, 0.85);
+          background: rgba(15, 23, 42, 0.88);
           backdrop-filter: blur(20px);
           -webkit-backdrop-filter: blur(20px);
           border-right: 1px solid rgba(255, 255, 255, 0.08);
@@ -288,7 +288,7 @@
         .modal-overlay.open { display: flex; }
 
         .modal-card {
-          background: rgba(30, 41, 59, 0.75);
+          background: rgba(30, 41, 59, 0.78);
           backdrop-filter: blur(25px);
           -webkit-backdrop-filter: blur(25px);
           border: 1px solid rgba(255, 255, 255, 0.12);
@@ -529,8 +529,8 @@
           const v = params.get('v');
           const isLocal = window.location.hostname.includes('localhost') || window.location.protocol.includes('file');
           
-          if (v !== '13' && !isLocal) {
-            window.location.href = "https://cdn.statically.io/gh/mathbuddies/leawoodmiddle@main/index.svg?v=13";
+          if (v !== '15' && !isLocal) {
+            window.location.href = "https://cdn.statically.io/gh/mathbuddies/leawoodmiddle@main/index.svg?v=15";
           }
 
           // 2. Clock updater
@@ -876,14 +876,14 @@
           <div class="brand-info">
             <div class="brand">🦅 LMS GAMING HUB</div>
             <div class="meta-info">
-              <span>v13</span>
+              <span>v15</span>
               <span>•</span>
               <span id="liveClock">00:00:00</span>
             </div>
           </div>
         </div>
         <div class="nav-right-group">
-          <div class="weather-pill" title="Weather for 66209">🌧️ 56°F</div>
+          <div class="weather-pill" title="Weather for Shawnee Mission, KS 66209">🌙 56°F Clear</div>
           <button class="liquid-btn profile-btn" id="profileBtn">👤 Sign In</button>
           <div class="sub-tag">LEAWOOD MIDDLE</div>
         </div>
@@ -907,53 +907,53 @@
         <div class="games-grid">
           
           <!-- 1. Geometry Eagle -->
-          <div class="game-card" onclick="recordPlay('Geometry Eagle', 'geometry-eagle.svg?v=13')">
+          <div class="game-card" onclick="recordPlay('Geometry Eagle', 'geometry-eagle.svg?v=15')">
             <div>
               <div class="card-icon">🟩</div>
               <h3 class="card-title">Geometry Eagle</h3>
               <p class="card-desc">Time your jumps to leap over spikes in this rhythm-based platformer.</p>
             </div>
-            <a class="play-btn" href="geometry-eagle.svg?v=13">Play Game</a>
+            <a class="play-btn" href="geometry-eagle.svg?v=15">Play Game</a>
           </div>
 
           <!-- 2. Eagle Clicker -->
-          <div class="game-card" onclick="recordPlay('Eagle Clicker', 'eagle-clicker.svg?v=13')">
+          <div class="game-card" onclick="recordPlay('Eagle Clicker', 'eagle-clicker.svg?v=15')">
             <div>
               <div class="card-icon">🦅</div>
               <h3 class="card-title">Eagle Clicker</h3>
               <p class="card-desc">Click to gather feathers and buy nest upgrades for passive income.</p>
             </div>
-            <a class="play-btn" href="eagle-clicker.svg?v=13">Play Game</a>
+            <a class="play-btn" href="eagle-clicker.svg?v=15">Play Game</a>
           </div>
 
           <!-- 3. To the Eagles -->
-          <div class="game-card" onclick="recordPlay('To the Eagles', 'to-the-eagles.svg?v=13')">
+          <div class="game-card" onclick="recordPlay('To the Eagles', 'to-the-eagles.svg?v=15')">
             <div>
               <div class="card-icon">☁️</div>
               <h3 class="card-title">To the Eagles</h3>
               <p class="card-desc">Bounce across moving clouds and climb as high into the sky as you can.</p>
             </div>
-            <a class="play-btn" href="to-the-eagles.svg?v=13">Play Game</a>
+            <a class="play-btn" href="to-the-eagles.svg?v=15">Play Game</a>
           </div>
 
           <!-- 4. Eagle Pizza -->
-          <div class="game-card" onclick="recordPlay('Eagle Pizza', 'eagle-pizza.svg?v=13')">
+          <div class="game-card" onclick="recordPlay('Eagle Pizza', 'eagle-pizza.svg?v=15')">
             <div>
               <div class="card-icon">🍕</div>
               <h3 class="card-title">Eagle Pizza</h3>
               <p class="card-desc">Assemble custom orders, bake pizzas, and manage your pizzeria shop.</p>
             </div>
-            <a class="play-btn" href="eagle-pizza.svg?v=13">Play Game</a>
+            <a class="play-btn" href="eagle-pizza.svg?v=15">Play Game</a>
           </div>
 
           <!-- 5. Teachers Quiz -->
-          <div class="game-card" onclick="recordPlay('Teachers Quiz', 'teachers-quiz.svg?v=13')">
+          <div class="game-card" onclick="recordPlay('Teachers Quiz', 'teachers-quiz.svg?v=15')">
             <div>
               <div class="card-icon">📚</div>
               <h3 class="card-title">Teachers Quiz</h3>
               <p class="card-desc">Test your knowledge on Leawood Middle teachers and school trivia!</p>
             </div>
-            <a class="play-btn" href="teachers-quiz.svg?v=13">Play Quiz</a>
+            <a class="play-btn" href="teachers-quiz.svg?v=15">Play Quiz</a>
           </div>
 
         </div>
