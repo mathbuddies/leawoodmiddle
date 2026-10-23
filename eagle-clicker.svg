@@ -1,0 +1,311 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+  <foreignObject width="100%" height="100%">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100vw; height: 100vh; margin: 0; padding: 0; background: #0f172a; font-family: system-ui, -apple-system, sans-serif; color: #f8fafc; display: flex; flex-direction: column; overflow: hidden; user-select: none;">
+      
+      <style>
+        * { box-sizing: border-box; }
+        
+        .navbar {
+          width: 100%;
+          padding: 12px 20px;
+          background: #1e293b;
+          border-bottom: 1px solid #334155;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          z-index: 10;
+        }
+
+        .nav-left {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+        }
+
+        .back-btn {
+          background: #334155;
+          color: #f8fafc;
+          border: 1px solid #475569;
+          padding: 8px 14px;
+          border-radius: 8px;
+          font-weight: 700;
+          font-size: 0.85rem;
+          cursor: pointer;
+          text-decoration: none;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          transition: background 0.2s, transform 0.1s;
+        }
+        .back-btn:hover { background: #475569; transform: translateX(-2px); }
+
+        .title { font-weight: 900; font-size: 1.3rem; color: #38bdf8; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px; }
+
+        .game-layout {
+          flex: 1;
+          display: grid;
+          grid-template-columns: 1fr 340px;
+          gap: 20px;
+          padding: 20px;
+          max-width: 1100px;
+          width: 100%;
+          margin: 0 auto;
+          height: calc(100vh - 65px);
+        }
+
+        /* Clicker Area */
+        .click-section {
+          background: #1e293b;
+          border-radius: 16px;
+          border: 1px solid #334155;
+          padding: 30px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          position: relative;
+        }
+
+        .score-display {
+          text-align: center;
+          margin-bottom: 30px;
+        }
+
+        .feather-count {
+          font-size: 2.8rem;
+          font-weight: 900;
+          color: #38bdf8;
+          line-height: 1.1;
+        }
+
+        .fps-count {
+          font-size: 1rem;
+          color: #94a3b8;
+          font-weight: 700;
+          margin-top: 6px;
+        }
+
+        .eagle-btn {
+          width: 200px;
+          height: 200px;
+          background: linear-gradient(135deg, #0ea5e9, #2563eb);
+          border-radius: 50%;
+          border: 6px solid #38bdf8;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 5.5rem;
+          cursor: pointer;
+          box-shadow: 0 15px 35px rgba(14, 165, 233, 0.4);
+          transition: transform 0.05s, box-shadow 0.1s;
+        }
+
+        .eagle-btn:active {
+          transform: scale(0.92);
+          box-shadow: 0 5px 15px rgba(14, 165, 233, 0.6);
+        }
+
+        /* Shop Panel */
+        .shop-panel {
+          background: #1e293b;
+          border-radius: 16px;
+          border: 1px solid #334155;
+          padding: 20px;
+          display: flex;
+          flex-direction: column;
+          gap: 14px;
+          overflow-y: auto;
+        }
+
+        .shop-title {
+          font-size: 1.2rem;
+          font-weight: 800;
+          color: #f8fafc;
+          border-bottom: 1px solid #334155;
+          padding-bottom: 10px;
+          margin: 0;
+        }
+
+        .upgrade-card {
+          background: #0f172a;
+          border: 1px solid #334155;
+          border-radius: 12px;
+          padding: 14px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          cursor: pointer;
+          transition: border-color 0.2s, transform 0.1s;
+        }
+
+        .upgrade-card:hover:not(.disabled) {
+          border-color: #38bdf8;
+          transform: translateY(-2px);
+        }
+
+        .upgrade-card.disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+
+        .upgrade-info {
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+        }
+
+        .upgrade-name { font-weight: 800; font-size: 0.95rem; color: #f8fafc; }
+        .upgrade-desc { font-size: 0.8rem; color: #94a3b8; }
+        .upgrade-cost { font-weight: 800; color: #facc15; font-size: 0.85rem; }
+        .upgrade-count { font-weight: 900; font-size: 1.2rem; color: #38bdf8; }
+      </style>
+
+      <!-- Header Nav -->
+      <div class="navbar">
+        <div class="nav-left">
+          <a class="back-btn" href="index.svg">◀ HUB</a>
+          <div class="title">🦅 EAGLE CLICKER</div>
+        </div>
+      </div>
+
+      <!-- Main Layout -->
+      <div class="game-layout">
+        
+        <!-- Center Clicker Section -->
+        <div class="click-section">
+          <div class="score-display">
+            <div class="feather-count" id="featherDisplay">0</div>
+            <div style="font-weight:800; color:#cbd5e1; letter-spacing:1px; margin-top:2px;">FEATHERS</div>
+            <div class="fps-count" id="fpsDisplay">+0 feathers / sec</div>
+          </div>
+
+          <div class="eagle-btn" id="clickTarget" onclick="clickEagle()">🦅</div>
+        </div>
+
+        <!-- Right Upgrade Shop -->
+        <div class="shop-panel">
+          <h3 class="shop-title">🏬 NEST UPGRADES</h3>
+
+          <!-- Upgrade 1 -->
+          <div class="upgrade-card disabled" id="upg1" onclick="buyUpgrade(1)">
+            <div class="upgrade-info">
+              <div class="upgrade-name">🪶 Feather Collector</div>
+              <div class="upgrade-desc">+1 Feather / sec</div>
+              <div class="upgrade-cost" id="cost1">15 Feathers</div>
+            </div>
+            <div class="upgrade-count" id="count1">0</div>
+          </div>
+
+          <!-- Upgrade 2 -->
+          <div class="upgrade-card disabled" id="upg2" onclick="buyUpgrade(2)">
+            <div class="upgrade-info">
+              <div class="upgrade-name">🪺 Auto-Nest</div>
+              <div class="upgrade-desc">+5 Feathers / sec</div>
+              <div class="upgrade-cost" id="cost2">100 Feathers</div>
+            </div>
+            <div class="upgrade-count" id="count2">0</div>
+          </div>
+
+          <!-- Upgrade 3 -->
+          <div class="upgrade-card disabled" id="upg3" onclick="buyUpgrade(3)">
+            <div class="upgrade-info">
+              <div class="upgrade-name">🦅 Eagle Whistle</div>
+              <div class="upgrade-desc">+25 Feathers / sec</div>
+              <div class="upgrade-cost" id="cost3">500 Feathers</div>
+            </div>
+            <div class="upgrade-count" id="count3">0</div>
+          </div>
+
+          <!-- Upgrade 4 -->
+          <div class="upgrade-card disabled" id="upg4" onclick="buyUpgrade(4)">
+            <div class="upgrade-info">
+              <div class="upgrade-name">⚡ Golden Talon</div>
+              <div class="upgrade-desc">+100 Feathers / sec</div>
+              <div class="upgrade-cost" id="cost4">2,500 Feathers</div>
+            </div>
+            <div class="upgrade-count" id="count4">0</div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <script type="text/javascript">
+        <![CDATA[
+        // State
+        let feathers = parseFloat(localStorage.getItem('ec_feathers') || '0');
+        let counts = JSON.parse(localStorage.getItem('ec_counts') || '[0,0,0,0]');
+        
+        const costs = [15, 100, 500, 2500];
+        const rates = [1, 5, 25, 100];
+
+        function getCost(index) {
+          return Math.floor(costs[index] * Math.pow(1.15, counts[index]));
+        }
+
+        function getFPS() {
+          let total = 0;
+          for (let i = 0; i < 4; i++) {
+            total += counts[i] * rates[i];
+          }
+          return total;
+        }
+
+        function saveGame() {
+          localStorage.setItem('ec_feathers', feathers.toString());
+          localStorage.setItem('ec_counts', JSON.stringify(counts));
+        }
+
+        function updateUI() {
+          document.getElementById('featherDisplay').textContent = Math.floor(feathers).toLocaleString();
+          document.getElementById('fpsDisplay').textContent = `+${getFPS().toLocaleString()} feathers / sec`;
+
+          for (let i = 0; i < 4; i++) {
+            const currentCost = getCost(i);
+            const card = document.getElementById(`upg${i + 1}`);
+            document.getElementById(`cost${i + 1}`).textContent = `${currentCost.toLocaleString()} Feathers`;
+            document.getElementById(`count${i + 1}`).textContent = counts[i];
+
+            if (feathers >= currentCost) {
+              card.classList.remove('disabled');
+            } else {
+              card.classList.add('disabled');
+            }
+          }
+        }
+
+        function clickEagle() {
+          feathers += 1;
+          updateUI();
+          saveGame();
+        }
+
+        function buyUpgrade(num) {
+          const idx = num - 1;
+          const cost = getCost(idx);
+
+          if (feathers >= cost) {
+            feathers -= cost;
+            counts[idx]++;
+            updateUI();
+            saveGame();
+          }
+        }
+
+        // Passive Income Timer
+        setInterval(() => {
+          const fps = getFPS();
+          if (fps > 0) {
+            feathers += fps / 10;
+            updateUI();
+            saveGame();
+          }
+        }, 100);
+
+        // Initial Load
+        updateUI();
+        ]]>
+      </script>
+    </div>
+  </foreignObject>
+</svg>
