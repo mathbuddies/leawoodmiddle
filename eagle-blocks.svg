@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 800 600" style="background: #070a12; font-family: system-ui, sans-serif; user-select: none;">
+  <defs>
+    <style>
+      .bg { fill: #070a12; }
+      .score-text { fill: #facc15; font-size: 36px; font-weight: 900; text-anchor: middle; }
+      .high-score-text { fill: #94a3b8; font-size: 16px; font-weight: 700; text-anchor: middle; }
+      .grid-cell { fill: rgba(30, 41, 59, 0.5); stroke: rgba(255, 255, 255, 0.05); stroke-width: 2; rx: 6px; }
+      .instructions { fill: #38bdf8; font-size: 15px; font-weight: 800; text-anchor: middle; }
+      
+      .back-btn { fill: rgba(30, 41, 59, 0.8); stroke: rgba(255, 255, 255, 0.1); rx: 10px; cursor: pointer; }
+      .back-btn:hover { fill: rgba(56, 189, 248, 0.2); }
+      .back-text { fill: #38bdf8; font-size: 14px; font-weight: bold; text-anchor: middle; dominant-baseline: middle; cursor: pointer; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="600" class="bg" />
+
+  <!-- Back to Hub Button -->
+  <g transform="translate(30, 25)" onclick="window.location.href='index.svg?v=31'">
+    <rect width="130" height="36" class="back-btn" />
+    <text x="65" y="19" class="back-text">← Back to Hub</text>
+  </g>
+
+  <!-- UI Text -->
+  <text x="400" y="55" class="score-text" id="scoreEl">0</text>
+  <text x="400" y="80" class="high-score-text" id="highScoreEl">BEST: 0</text>
+  <text x="400" y="570" class="instructions">DRAG BLOCKS TO CLEAR ROWS &amp; COLUMNS</text>
+
+  <!-- 8x8 Board Container -->
+  <g id="boardGroup" transform="translate(240, 100)"></g>
+
+  <!-- Pieces Container -->
+  <g id="piecesGroup" transform="translate(0, 430)"></g>
+
+  <script type="text/javascript">
+    <![CDATA[
+    window.addEventListener('DOMContentLoaded', () => {
+      const boardGroup = document.getElementById('boardGroup');
+      const piecesGroup = document.getElementById('piecesGroup');
+      const scoreEl = document.getElementById('scoreEl');
+      const highScoreEl = document.getElementById('highScoreEl');
+
+      let highScore = localStorage.getItem('eagle_blocks_high') || 0;
+      highScoreEl.textContent = `BEST: ${highScore}`;
+
+      const GRID_SIZE = 8;
+      const CELL_SIZE = 40;
+      const BOARD = Array(GRID_SIZE).fill(null).map(() => Array(GRID_SIZE).fill(null));
+      const BLOCK_COLORS = ['#facc15', '#ffffff', '#eab308', '#fef08a']; // Yellow, White, Gold
+
+      let score = 0;
+
+      // Draw 8x8 Board
+      for (let r = 0; r < GRID_SIZE; r++) {
+        for (let c = 0; c < GRID_SIZE; c++) {
+          const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+          rect.setAttribute('x', c * CELL_SIZE);
+          rect.setAttribute('y', r * CELL_SIZE);
+          rect.setAttribute('width', CELL_SIZE - 2);
+          rect.setAttribute('height', CELL_SIZE - 2);
+          rect.setAttribute('class', 'grid-cell');
+          rect.setAttribute('id', `cell_${r}_${c}`);
+          boardGroup.appendChild(rect);
+        }
+      }
+
+      const SHAPES = [
+        [[1,1],[1,1]], // 2x2 Square
+        [[1,1,1]],     // 3-line horizontal
+        [[1],[1],[1]], // 3-line vertical
+        [[1,0],[1,1]], // L-shape
+        [[1]],         // Single dot
+        [[1,1],[0,1]]  // Corner shape
+      ];
+
+      function spawnPieces() {
+        piecesGroup.innerHTML = '';
+        for (let i = 0; i < 3; i++) {
+          const shape = SHAPES[Math.floor(Math.random() * SHAPES.length)];
+          const color = BLOCK_COLORS[Math.floor(Math.random() * BLOCK_COLORS.length)];
+          createPiece(shape, color, 120 + i * 220, 0);
+        }
+      }
+
+      function createPiece(shape, color, x, y) {
+        const pGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        pGroup.setAttribute('transform', `translate(${x}, ${y})`);
+        pGroup.setAttribute('cursor', 'pointer');
+
+        shape.forEach((row, r) => {
+          row.forEach((cell, c) => {
+            if (cell) {
+              const b = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+              b.setAttribute('x', c * 24);
+              b.setAttribute('y', r * 24);
+              b.setAttribute('width', 22);
+              b.setAttribute('height', 22);
+              b.setAttribute('fill', color);
+              b.setAttribute('rx', 4);
+              pGroup.appendChild(b);
+            }
+          });
+        });
+
+        piecesGroup.appendChild(pGroup);
+      }
+
+      spawnPieces();
+
+      // Escape key redirect
+      window.addEventListener('keydown', (e) => {
+        if (e.key === "'") window.location.href = "https://www.google.com";
+      });
+    });
+    ]]>
+  </script>
+</svg>
