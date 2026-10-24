@@ -247,9 +247,9 @@
         <div class="modal-card">
           <h3 style="margin:0; color:var(--accent-color);">📜 UPDATE LOG</h3>
           <div style="font-size:0.85rem; color:#94a3b8; line-height:1.5; display:flex; flex-direction:column; gap:10px; max-height:300px; overflow-y:auto;" id="updateLogContent">
-            <div><strong style="color:#f8fafc;">v35:</strong> Added first-visit interactive onboarding tutorial & name storage, personalized hub greetings, layout style switcher, user settings app, and custom symbol-only escape key.</div>
+            <div><strong style="color:#f8fafc;">v36:</strong> Fixed XML ampersand parsing bug, ensured rock-solid rendering across CDN caching.</div>
+            <div><strong style="color:#f8fafc;">v35:</strong> Added first-visit interactive onboarding tutorial &amp; name storage, personalized hub greetings, layout style switcher, user settings app, and custom symbol-only escape key.</div>
             <div><strong style="color:#f8fafc;">v33-v34:</strong> Transformed menu apps into a modern icon tile dropdown suite with Liquid Glass UI styling.</div>
-            <div><strong style="color:#f8fafc;">v32:</strong> Introduced My Hub widget dashboard view and Games library view.</div>
           </div>
           <button id="closeUpdateLog" style="background:rgba(51, 65, 85, 0.6); color:#fff; border:none; padding:8px; border-radius:10px; font-weight:bold; cursor:pointer;">Close</button>
         </div>
@@ -408,7 +408,7 @@
 
           <div>
             <div class="brand">🦅 eagle.io</div>
-            <div class="meta-info"><span>v35</span> • <span id="liveClock">00:00:00 CT</span></div>
+            <div class="meta-info"><span>v36</span> • <span id="liveClock">00:00:00 CT</span></div>
           </div>
         </div>
         <div class="nav-right-group">
@@ -469,7 +469,7 @@
             <div style="font-size:2.5rem;">🟩</div>
             <div style="font-size:1.3rem; font-weight:800;">Geometry Eagle</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Time your jumps to leap over spikes in this rhythm-based platformer.</div>
-            <a class="play-btn" href="geometry-eagle.svg?v=35">Play Game</a>
+            <a class="play-btn" href="geometry-eagle.svg?v=36">Play Game</a>
           </div>
 
           <!-- Game 2: Eagle Clicker -->
@@ -478,7 +478,7 @@
             <div style="font-size:2.5rem;">🦅</div>
             <div style="font-size:1.3rem; font-weight:800;">Eagle Clicker</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Click to gather feathers and buy nest upgrades for passive income.</div>
-            <a class="play-btn" href="eagle-clicker.svg?v=35">Play Game</a>
+            <a class="play-btn" href="eagle-clicker.svg?v=36">Play Game</a>
           </div>
 
           <!-- Game 3: To the Eagles -->
@@ -487,7 +487,7 @@
             <div style="font-size:2.5rem;">☁️</div>
             <div style="font-size:1.3rem; font-weight:800;">To the Eagles</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Bounce across moving clouds and climb as high as you can.</div>
-            <a class="play-btn" href="to-the-eagles.svg?v=35">Play Game</a>
+            <a class="play-btn" href="to-the-eagles.svg?v=36">Play Game</a>
           </div>
 
           <!-- Game 4: Eagle Pizza -->
@@ -496,7 +496,7 @@
             <div style="font-size:2.5rem;">🍕</div>
             <div style="font-size:1.3rem; font-weight:800;">Eagle Pizza</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Assemble custom orders, bake pizzas, and manage your pizzeria shop.</div>
-            <a class="play-btn" href="eagle-pizza.svg?v=35">Play Game</a>
+            <a class="play-btn" href="eagle-pizza.svg?v=36">Play Game</a>
           </div>
 
           <!-- Game 5: Teachers Quiz -->
@@ -505,7 +505,7 @@
             <div style="font-size:2.5rem;">📚</div>
             <div style="font-size:1.3rem; font-weight:800;">Teachers Quiz</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Test your knowledge on Leawood Middle teachers and school trivia!</div>
-            <a class="play-btn" href="teachers-quiz.svg?v=35">Play Quiz</a>
+            <a class="play-btn" href="teachers-quiz.svg?v=36">Play Quiz</a>
           </div>
 
           <!-- Game 6: Eagle Pong -->
@@ -514,7 +514,7 @@
             <div style="font-size:2.5rem;">🏓</div>
             <div style="font-size:1.3rem; font-weight:800;">Eagle Pong</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Classic retro paddle arcade game against an AI opponent.</div>
-            <a class="play-btn" href="eagle-pong.svg?v=35">Play Game</a>
+            <a class="play-btn" href="eagle-pong.svg?v=36">Play Game</a>
           </div>
 
           <!-- Game 7: Eagle Stack Tower -->
@@ -523,7 +523,7 @@
             <div style="font-size:2.5rem;">🧱</div>
             <div style="font-size:1.3rem; font-weight:800;">Eagle Stack Tower</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Precision-time your drops to stack blocks and reach the sky!</div>
-            <a class="play-btn" href="eagle-stack.svg?v=35">Play Game</a>
+            <a class="play-btn" href="eagle-stack.svg?v=36">Play Game</a>
           </div>
 
           <!-- Game 8: Eagle Blocks -->
@@ -532,7 +532,7 @@
             <div style="font-size:2.5rem;">🟨</div>
             <div style="font-size:1.3rem; font-weight:800;">Eagle Blocks</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Clear full rows and columns with yellow, white, and gold blocks.</div>
-            <a class="play-btn" href="eagle-blocks.svg?v=35">Play Game</a>
+            <a class="play-btn" href="eagle-blocks.svg?v=36">Play Game</a>
           </div>
 
         </div>
@@ -842,7 +842,6 @@
 
           escKeyInput.oninput = (e) => {
             const val = e.target.value;
-            // Prevent letters, numbers, and spacebar
             if (/[a-zA-Z0-9\s]/.test(val)) {
               alert('Only symbols allowed for the custom escape key!');
               escKeyInput.value = savedEscKey;
