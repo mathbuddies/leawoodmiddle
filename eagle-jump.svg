@@ -1,0 +1,277 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+  <foreignObject width="100%" height="100%">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100vw; height: 100vh; margin: 0; padding: 0; background: #070a12; font-family: system-ui, -apple-system, sans-serif; color: #f8fafc; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; user-select: none;">
+      
+      <style type="text/css">
+        <![CDATA[
+        * { box-sizing: border-box; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: #070a12; overflow: hidden; }
+        .arcade-container {
+          position: relative; width: 100%; max-width: 480px; height: 100%; max-height: 720px;
+          background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.15);
+          display: flex; flex-direction: column; align-items: center; justify-content: center;
+          box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+        }
+        canvas { display: block; background: linear-gradient(to bottom, #1e293b, #0f172a); cursor: pointer; width: 100%; height: 100%; }
+        .back-link {
+          position: absolute; top: 16px; left: 16px; background: rgba(30, 41, 59, 0.8);
+          border: 1px solid rgba(255, 255, 255, 0.15); color: #f8fafc; padding: 8px 14px;
+          border-radius: 10px; text-decoration: none; font-weight: bold; font-size: 0.85rem; z-index: 10;
+        }
+        .back-link:hover { background: #38bdf8; color: #0f172a; }
+        ]]>
+      </style>
+
+      <div class="arcade-container">
+        <!-- Dynamic Back to Hub Link pointing to latest version -->
+        <a class="back-link" id="backHubBtn" href="index.svg">← Back to Hub</a>
+        <canvas id="gameCanvas" width="480" height="720"></canvas>
+      </div>
+
+      <script type="text/javascript">
+        <![CDATA[
+        // Ensure Back to Hub button always loads the latest version dynamically
+        document.getElementById('backHubBtn').setAttribute('href', 'index.svg?v=' + Date.now());
+
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let gameState = 'START'; // START, PLAYING, GAMEOVER
+        let score = 0;
+        let highscore = parseInt(localStorage.getItem('eagle_jump_highscore') || '0', 10);
+
+        const eagle = {
+          x: 240,
+          y: 400,
+          width: 36,
+          height: 36,
+          vx: 0,
+          vy: 0,
+          gravity: 0.35,
+          jumpForce: -10.5,
+          speed: 6
+        };
+
+        let clouds = [];
+        const cloudWidth = 80;
+        const cloudHeight = 20;
+        let cameraY = 0;
+
+        function resetGame() {
+          eagle.x = 240;
+          eagle.y = 500;
+          eagle.vx = 0;
+          eagle.vy = eagle.jumpForce;
+          score = 0;
+          cameraY = 0;
+          
+          clouds = [
+            { x: 200, y: 620, type: 'normal' },
+            { x: 100, y: 500, type: 'normal' },
+            { x: 300, y: 380, type: 'moving', dir: 1 },
+            { x: 150, y: 260, type: 'normal' },
+            { x: 220, y: 140, type: 'normal' },
+            { x: 180, y: 20, type: 'normal' }
+          ];
+          gameState = 'PLAYING';
+        }
+
+        function startGame() {
+          if (gameState === 'START' || gameState === 'GAMEOVER') {
+            resetGame();
+          }
+        }
+
+        // Controls
+        const keys = {};
+        window.addEventListener('keydown', function(e) {
+          if (e.code === 'ArrowLeft' || e.code === 'KeyA') keys['left'] = true;
+          if (e.code === 'ArrowRight' || e.code === 'KeyD') keys['right'] = true;
+          if (e.code === 'Space' && (gameState === 'START' || gameState === 'GAMEOVER')) {
+            e.preventDefault();
+            startGame();
+          }
+        });
+
+        window.addEventListener('keyup', function(e) {
+          if (e.code === 'ArrowLeft' || e.code === 'KeyA') keys['left'] = false;
+          if (e.code === 'ArrowRight' || e.code === 'KeyD') keys['right'] = false;
+        });
+
+        canvas.addEventListener('click', function() {
+          startGame();
+        });
+
+        function update() {
+          if (gameState !== 'PLAYING') return;
+
+          // Horizontal movement
+          if (keys['left']) eagle.vx = -eagle.speed;
+          else if (keys['right']) eagle.vx = eagle.speed;
+          else eagle.vx *= 0.8; // friction
+
+          eagle.x += eagle.vx;
+
+          // Screen wrapping horizontally
+          if (eagle.x < -eagle.width) eagle.x = canvas.width;
+          if (eagle.x > canvas.width) eagle.x = -eagle.width;
+
+          // Vertical physics
+          eagle.vy += eagle.gravity;
+          eagle.y += eagle.vy;
+
+          // Camera scrolling upwards as eagle climbs
+          let targetCameraY = eagle.y - 300;
+          if (targetCameraY < cameraY) {
+            let diff = cameraY - targetCameraY;
+            cameraY -= diff * 0.1;
+          }
+
+          // Cloud collision & bouncing
+          for (let i = 0; i < clouds.length; i++) {
+            let c = clouds[i];
+
+            // Move side-to-side clouds
+            if (c.type === 'moving') {
+              c.x += 1.5 * c.dir;
+              if (c.x <= 20 || c.x >= canvas.width - cloudWidth - 20) c.dir *= -1;
+            }
+
+            // Check bounce when falling downward
+            if (
+              eagle.vy > 0 &&
+              eagle.x + eagle.width > c.x &&
+              eagle.x < c.x + cloudWidth &&
+              eagle.y + eagle.height >= c.y &&
+              eagle.y + eagle.height <= c.y + 16
+            ) {
+              eagle.vy = eagle.jumpForce;
+            }
+          }
+
+          // Score tracking based on highest height reached
+          let currentScore = Math.floor((620 - eagle.y) / 10);
+          if (currentScore > score) {
+            score = currentScore;
+            if (score > highscore) {
+              highscore = score;
+              localStorage.setItem('eagle_jump_highscore', highscore);
+            }
+          }
+
+          // Generate clouds above and recycle old ones below
+          let highestCloudY = clouds[0].y;
+          if (highestCloudY > cameraY - 100) {
+            let newY = highestCloudY - (Math.random() * 90 + 80);
+            let isMoving = Math.random() < 0.35;
+            clouds.unshift({
+              x: Math.random() * (canvas.width - cloudWidth - 40) + 20,
+              y: newY,
+              type: isMoving ? 'moving' : 'normal',
+              dir: Math.random() < 0.5 ? 1 : -1
+            });
+          }
+
+          // Remove clouds that fall off screen below
+          for (let i = clouds.length - 1; i >= 0; i--) {
+            if (clouds[i].y > cameraY + canvas.height + 100) {
+              clouds.splice(i, 1);
+            }
+          }
+
+          // Game Over if eagle falls below bottom of screen view
+          if (eagle.y > cameraY + canvas.height + 50) {
+            gameState = 'GAMEOVER';
+          }
+        }
+
+        function draw() {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+          ctx.save();
+          ctx.translate(0, -cameraY);
+
+          // Draw Clouds
+          for (let i = 0; i < clouds.length; i++) {
+            let c = clouds[i];
+            ctx.fillStyle = c.type === 'moving' ? '#7dd3fc' : '#38bdf8';
+            ctx.beginPath();
+            ctx.roundRect(c.x, c.y, cloudWidth, cloudHeight, 10);
+            ctx.fill();
+          }
+
+          // Draw Eagle
+          ctx.fillStyle = '#facc15';
+          ctx.beginPath();
+          ctx.arc(eagle.x + eagle.width/2, eagle.y + eagle.height/2, eagle.width/2, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.lineWidth = 3;
+          ctx.strokeStyle = '#f8fafc';
+          ctx.stroke();
+          ctx.closePath();
+
+          // Eagle beak
+          ctx.beginPath();
+          ctx.moveTo(eagle.x + eagle.width, eagle.y + eagle.height/2);
+          ctx.lineTo(eagle.x + eagle.width + 8, eagle.y + eagle.height/2 + 3);
+          ctx.lineTo(eagle.x + eagle.width, eagle.y + eagle.height/2 + 6);
+          ctx.fillStyle = '#f97316';
+          ctx.fill();
+
+          ctx.restore();
+
+          // UI / HUD (Fixed to Screen)
+          if (gameState === 'START') {
+            ctx.fillStyle = 'rgba(15, 23, 42, 0.88)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#38bdf8';
+            ctx.font = '900 36px system-ui';
+            ctx.textAlign = 'center';
+            ctx.fillText('EAGLE JUMP', canvas.width / 2, canvas.height / 2 - 50);
+            ctx.fillStyle = '#f8fafc';
+            ctx.font = '600 15px system-ui';
+            ctx.fillText('Bounce higher and higher on clouds!', canvas.width / 2, canvas.height / 2 - 5);
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '500 14px system-ui';
+            ctx.fillText('Use Left / Right Arrow Keys to Move', canvas.width / 2, canvas.height / 2 + 30);
+            ctx.fillStyle = '#facc15';
+            ctx.font = 'bold 16px system-ui';
+            ctx.fillText('High Score: ' + highscore, canvas.width / 2, canvas.height / 2 + 80);
+            ctx.fillStyle = '#38bdf8';
+            ctx.fillText('Click or Press Space to Play', canvas.width / 2, canvas.height / 2 + 120);
+          } else if (gameState === 'PLAYING') {
+            ctx.fillStyle = '#f8fafc';
+            ctx.font = '900 32px system-ui';
+            ctx.textAlign = 'center';
+            ctx.fillText(score, canvas.width / 2, 55);
+          } else if (gameState === 'GAMEOVER') {
+            ctx.fillStyle = 'rgba(15, 23, 42, 0.92)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#ef4444';
+            ctx.font = '900 38px system-ui';
+            ctx.textAlign = 'center';
+            ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2 - 50);
+            ctx.fillStyle = '#f8fafc';
+            ctx.font = '700 20px system-ui';
+            ctx.fillText('Height Score: ' + score, canvas.width / 2, canvas.height / 2);
+            ctx.fillStyle = '#facc15';
+            ctx.fillText('High Score: ' + highscore, canvas.width / 2, canvas.height / 2 + 40);
+            ctx.fillStyle = '#38bdf8';
+            ctx.font = '600 16px system-ui';
+            ctx.fillText('Click or Press Space to Restart', canvas.width / 2, canvas.height / 2 + 100);
+          }
+        }
+
+        function loop() {
+          update();
+          draw();
+          requestAnimationFrame(loop);
+        }
+
+        loop();
+        ]]>
+      </script>
+
+    </div>
+  </foreignObject>
+</svg>
