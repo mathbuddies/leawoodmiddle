@@ -143,9 +143,39 @@
         }
         .fav-star:hover { background: rgba(250, 204, 21, 0.2); border-color: #facc15; }
         .fav-star.active { color: #facc15; background: rgba(250, 204, 21, 0.15); border-color: #facc15; }
+
+        /* End of List Row */
+        .end-of-list {
+          margin-top: 30px;
+          padding: 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 12px;
+          color: #94a3b8;
+          font-weight: 700;
+          font-size: 0.95rem;
+          border-top: 1px dashed rgba(255, 255, 255, 0.1);
+        }
+
+        .scroll-top-btn {
+          background: rgba(30, 41, 59, 0.8);
+          border: 1px solid rgba(255, 255, 255, 0.15);
+          color: #38bdf8;
+          width: 38px;
+          height: 38px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          font-size: 1.1rem;
+          transition: 0.2s;
+        }
+        .scroll-top-btn:hover { background: #38bdf8; color: #0f172a; }
       </style>
 
-      <div class="top-banner" id="globalBanner">🦅 eagle.io v26 🦅</div>
+      <div class="top-banner" id="globalBanner">🦅 eagle.io v27 🦅</div>
 
       <!-- Slide-out Drawer -->
       <div class="drawer-overlay" id="drawerOverlay"></div>
@@ -156,7 +186,18 @@
         </div>
         
         <div style="display:flex; flex-direction:column; gap:12px;">
+          <!-- Main Section -->
           <div class="drawer-item" id="ownerMenuBtn"><span>Owners Only</span> <span>🔒</span></div>
+          <div class="drawer-item" id="proxyWizardBtn"><span>Proxy Wizard</span> <span>🧙‍♂️</span></div>
+
+          <!-- Quick Links Section -->
+          <div class="settings-section">
+            <div style="font-weight: bold; color: #38bdf8;">🔗 Quick Links</div>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              <a class="drawer-item" href="https://bluevalleyk12.nutrislice.com/menu/leawood-middle/lunch/" target="_blank" style="padding:10px 12px; font-size:0.85rem;"><span>Lunch Menu</span> <span>🍕</span></a>
+              <a class="drawer-item" href="https://maps.app.goo.gl/pXXP9qisj1fXQJqX8?g_st=ic" target="_blank" style="padding:10px 12px; font-size:0.85rem;"><span>LMS Map</span> <span>📍</span></a>
+            </div>
+          </div>
           
           <!-- Background Customizer Section -->
           <div class="settings-section">
@@ -182,9 +223,7 @@
             <div style="color: #94a3b8; font-size: 0.75rem;">Instantly redirects to Google when pressed.</div>
           </div>
 
-          <a class="drawer-item" href="https://bluevalleyk12.nutrislice.com/menu/leawood-middle/lunch/" target="_blank"><span>Lunch Menu</span> <span>🍕</span></a>
           <div class="drawer-item" id="reportBtn"><span>Report Bug</span> <span>🐛</span></div>
-          <a class="drawer-item" href="https://maps.app.goo.gl/pXXP9qisj1fXQJqX8?g_st=ic" target="_blank"><span>LMS Map</span> <span>📍</span></a>
         </div>
       </div>
 
@@ -229,12 +268,12 @@
       </div>
 
       <!-- Top Nav -->
-      <div class="navbar">
+      <div class="navbar" id="navTop">
         <div class="nav-left-group">
           <button class="liquid-btn" id="menuBtn">☰</button>
           <div>
             <div class="brand">🦅 eagle.io</div>
-            <div class="meta-info"><span>v26</span> • <span id="liveClock">00:00:00</span></div>
+            <div class="meta-info"><span>v27</span> • <span id="liveClock">00:00:00</span></div>
           </div>
         </div>
         <div class="nav-right-group">
@@ -260,7 +299,7 @@
             <div style="font-size:2.5rem;">🟩</div>
             <div style="font-size:1.3rem; font-weight:800;">Geometry Eagle</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Time your jumps to leap over spikes in this rhythm-based platformer.</div>
-            <a class="play-btn" href="geometry-eagle.svg?v=26">Play Game</a>
+            <a class="play-btn" href="geometry-eagle.svg?v=27">Play Game</a>
           </div>
 
           <!-- Game 2: Eagle Clicker -->
@@ -269,7 +308,7 @@
             <div style="font-size:2.5rem;">🦅</div>
             <div style="font-size:1.3rem; font-weight:800;">Eagle Clicker</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Click to gather feathers and buy nest upgrades for passive income.</div>
-            <a class="play-btn" href="eagle-clicker.svg?v=26">Play Game</a>
+            <a class="play-btn" href="eagle-clicker.svg?v=27">Play Game</a>
           </div>
 
           <!-- Game 3: To the Eagles -->
@@ -278,7 +317,7 @@
             <div style="font-size:2.5rem;">☁️</div>
             <div style="font-size:1.3rem; font-weight:800;">To the Eagles</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Bounce across moving clouds and climb as high as you can.</div>
-            <a class="play-btn" href="to-the-eagles.svg?v=26">Play Game</a>
+            <a class="play-btn" href="to-the-eagles.svg?v=27">Play Game</a>
           </div>
 
           <!-- Game 4: Eagle Pizza -->
@@ -287,7 +326,7 @@
             <div style="font-size:2.5rem;">🍕</div>
             <div style="font-size:1.3rem; font-weight:800;">Eagle Pizza</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Assemble custom orders, bake pizzas, and manage your pizzeria shop.</div>
-            <a class="play-btn" href="eagle-pizza.svg?v=26">Play Game</a>
+            <a class="play-btn" href="eagle-pizza.svg?v=27">Play Game</a>
           </div>
 
           <!-- Game 5: Teachers Quiz -->
@@ -296,7 +335,7 @@
             <div style="font-size:2.5rem;">📚</div>
             <div style="font-size:1.3rem; font-weight:800;">Teachers Quiz</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Test your knowledge on Leawood Middle teachers and school trivia!</div>
-            <a class="play-btn" href="teachers-quiz.svg?v=26">Play Quiz</a>
+            <a class="play-btn" href="teachers-quiz.svg?v=27">Play Quiz</a>
           </div>
 
           <!-- Game 6: Eagle Pong -->
@@ -305,9 +344,15 @@
             <div style="font-size:2.5rem;">🏓</div>
             <div style="font-size:1.3rem; font-weight:800;">Eagle Pong</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Classic retro paddle arcade game against an AI opponent.</div>
-            <a class="play-btn" href="eagle-pong.svg?v=26">Play Game</a>
+            <a class="play-btn" href="eagle-pong.svg?v=27">Play Game</a>
           </div>
 
+        </div>
+
+        <!-- End of List Row -->
+        <div class="end-of-list">
+          <span>End of list. Go back to top?</span>
+          <button class="scroll-top-btn" id="scrollTopBtn" title="Back to Top">⬆</button>
         </div>
       </div>
 
@@ -322,6 +367,12 @@
           setInterval(() => {
             clockEl.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
           }, 1000);
+
+          // Scroll to Top
+          const scrollTopBtn = document.getElementById('scrollTopBtn');
+          scrollTopBtn.onclick = () => {
+            appRoot.scrollTo({ top: 0, behavior: 'smooth' });
+          };
 
           // LocalStorage Background Load
           const appRoot = document.getElementById('appRoot');
