@@ -1,42 +1,20 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
   <foreignObject width="100%" height="100%">
-    <div xmlns="http://www.w3.org/1999/xhtml" id="appRoot" style="width: 100vw; height: 100vh; margin: 0; padding: 0; background: #070a12; font-family: system-ui, -apple-system, sans-serif; color: #f8fafc; display: flex; flex-direction: column; overflow-x: hidden; overflow-y: auto; user-select: none; position: relative; transition: background 0.3s;">
+    <div xmlns="http://www.w3.org/1999/xhtml" id="appRoot" style="width: 100vw; height: 100vh; margin: 0; padding: 0; background: #070a12; font-family: system-ui, -apple-system, sans-serif; color: #f8fafc; display: flex; flex-direction: column; overflow-x: hidden; overflow-y: auto; user-select: none; position: relative;">
       
       <style>
         * { box-sizing: border-box; }
 
         :root {
           --accent-color: #38bdf8;
-          --accent-glow: rgba(56, 189, 248, 0.3);
         }
 
-        /* Intro Tutorial / Welcome Modal */
-        .tutorial-overlay {
-          position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-          background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(12px); z-index: 9999;
-          display: flex; align-items: center; justify-content: center;
-        }
-        .tutorial-card {
-          background: rgba(30, 41, 59, 0.85); backdrop-filter: blur(20px);
-          border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 24px;
-          padding: 30px; width: 90%; max-width: 420px; display: flex; flex-direction: column; gap: 16px;
-          box-shadow: 0 20px 40px rgba(0,0,0,0.6); text-align: center;
-        }
-
-        /* Background Video Element */
-        #bgVideo {
-          position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-          object-fit: cover; pointer-events: none; z-index: -1; opacity: 0.35; display: none;
-        }
-
-        /* Navbar - Liquid Glass */
+        /* Navbar - Simplified for Maximum Speed */
         .navbar {
           width: 100%;
-          padding: 16px 32px;
-          background: rgba(15, 23, 42, 0.65);
-          backdrop-filter: blur(12px);
-          -webkit-backdrop-filter: blur(12px);
-          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+          padding: 14px 24px;
+          background: #0f172a;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
           display: flex;
           justify-content: space-between;
           align-items: center;
@@ -45,948 +23,338 @@
           z-index: 100;
         }
 
-        .nav-left-group, .nav-right-group {
+        .nav-left, .nav-right {
           display: flex;
           align-items: center;
-          gap: 16px;
+          gap: 14px;
           position: relative;
         }
 
-        .liquid-btn {
-          background: rgba(30, 41, 59, 0.45);
-          backdrop-filter: blur(8px);
-          border: 1px solid rgba(255, 255, 255, 0.12);
+        .btn {
+          background: #1e293b;
+          border: 1px solid rgba(255, 255, 255, 0.15);
           color: #f8fafc;
-          padding: 8px 16px;
-          border-radius: 12px;
+          padding: 8px 14px;
+          border-radius: 10px;
           cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
           font-weight: bold;
-          transition: 0.2s;
+          font-size: 0.9rem;
         }
-        .liquid-btn:hover { background: var(--accent-glow); border-color: var(--accent-color); }
+        .btn:hover { background: var(--accent-color); color: #0f172a; }
 
-        .brand { font-weight: 900; font-size: 1.3rem; color: var(--accent-color); display: flex; align-items: center; gap: 8px; }
-        .meta-info { font-size: 0.75rem; color: #94a3b8; font-family: monospace; display: flex; gap: 10px; }
+        .brand { font-weight: 900; font-size: 1.2rem; color: var(--accent-color); }
+        .meta-info { font-size: 0.75rem; color: #94a3b8; font-family: monospace; }
 
-        /* Apps Dropdown Grid Suite */
-        .apps-dropdown {
-          position: absolute; top: 50px; left: 0; width: 360px;
-          background: rgba(15, 23, 42, 0.9);
-          backdrop-filter: blur(20px);
-          border: 1px solid rgba(255, 255, 255, 0.12);
-          border-radius: 20px; padding: 20px; display: none; flex-direction: column; gap: 16px;
-          box-shadow: 0 15px 35px rgba(0,0,0,0.6); z-index: 200;
-        }
-        .apps-dropdown.open { display: flex; }
-
-        .apps-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 10px;
-        }
-
-        .app-tile {
-          background: rgba(30, 41, 59, 0.5);
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          border-radius: 14px;
-          padding: 14px 8px;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 6px;
-          cursor: pointer;
-          transition: 0.2s;
-          text-align: center;
-          color: #f8fafc;
-          font-size: 0.75rem;
-          font-weight: 700;
-        }
-        .app-tile:hover {
-          background: var(--accent-glow);
-          border-color: var(--accent-color);
-          transform: translateY(-2px);
-        }
-        .app-tile span:first-child { font-size: 1.5rem; }
-
-        /* Notifications Dropdown */
-        .notif-wrapper { position: relative; }
-        .notif-btn {
-          background: rgba(30, 41, 59, 0.45);
-          backdrop-filter: blur(8px);
-          border: 1px solid rgba(255, 255, 255, 0.12);
-          color: #f8fafc;
-          padding: 8px 12px;
-          border-radius: 12px;
-          cursor: pointer;
-          font-size: 1.1rem;
-          position: relative;
-        }
-        .notif-badge {
-          position: absolute; top: -4px; right: -4px;
-          background: #ef4444; color: #fff; font-size: 0.65rem; font-weight: 900;
-          padding: 2px 5px; border-radius: 10px; display: none;
-        }
-        .notif-dropdown {
-          position: absolute; top: 45px; right: 0; width: 300px;
-          background: rgba(30, 41, 59, 0.85);
-          backdrop-filter: blur(16px);
-          border: 1px solid rgba(255, 255, 255, 0.12);
-          border-radius: 16px; padding: 16px; display: none; flex-direction: column; gap: 12px;
+        /* Dropdown Menu */
+        .dropdown-menu {
+          position: absolute; top: 45px; left: 0; width: 240px;
+          background: #0f172a;
+          border: 1px solid rgba(255, 255, 255, 0.15);
+          border-radius: 14px; padding: 12px; display: none; flex-direction: column; gap: 8px;
           box-shadow: 0 10px 25px rgba(0,0,0,0.5); z-index: 200;
         }
-        .notif-dropdown.open { display: flex; }
+        .dropdown-menu.open { display: flex; }
 
-        .settings-section {
-          background: rgba(30, 41, 59, 0.3); border: 1px solid rgba(255, 255, 255, 0.08);
-          border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 10px; font-size: 0.85rem;
+        .dropdown-item {
+          background: #1e293b; border: 1px solid rgba(255, 255, 255, 0.08);
+          color: #f8fafc; padding: 10px 12px; border-radius: 8px; font-weight: 600;
+          cursor: pointer; font-size: 0.85rem; display: flex; align-items: center; gap: 8px;
         }
+        .dropdown-item:hover { background: var(--accent-color); color: #0f172a; }
 
-        .color-presets { display: flex; gap: 8px; flex-wrap: wrap; }
-        .color-dot { width: 26px; height: 26px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.2); cursor: pointer; }
-
-        /* Modals - Liquid Glass */
+        /* Modals */
         .modal-overlay {
           position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-          background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(8px); z-index: 300; display: none; align-items: center; justify-content: center;
+          background: rgba(0, 0, 0, 0.7); z-index: 300; display: none; align-items: center; justify-content: center;
         }
         .modal-overlay.open { display: flex; }
 
         .modal-card {
-          background: rgba(30, 41, 59, 0.85); backdrop-filter: blur(20px);
-          border: 1px solid rgba(255, 255, 255, 0.15);
-          border-radius: 20px; padding: 24px; width: 90%; max-width: 440px; display: flex; flex-direction: column; gap: 16px; max-height: 90vh; overflow-y: auto;
-          box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+          background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.2);
+          border-radius: 16px; padding: 20px; width: 90%; max-width: 400px; display: flex; flex-direction: column; gap: 14px;
         }
 
         .modal-input {
-          width: 100%; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1);
-          color: #f8fafc; padding: 12px; border-radius: 10px; outline: none;
+          width: 100%; background: #1e293b; border: 1px solid rgba(255, 255, 255, 0.15);
+          color: #f8fafc; padding: 10px; border-radius: 8px; outline: none; font-size: 0.9rem;
         }
-
-        .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-        .key-btn { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); color: #f8fafc; padding: 14px; border-radius: 10px; font-size: 1.2rem; font-weight: 800; cursor: pointer; }
-        .key-btn:hover { background: var(--accent-color); color: #0f172a; }
 
         /* Hub Layout */
-        .hub-container { max-width: 1200px; width: 100%; margin: 0 auto; padding: 40px 30px; display: flex; flex-direction: column; gap: 30px; }
+        .container { max-width: 1100px; width: 100%; margin: 0 auto; padding: 30px 20px; display: flex; flex-direction: column; gap: 24px; }
         
-        .hub-header-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
-        .hero-title { font-size: 3rem; font-weight: 900; margin: 0; color: var(--accent-color); text-shadow: 0 2px 10px var(--accent-glow); }
+        .header-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+        .hero-title { font-size: 2.2rem; font-weight: 900; margin: 0; color: var(--accent-color); }
         
-        .filter-select {
-          background: rgba(30, 41, 59, 0.45); backdrop-filter: blur(8px);
-          border: 1px solid rgba(255, 255, 255, 0.12);
-          color: #f8fafc; padding: 10px 18px; border-radius: 14px; font-weight: bold; outline: none; cursor: pointer;
-          transition: 0.2s;
+        .select-box {
+          background: #1e293b; border: 1px solid rgba(255, 255, 255, 0.15);
+          color: #f8fafc; padding: 8px 14px; border-radius: 10px; font-weight: bold; outline: none; cursor: pointer;
         }
-        .filter-select:hover { border-color: var(--accent-color); }
 
-        /* Widgets Section (My Hub View) */
-        .widgets-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+        /* Widgets */
+        .widgets-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
         .widget-card {
-          background: rgba(30, 41, 59, 0.4); backdrop-filter: blur(12px);
-          border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 24px;
-          display: flex; flex-direction: column; gap: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.3);
-          transition: 0.2s;
+          background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 14px; padding: 18px;
+          display: flex; flex-direction: column; gap: 8px;
         }
-        .widget-card:hover { border-color: var(--accent-color); transform: translateY(-2px); }
-        .widget-title { font-size: 0.95rem; font-weight: 800; color: var(--accent-color); display: flex; align-items: center; gap: 8px; }
+        .widget-title { font-size: 0.85rem; font-weight: 800; color: var(--accent-color); }
 
         /* Games Grid */
-        .games-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+        .games-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
         .game-card {
-          background: rgba(30, 41, 59, 0.4); backdrop-filter: blur(14px);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 20px; padding: 24px; display: flex; flex-direction: column; gap: 16px; text-decoration: none; color: inherit; transition: 0.2s; position: relative;
-          box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+          background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 12px; text-decoration: none; color: inherit; position: relative;
         }
-        .game-card:hover { border-color: var(--accent-color); transform: translateY(-4px); background: rgba(30, 41, 59, 0.6); }
-        .play-btn { background: var(--accent-color); color: #0f172a; font-weight: 800; padding: 12px; border-radius: 14px; text-align: center; box-shadow: 0 4px 15px var(--accent-glow); }
+        .game-card:hover { border-color: var(--accent-color); }
+        .play-btn { background: var(--accent-color); color: #0f172a; font-weight: 800; padding: 10px; border-radius: 10px; text-align: center; font-size: 0.9rem; }
         
         .fav-star {
-          position: absolute; top: 20px; right: 20px; background: rgba(15, 23, 42, 0.5);
-          backdrop-filter: blur(6px); border: 1px solid rgba(255,255,255,0.1); width: 36px; height: 36px; border-radius: 50%;
-          display: flex; align-items: center; justify-content: center; font-size: 1.1rem; cursor: pointer; transition: 0.2s;
+          position: absolute; top: 16px; right: 16px; background: #1e293b;
+          border: 1px solid rgba(255,255,255,0.15); width: 32px; height: 32px; border-radius: 50%;
+          display: flex; align-items: center; justify-content: center; font-size: 1rem; cursor: pointer;
         }
-        .fav-star:hover { background: rgba(250, 204, 21, 0.2); border-color: #facc15; }
-        .fav-star.active { color: #facc15; background: rgba(250, 204, 21, 0.15); border-color: #facc15; }
-
-        .end-of-list {
-          margin-top: 30px; padding: 20px; display: flex; align-items: center; justify-content: center;
-          gap: 12px; color: #94a3b8; font-weight: 700; font-size: 0.95rem; border-top: 1px dashed rgba(255, 255, 255, 0.1);
-        }
-
-        .scroll-top-btn {
-          background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(255, 255, 255, 0.15);
-          color: var(--accent-color); width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-          cursor: pointer; font-size: 1.1rem; transition: 0.2s;
-        }
-        .scroll-top-btn:hover { background: var(--accent-color); color: #0f172a; }
+        .fav-star.active { color: #facc15; }
       </style>
 
-      <!-- First-Visit Tutorial Overlay -->
-      <div class="tutorial-overlay" id="tutorialOverlay" style="display:none;">
-        <div class="tutorial-card" id="tutStep1">
-          <h2 style="margin:0; color:var(--accent-color);">Welcome to eagle.io</h2>
-          <p style="color:#94a3b8; font-size:0.9rem; margin:0;">We have a quick tutorial to show you around. But first, what should we call you?</p>
+      <!-- First-Visit Name Modal -->
+      <div class="modal-overlay" id="nameModal" style="display:none;">
+        <div class="modal-card">
+          <h3 style="margin:0; color:var(--accent-color);">Welcome to eagle.io</h3>
+          <p style="color:#94a3b8; font-size:0.85rem; margin:0;">What should we call you?</p>
           <input type="text" class="modal-input" id="userNameInput" placeholder="Enter your name..." />
-          <button onclick="nextTutStep(2)" style="background:var(--accent-color); color:#0f172a; border:none; padding:10px; border-radius:12px; font-weight:bold; cursor:pointer;">Next</button>
-        </div>
-        <div class="tutorial-card" id="tutStep2" style="display:none;">
-          <h2 style="margin:0; color:var(--accent-color);">Quick Tour</h2>
-          <p style="color:#94a3b8; font-size:0.9rem; margin:0;">Use the <b>Apps</b> menu in the top left to open Themes, Schedule, and Settings. Check out <b>My Hub</b> for your personalized dashboard and widgets!</p>
-          <button onclick="finishTutorial()" style="background:var(--accent-color); color:#0f172a; border:none; padding:10px; border-radius:12px; font-weight:bold; cursor:pointer;">Get Started</button>
-        </div>
-      </div>
-
-      <!-- Custom Background Video -->
-      <video id="bgVideo" autoplay="" muted="" loop="" playsinline=""></video>
-
-      <!-- Update Log Modal -->
-      <div class="modal-overlay" id="updateLogModal">
-        <div class="modal-card">
-          <h3 style="margin:0; color:var(--accent-color);">UPDATE LOG</h3>
-          <div style="font-size:0.85rem; color:#94a3b8; line-height:1.5; display:flex; flex-direction:column; gap:10px; max-height:300px; overflow-y:auto;" id="updateLogContent">
-            <div><strong style="color:#f8fafc;">v39:</strong> Separated My Hub widgets dashboard from the Games library page. Localized clock time while maintaining Leawood weather. Enhanced sleek liquid glass design.</div>
-            <div><strong style="color:#f8fafc;">v38:</strong> Added custom browser tab title and orange "e.io" favicon icon.</div>
-            <div><strong style="color:#f8fafc;">v35:</strong> Added first-visit interactive onboarding tutorial and name storage, personalized hub greetings, and layout style switcher.</div>
-          </div>
-          <button id="closeUpdateLog" style="background:rgba(51, 65, 85, 0.6); color:#fff; border:none; padding:8px; border-radius:10px; font-weight:bold; cursor:pointer;">Close</button>
-        </div>
-      </div>
-
-      <!-- Schedule Modal -->
-      <div class="modal-overlay" id="scheduleModal">
-        <div class="modal-card">
-          <h3 style="margin:0; color:var(--accent-color);">SCHEDULE AND EVENTS (Up to 2030)</h3>
-          <div style="display:flex; gap:10px;">
-            <input type="date" class="modal-input" id="eventDateInput" min="2024-01-01" max="2030-12-31" />
-            <input type="text" class="modal-input" id="eventTitleInput" placeholder="Event description..." />
-          </div>
-          <button id="addEventBtn" style="background:var(--accent-color); color:#0f172a; border:none; padding:10px; border-radius:10px; font-weight:bold; cursor:pointer;">Add Event</button>
-
-          <div style="border-top:1px solid rgba(255,255,255,0.1); padding-top:10px; max-height:220px; overflow-y:auto; display:flex; flex-direction:column; gap:8px;" id="eventList">
-            <!-- Event items populated dynamically -->
-          </div>
-
-          <button id="closeSchedule" style="background:rgba(51, 65, 85, 0.6); color:#fff; border:none; padding:8px; border-radius:10px; font-weight:bold; cursor:pointer;">Close</button>
-        </div>
-      </div>
-
-      <!-- User Settings Modal -->
-      <div class="modal-overlay" id="userSettingsModal">
-        <div class="modal-card">
-          <h3 style="margin:0; color:var(--accent-color);">USER SETTINGS</h3>
-          <div class="settings-section">
-            <span style="font-weight: bold; color: var(--accent-color);">Your Name:</span>
-            <input type="text" class="modal-input" id="changeNameInput" placeholder="Enter new name..." />
-            <button id="saveNameBtn" style="background:var(--accent-color); color:#0f172a; border:none; padding:8px; border-radius:8px; font-weight:bold; cursor:pointer; margin-top:4px;">Update Name</button>
-          </div>
-          <button id="closeUserSettings" style="background:rgba(51, 65, 85, 0.6); color:#fff; border:none; padding:8px; border-radius:10px; font-weight:bold; cursor:pointer;">Close</button>
-        </div>
-      </div>
-
-      <!-- Owner Modal -->
-      <div class="modal-overlay" id="ownerModal">
-        <div class="modal-card">
-          <h3 style="margin:0; color:#facc15;">OWNER ACCESS</h3>
-          <div id="codeDisplay" style="background:#0f172a; color:var(--accent-color); font-size:1.8rem; font-weight:900; text-align:center; padding:10px; border-radius:10px; letter-spacing:8px;">____</div>
-          <div class="keypad">
-            <button class="key-btn" onclick="pressKey('1')">1</button>
-            <button class="key-btn" onclick="pressKey('2')">2</button>
-            <button class="key-btn" onclick="pressKey('3')">3</button>
-            <button class="key-btn" onclick="pressKey('4')">4</button>
-            <button class="key-btn" onclick="pressKey('5')">5</button>
-            <button class="key-btn" onclick="pressKey('6')">6</button>
-            <button class="key-btn" onclick="pressKey('7')">7</button>
-            <button class="key-btn" onclick="pressKey('8')">8</button>
-            <button class="key-btn" onclick="pressKey('9')">9</button>
-            <button class="key-btn" onclick="pressKey('0')" style="grid-column: 2;">0</button>
-          </div>
-
-          <div id="ownerBroadcastPanel" style="display:none; flex-direction:column; gap:10px; border-top:1px solid rgba(255,255,255,0.1); padding-top:12px;">
-            <div style="color:#22c55e; font-weight:bold; font-size:0.85rem;">Access Granted! Broadcast Message:</div>
-            <input type="text" class="modal-input" id="broadcastInput" placeholder="Type notification broadcast..." />
-            <button id="sendBroadcastBtn" style="background:#22c55e; color:#0f172a; border:none; padding:10px; border-radius:10px; font-weight:bold; cursor:pointer;">Send Notification</button>
-          </div>
-
-          <button id="cancelOwner" style="background:rgba(51, 65, 85, 0.6); color:#fff; border:none; padding:10px; border-radius:10px; font-weight:bold; cursor:pointer; margin-top:6px;">Close</button>
-        </div>
-      </div>
-
-      <!-- Bug Modal -->
-      <div class="modal-overlay" id="bugModal">
-        <div class="modal-card">
-          <h3 style="margin:0; color:var(--accent-color);">REPORT A BUG</h3>
-          <input type="text" class="modal-input" id="bugInput" placeholder="Describe the issue..." />
-          <div style="display:flex; gap:10px; justify-content:flex-end;">
-            <button id="cancelBug" style="background:rgba(51,65,85,0.6); color:#fff; border:none; padding:8px 16px; border-radius:10px; cursor:pointer;">Cancel</button>
-            <button id="submitBug" style="background:var(--accent-color); color:#0f172a; border:none; padding:8px 16px; border-radius:10px; font-weight:bold; cursor:pointer;">Submit</button>
-          </div>
+          <button onclick="saveName()" class="btn" style="background:var(--accent-color); color:#0f172a;">Get Started</button>
         </div>
       </div>
 
       <!-- Settings / Themes Modal -->
       <div class="modal-overlay" id="settingsModal">
         <div class="modal-card">
-          <h3 style="margin:0; color:var(--accent-color);">THEMES AND SETTINGS</h3>
-          
-          <div class="settings-section">
-            <div style="font-weight: bold; color: var(--accent-color);">Primary Accent Color</div>
-            <div class="color-presets">
-              <div class="color-dot" style="background: #ef4444;" title="Red" onclick="setAccentColor('#ef4444')"></div>
-              <div class="color-dot" style="background: #facc15;" title="Yellow" onclick="setAccentColor('#facc15')"></div>
-              <div class="color-dot" style="background: #22c55e;" title="Green" onclick="setAccentColor('#22c55e')"></div>
-              <div class="color-dot" style="background: #38bdf8;" title="Blue" onclick="setAccentColor('#38bdf8')"></div>
-              <div class="color-dot" style="background: #c084fc;" title="Purple" onclick="setAccentColor('#c084fc')"></div>
-            </div>
-            <div style="display:flex; gap:8px; align-items:center; margin-top:4px;">
-              <input type="color" id="customAccentPicker" style="background:none; border:none; width:30px; height:30px; cursor:pointer;" />
-              <input type="text" id="customAccentHex" class="modal-input" placeholder="#38bdf8" style="padding:6px 10px; font-size:0.8rem;" />
+          <h3 style="margin:0; color:var(--accent-color);">Settings</h3>
+          <div style="display:flex; flex-direction:column; gap:6px;">
+            <span style="font-size:0.85rem; color:#94a3b8;">Change Accent Color:</span>
+            <div style="display:flex; gap:10px;">
+              <button class="btn" onclick="setAccent('#38bdf8')" style="background:#38bdf8; width:30px; height:30px; padding:0; border-radius:50%;"></button>
+              <button class="btn" onclick="setAccent('#22c55e')" style="background:#22c55e; width:30px; height:30px; padding:0; border-radius:50%;"></button>
+              <button class="btn" onclick="setAccent('#facc15')" style="background:#facc15; width:30px; height:30px; padding:0; border-radius:50%;"></button>
+              <button class="btn" onclick="setAccent('#ef4444')" style="background:#ef4444; width:30px; height:30px; padding:0; border-radius:50%;"></button>
             </div>
           </div>
-
-          <div class="settings-section">
-            <div style="font-weight: bold; color: var(--accent-color);">Background Video</div>
-            <input type="file" id="bgVideoInput" accept="video/mp4,video/webm" style="font-size:0.75rem; color:#f8fafc;" />
-            <button id="clearVideoBtn" style="background:rgba(239,68,68,0.2); color:#ef4444; border:1px solid rgba(239,68,68,0.3); padding:4px; border-radius:6px; font-size:0.75rem; cursor:pointer; display:none;">Remove Video</button>
-          </div>
-
-          <div class="settings-section">
-            <div style="font-weight: bold; color: var(--accent-color);">Custom Escape Key (Symbols Only)</div>
-            <input type="text" class="modal-input" id="escKeyInput" maxlength="1" placeholder="e.g. ;, ., /, -, etc." style="width:60px; text-align:center; font-size:1.1rem; font-weight:bold;" />
-            <div style="color: #94a3b8; font-size: 0.75rem;">Pressing this symbol instantly redirects to Google. No letters, numbers, or spacebar allowed.</div>
-          </div>
-
-          <button id="closeSettingsModal" style="background:rgba(51, 65, 85, 0.6); color:#fff; border:none; padding:8px; border-radius:10px; font-weight:bold; cursor:pointer;">Close</button>
+          <button onclick="closeModal('settingsModal')" class="btn">Close</button>
         </div>
       </div>
 
-      <!-- Top Nav -->
-      <div class="navbar" id="navTop">
-        <div class="nav-left-group">
-          <button class="liquid-btn" id="appsDropdownBtn">Apps</button>
+      <!-- Navbar -->
+      <div class="navbar">
+        <div class="nav-left">
+          <button class="btn" id="menuBtn">Apps</button>
           
-          <!-- Apps Dropdown Suite -->
-          <div class="apps-dropdown" id="appsDropdown">
-            <div style="font-weight:900; color:var(--accent-color); font-size:0.9rem; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:6px;">App Suite</div>
-            <div class="apps-grid">
-              <div class="app-tile" onclick="openApp('latest')">
-                <span>🚀</span>
-                <span>Latest</span>
-              </div>
-              <div class="app-tile" onclick="openApp('schedule')">
-                <span>📅</span>
-                <span>Schedule</span>
-              </div>
-              <div class="app-tile" onclick="openApp('themes')">
-                <span>🎨</span>
-                <span>Themes</span>
-              </div>
-              <div class="app-tile" onclick="openApp('user')">
-                <span>👤</span>
-                <span>Profile</span>
-              </div>
-              <div class="app-tile" onclick="openApp('updatelog')">
-                <span>📜</span>
-                <span>Updates</span>
-              </div>
-              <div class="app-tile" onclick="openApp('owner')">
-                <span>🔒</span>
-                <span>Owners</span>
-              </div>
-              <div class="app-tile" onclick="openApp('proxy')">
-                <span>🧙‍♂️</span>
-                <span>Proxy</span>
-              </div>
-              <div class="app-tile" onclick="openApp('bug')">
-                <span>🐛</span>
-                <span>Bugs</span>
-              </div>
-            </div>
+          <div class="dropdown-menu" id="appsDropdown">
+            <div class="dropdown-item" onclick="openApp('latest')">🚀 Latest Version</div>
+            <div class="dropdown-item" onclick="openApp('settings')">🎨 Themes and Settings</div>
+            <div class="dropdown-item" onclick="openApp('profile')">👤 Change Name</div>
           </div>
 
           <div>
             <div class="brand">eagle.io</div>
-            <div class="meta-info"><span>v39</span> • <span id="liveClock">00:00:00</span></div>
-          </div>
-        </div>
-        <div class="nav-right-group">
-          <div class="notif-wrapper">
-            <button class="notif-btn" id="notifBtn">🔔<span class="notif-badge" id="notifBadge">1</span></button>
-            <div class="notif-dropdown" id="notifDropdown">
-              <div style="font-weight:900; color:var(--accent-color); font-size:0.9rem; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:6px;">Global Announcements</div>
-              <div id="notifContent" style="font-size:0.85rem; color:#f8fafc; line-height:1.4;">No new announcements.</div>
-            </div>
+            <div class="meta-info">v40 • <span id="liveClock">00:00:00</span></div>
           </div>
         </div>
       </div>
 
-      <!-- Hub Content -->
-      <div class="hub-container">
-        <div class="hub-header-row">
-          <h1 class="hero-title" id="heroGreeting">How is it going, Gamer?</h1>
-          <div style="display:flex; gap:12px; align-items:center;">
-            <select class="filter-select" id="layoutStyleSelect" style="display:none;">
-              <option value="grid">Grid Layout</option>
-              <option value="compact">Compact Layout</option>
-            </select>
-            <select class="filter-select" id="mainNavSelect">
-              <option value="hub">My Hub</option>
-              <option value="games">Games</option>
-              <option value="favorites">Favorites Only</option>
-            </select>
-          </div>
+      <!-- Content Container -->
+      <div class="container">
+        <div class="header-row">
+          <h1 class="hero-title" id="heroGreeting">My Hub</h1>
+          <select class="select-box" id="mainNavSelect">
+            <option value="hub">My Hub</option>
+            <option value="games">Games</option>
+          </select>
         </div>
 
-        <!-- My Hub Widgets Dashboard View -->
-        <div id="myHubView" style="display:flex; flex-direction:column; gap:24px;">
+        <!-- My Hub View -->
+        <div id="myHubView" style="display:flex; flex-direction:column; gap:20px;">
           <div class="widgets-grid">
             <div class="widget-card">
-              <div class="widget-title">⏰ Local Device Time</div>
-              <div style="font-size:1.8rem; font-weight:900; color:#f8fafc;" id="widgetClock">00:00:00</div>
-              <div style="font-size:0.8rem; color:#94a3b8;" id="widgetDate">Loading date...</div>
+              <div class="widget-title">Local Time</div>
+              <div style="font-size:1.5rem; font-weight:900;" id="widgetClock">00:00:00</div>
+              <div style="font-size:0.75rem; color:#94a3b8;" id="widgetDate">Loading date...</div>
             </div>
             <div class="widget-card">
-              <div class="widget-title">🌤️ Leawood Weather</div>
-              <div style="font-size:1.8rem; font-weight:900; color:#7dd3fc;">56°F Clear</div>
-              <div style="font-size:0.8rem; color:#94a3b8;">Leawood, Kansas area.</div>
+              <div class="widget-title">Leawood Weather</div>
+              <div style="font-size:1.5rem; font-weight:900; color:#7dd3fc;">56°F Clear</div>
+              <div style="font-size:0.75rem; color:#94a3b8;">Leawood, Kansas</div>
             </div>
             <div class="widget-card">
-              <div class="widget-title">📝 Quick Personal Notes</div>
-              <textarea id="quickNotes" class="modal-input" placeholder="Type personal notes here..." style="height:70px; resize:none; font-size:0.85rem;"></textarea>
+              <div class="widget-title">Quick Notes</div>
+              <textarea id="quickNotes" class="modal-input" placeholder="Notes..." style="height:60px; resize:none; font-size:0.8rem;"></textarea>
             </div>
           </div>
-          <h3 style="margin:0; color:var(--accent-color);">⭐ Favorite Game Shortcuts</h3>
-          <div class="games-grid" id="favoritesGrid">
-            <!-- Populated dynamically via script -->
-          </div>
+          <h3 style="margin:0; color:var(--accent-color);">Favorite Games</h3>
+          <div class="games-grid" id="favoritesGrid"></div>
         </div>
 
-        <!-- Games Grid View -->
-        <div class="games-grid" id="gamesGrid" style="display:none;">
-          
-          <!-- Game 1: Geometry Eagle -->
+        <!-- Games View (Includes Favorites) -->
+        <div id="gamesView" class="games-grid" style="display:none;">
           <div class="game-card" data-id="geometry-eagle">
             <div class="fav-star" onclick="toggleFavorite('geometry-eagle')">★</div>
-            <div style="font-size:2.5rem;">🟩</div>
-            <div style="font-size:1.3rem; font-weight:800;">Geometry Eagle</div>
-            <div style="color:#94a3b8; font-size:0.95rem;">Time your jumps to leap over spikes in this rhythm-based platformer.</div>
-            <a class="play-btn" href="geometry-eagle.svg?v=39">Play Game</a>
+            <div style="font-size:2rem;">🟩</div>
+            <div style="font-size:1.1rem; font-weight:800;">Geometry Eagle</div>
+            <div style="color:#94a3b8; font-size:0.85rem;">Time your jumps over spikes in this rhythm platformer.</div>
+            <a class="play-btn" href="geometry-eagle.svg?v=40">Play Game</a>
           </div>
 
-          <!-- Game 2: Eagle Clicker -->
           <div class="game-card" data-id="eagle-clicker">
             <div class="fav-star" onclick="toggleFavorite('eagle-clicker')">★</div>
-            <div style="font-size:2.5rem;">🦅</div>
-            <div style="font-size:1.3rem; font-weight:800;">Eagle Clicker</div>
-            <div style="color:#94a3b8; font-size:0.95rem;">Click to gather feathers and buy nest upgrades for passive income.</div>
-            <a class="play-btn" href="eagle-clicker.svg?v=39">Play Game</a>
+            <div style="font-size:2rem;">🦅</div>
+            <div style="font-size:1.1rem; font-weight:800;">Eagle Clicker</div>
+            <div style="color:#94a3b8; font-size:0.85rem;">Gather feathers and buy nest upgrades for passive income.</div>
+            <a class="play-btn" href="eagle-clicker.svg?v=40">Play Game</a>
           </div>
 
-          <!-- Game 3: To the Eagles -->
           <div class="game-card" data-id="to-the-eagles">
             <div class="fav-star" onclick="toggleFavorite('to-the-eagles')">★</div>
-            <div style="font-size:2.5rem;">☁️</div>
-            <div style="font-size:1.3rem; font-weight:800;">To the Eagles</div>
-            <div style="color:#94a3b8; font-size:0.95rem;">Bounce across moving clouds and climb as high as you can.</div>
-            <a class="play-btn" href="to-the-eagles.svg?v=39">Play Game</a>
+            <div style="font-size:2rem;">☁️</div>
+            <div style="font-size:1.1rem; font-weight:800;">To the Eagles</div>
+            <div style="color:#94a3b8; font-size:0.85rem;">Bounce across moving clouds and climb as high as possible.</div>
+            <a class="play-btn" href="to-the-eagles.svg?v=40">Play Game</a>
           </div>
 
-          <!-- Game 4: Eagle Pizza -->
           <div class="game-card" data-id="eagle-pizza">
             <div class="fav-star" onclick="toggleFavorite('eagle-pizza')">★</div>
-            <div style="font-size:2.5rem;">🍕</div>
-            <div style="font-size:1.3rem; font-weight:800;">Eagle Pizza</div>
-            <div style="color:#94a3b8; font-size:0.95rem;">Assemble custom orders, bake pizzas, and manage your pizzeria shop.</div>
-            <a class="play-btn" href="eagle-pizza.svg?v=39">Play Game</a>
+            <div style="font-size:2rem;">🍕</div>
+            <div style="font-size:1.1rem; font-weight:800;">Eagle Pizza</div>
+            <div style="color:#94a3b8; font-size:0.85rem;">Assemble custom orders and manage your pizza shop.</div>
+            <a class="play-btn" href="eagle-pizza.svg?v=40">Play Game</a>
           </div>
-
-          <!-- Game 5: Teachers Quiz -->
-          <div class="game-card" data-id="teachers-quiz">
-            <div class="fav-star" onclick="toggleFavorite('teachers-quiz')">★</div>
-            <div style="font-size:2.5rem;">📚</div>
-            <div style="font-size:1.3rem; font-weight:800;">Teachers Quiz</div>
-            <div style="color:#94a3b8; font-size:0.95rem;">Test your knowledge on Leawood Middle teachers and school trivia!</div>
-            <a class="play-btn" href="teachers-quiz.svg?v=39">Play Quiz</a>
-          </div>
-
-          <!-- Game 6: Eagle Pong -->
-          <div class="game-card" data-id="eagle-pong">
-            <div class="fav-star" onclick="toggleFavorite('eagle-pong')">★</div>
-            <div style="font-size:2.5rem;">🏓</div>
-            <div style="font-size:1.3rem; font-weight:800;">Eagle Pong</div>
-            <div style="color:#94a3b8; font-size:0.95rem;">Classic retro paddle arcade game against an AI opponent.</div>
-            <a class="play-btn" href="eagle-pong.svg?v=39">Play Game</a>
-          </div>
-
-          <!-- Game 7: Eagle Stack Tower -->
-          <div class="game-card" data-id="eagle-stack">
-            <div class="fav-star" onclick="toggleFavorite('eagle-stack')">★</div>
-            <div style="font-size:2.5rem;">🧱</div>
-            <div style="font-size:1.3rem; font-weight:800;">Eagle Stack Tower</div>
-            <div style="color:#94a3b8; font-size:0.95rem;">Precision-time your drops to stack blocks and reach the sky!</div>
-            <a class="play-btn" href="eagle-stack.svg?v=39">Play Game</a>
-          </div>
-
-          <!-- Game 8: Eagle Blocks -->
-          <div class="game-card" data-id="eagle-blocks">
-            <div class="fav-star" onclick="toggleFavorite('eagle-blocks')">★</div>
-            <div style="font-size:2.5rem;">🟨</div>
-            <div style="font-size:1.3rem; font-weight:800;">Eagle Blocks</div>
-            <div style="color:#94a3b8; font-size:0.95rem;">Clear full rows and columns with yellow, white, and gold blocks.</div>
-            <a class="play-btn" href="eagle-blocks.svg?v=39">Play Game</a>
-          </div>
-
-        </div>
-
-        <!-- End of List Row -->
-        <div class="end-of-list">
-          <span>End of list. Go back to top?</span>
-          <button class="scroll-top-btn" id="scrollTopBtn" title="Back to Top">⬆</button>
         </div>
       </div>
 
       <script type="text/javascript">
         <![CDATA[
-        window.goToLatestVersion = function() {
-          const freshTimestamp = Date.now();
-          window.location.href = `index.svg?v=${freshTimestamp}`;
+        window.setAccent = function(color) {
+          document.documentElement.style.setProperty('--accent-color', color);
+          localStorage.setItem('eagle_accent', color);
         };
 
-        // Tutorial and Name Logic
-        window.nextTutStep = function(step) {
-          const nameVal = document.getElementById('userNameInput').value.trim();
-          if (step === 2) {
-            if (!nameVal) {
-              alert('Please enter your name!');
-              return;
-            }
-            localStorage.setItem('eagle_user_name', nameVal);
-            document.getElementById('tutStep1').style.display = 'none';
-            document.getElementById('tutStep2').style.display = 'flex';
-            updateGreeting(nameVal);
+        window.openApp = function(app) {
+          document.getElementById('appsDropdown').classList.remove('open');
+          if (app === 'latest') window.location.href = `index.svg?v=${Date.now()}`;
+          if (app === 'settings') document.getElementById('settingsModal').classList.add('open');
+          if (app === 'profile') {
+            const name = prompt('Enter your name:', localStorage.getItem('eagle_user_name') || '');
+            if (name) { localStorage.setItem('eagle_user_name', name); updateGreeting(name); }
           }
         };
 
-        window.finishTutorial = function() {
-          document.getElementById('tutorialOverlay').style.display = 'none';
-          localStorage.setItem('eagle_tut_done', 'true');
+        window.closeModal = function(id) {
+          document.getElementById(id).classList.remove('open');
+        };
+
+        window.saveName = function() {
+          const val = document.getElementById('userNameInput').value.trim();
+          if (val) {
+            localStorage.setItem('eagle_user_name', val);
+            localStorage.setItem('eagle_tut', 'true');
+            document.getElementById('nameModal').style.display = 'none';
+            updateGreeting(val);
+          }
         };
 
         function updateGreeting(name) {
-          const greetings = [
-            `How is it going, ${name}?`,
-            `Hey there, ${name}!`,
-            `Welcome back, ${name}!`,
-            `Ready to play, ${name}?`
-          ];
-          const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
-          document.getElementById('heroGreeting').textContent = randomGreeting;
+          document.getElementById('heroGreeting').textContent = `Welcome back, ${name}!`;
         }
 
         window.addEventListener('DOMContentLoaded', () => {
           document.title = "eagle.io";
 
-          // Set custom orange e.io favicon dynamically
-          const canvas = document.createElement('canvas');
-          canvas.width = 64;
-          canvas.height = 64;
-          const ctx = canvas.getContext('2d');
-          ctx.fillStyle = '#070a12';
-          ctx.fillRect(0, 0, 64, 64);
-          ctx.fillStyle = '#f97316';
-          ctx.font = 'bold 22px system-ui, sans-serif';
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
-          ctx.fillText('e.io', 32, 34);
+          // Accent setup
+          const savedAccent = localStorage.getItem('eagle_accent') || '#38bdf8';
+          setAccent(savedAccent);
 
-          let link = document.querySelector("link[rel*='icon']") || document.createElement('link');
-          link.type = 'image/x-icon';
-          link.rel = 'shortcut icon';
-          link.href = canvas.toDataURL('image/png');
-          document.getElementsByTagName('head')[0].appendChild(link);
-
-          // Check First Visit Tutorial
-          const tutDone = localStorage.getItem('eagle_tut_done');
-          const savedName = localStorage.getItem('eagle_user_name');
-          if (!tutDone || !savedName) {
-            document.getElementById('tutorialOverlay').style.display = 'flex';
+          // Name check
+          if (!localStorage.getItem('eagle_tut')) {
+            document.getElementById('nameModal').style.display = 'flex';
           } else {
-            updateGreeting(savedName);
+            updateGreeting(localStorage.getItem('eagle_user_name') || 'Gamer');
           }
 
-          // Accent Color Theme setup
-          const savedAccent = localStorage.getItem('eagle_accent') || '#38bdf8';
-          setAccentColor(savedAccent, false);
-
-          window.setAccentColor = function(color, save = true) {
-            document.documentElement.style.setProperty('--accent-color', color);
-            document.documentElement.style.setProperty('--accent-glow', color + '4d');
-            if (save) localStorage.setItem('eagle_accent', color);
-          };
-
-          const customAccentPicker = document.getElementById('customAccentPicker');
-          const customAccentHex = document.getElementById('customAccentHex');
-          customAccentPicker.oninput = (e) => {
-            setAccentColor(e.target.value);
-            customAccentHex.value = e.target.value;
-          };
-          customAccentHex.onchange = (e) => {
-            setAccentColor(e.target.value);
-          };
-
-          // Local Device Time and Date Clock
-          const clockEl = document.getElementById('liveClock');
-          const widgetClock = document.getElementById('widgetClock');
-          const widgetDate = document.getElementById('widgetDate');
+          // Clock
           setInterval(() => {
             const now = new Date();
             const timeStr = now.toLocaleTimeString();
-            const dateStr = now.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-            clockEl.textContent = timeStr;
-            if (widgetClock) widgetClock.textContent = timeStr;
-            if (widgetDate) widgetDate.textContent = dateStr;
+            const dateStr = now.toLocaleDateString();
+            document.getElementById('liveClock').textContent = timeStr;
+            document.getElementById('widgetClock').textContent = timeStr;
+            document.getElementById('widgetDate').textContent = dateStr;
           }, 1000);
 
-          // Quick Notes Persistence
-          const quickNotes = document.getElementById('quickNotes');
-          const savedNotes = localStorage.getItem('eagle_notes');
-          if (savedNotes) quickNotes.value = savedNotes;
-          quickNotes.oninput = (e) => {
-            localStorage.setItem('eagle_notes', e.target.value);
-          };
+          // Notes
+          const notes = document.getElementById('quickNotes');
+          notes.value = localStorage.getItem('eagle_notes') || '';
+          notes.oninput = (e) => localStorage.setItem('eagle_notes', e.target.value);
 
-          // Apps Dropdown Suite Logic
-          const appsDropdownBtn = document.getElementById('appsDropdownBtn');
-          const appsDropdown = document.getElementById('appsDropdown');
+          // Dropdown toggle
+          const menuBtn = document.getElementById('menuBtn');
+          const dropdown = document.getElementById('appsDropdown');
+          menuBtn.onclick = (e) => { e.stopPropagation(); dropdown.classList.toggle('open'); };
+          window.onclick = () => dropdown.classList.remove('open');
 
-          appsDropdownBtn.onclick = (e) => {
-            e.stopPropagation();
-            appsDropdown.classList.toggle('open');
-            notifDropdown.classList.remove('open');
-          };
+          // View Switching
+          const navSelect = document.getElementById('mainNavSelect');
+          const hubView = document.getElementById('myHubView');
+          const gamesView = document.getElementById('gamesView');
 
-          window.openApp = function(appName) {
-            appsDropdown.classList.remove('open');
-            if (appName === 'latest') goToLatestVersion();
-            else if (appName === 'schedule') scheduleModal.classList.add('open');
-            else if (appName === 'themes') settingsModal.classList.add('open');
-            else if (appName === 'user') {
-              document.getElementById('changeNameInput').value = localStorage.getItem('eagle_user_name'] || '';
-              userSettingsModal.classList.add('open');
-            }
-            else if (appName === 'updatelog') updateLogModal.classList.add('open');
-            else if (appName === 'owner') {
-              enteredCode = '';
-              codeDisplay.textContent = '____';
-              ownerBroadcastPanel.style.display = 'none';
-              ownerModal.classList.add('open');
-            }
-            else if (appName === 'proxy') alert('Proxy Wizard is currently a placeholder.');
-            else if (appName === 'bug') bugModal.classList.add('open');
-          };
-
-          window.addEventListener('click', (e) => {
-            if (!appsDropdown.contains(e.target) && e.target !== appsDropdownBtn) {
-              appsDropdown.classList.remove('open');
-            }
-            if (!notifDropdown.contains(e.target) && !notifBtn.contains(e.target)) {
-              notifDropdown.classList.remove('open');
-            }
-          });
-
-          // Notifications Logic
-          const notifBtn = document.getElementById('notifBtn');
-          const notifBadge = document.getElementById('notifBadge');
-          const notifDropdown = document.getElementById('notifDropdown');
-          const notifContent = document.getElementById('notifContent');
-
-          notifBtn.onclick = (e) => {
-            e.stopPropagation();
-            notifDropdown.classList.toggle('open');
-            notifBadge.style.display = 'none';
-            appsDropdown.classList.remove('open');
-          };
-
-          const BIN_URL = "https://api.jsonbin.io/v3/b/6adafef5ac6210605a4b0a6d";
-          const MASTER_KEY = "YOUR_MASTER_KEY_HERE";
-
-          async function syncAnnouncement() {
-            try {
-              const res = await fetch(BIN_URL, { headers: { 'X-Master-Key': MASTER_KEY } });
-              const data = await res.json();
-              if (data && data.record && data.record.message) {
-                notifContent.textContent = data.record.message;
-                notifBadge.style.display = 'block';
-              }
-            } catch (err) {
-              console.log('JSONBin sync offline or unconfigured');
-            }
-          }
-          syncAnnouncement();
-
-          // Custom Video Background Uploader
-          const appRoot = document.getElementById('appRoot');
-          const bgVideo = document.getElementById('bgVideo');
-          const bgVideoInput = document.getElementById('bgVideoInput');
-          const clearVideoBtn = document.getElementById('clearVideoBtn');
-
-          const savedVideo = localStorage.getItem('eagle_bg_video');
-          if (savedVideo) {
-            bgVideo.src = savedVideo;
-            bgVideo.style.display = 'block';
-            clearVideoBtn.style.display = 'block';
-          }
-
-          bgVideoInput.onchange = (e) => {
-            const file = e.target.files[0];
-            if (file) {
-              const reader = new FileReader();
-              reader.onload = function(event) {
-                const base64Video = event.target.result;
-                localStorage.setItem('eagle_bg_video', base64Video);
-                bgVideo.src = base64Video;
-                bgVideo.style.display = 'block';
-                clearVideoBtn.style.display = 'block';
-              };
-              reader.readAsDataURL(file);
+          navSelect.onchange = () => {
+            if (navSelect.value === 'hub') {
+              hubView.style.display = 'flex';
+              gamesView.style.display = 'none';
+              renderFavorites();
+            } else {
+              hubView.style.display = 'none';
+              gamesView.style.display = 'grid';
             }
           };
 
-          clearVideoBtn.onclick = () => {
-            localStorage.removeItem('eagle_bg_video');
-            bgVideo.pause();
-            bgVideo.removeAttribute('src');
-            bgVideo.style.display = 'none';
-            clearVideoBtn.style.display = 'none';
-            bgVideoInput.value = '';
+          // Favorites
+          let favorites = JSON.parse(localStorage.getItem('eagle_favs') || '[]');
+
+          window.toggleFavorite = function(id) {
+            if (favorites.includes(id)) favorites = favorites.filter(f => f !== id);
+            else favorites.push(id);
+            localStorage.setItem('eagle_favs', JSON.stringify(favorites));
+            updateFavUI();
+            if (navSelect.value === 'hub') renderFavorites();
           };
-
-          // Modal Controls
-          const updateLogModal = document.getElementById('updateLogModal');
-          document.getElementById('closeUpdateLog').onclick = () => updateLogModal.classList.remove('open');
-
-          const scheduleModal = document.getElementById('scheduleModal');
-          document.getElementById('closeSchedule').onclick = () => scheduleModal.classList.remove('open');
-
-          const settingsModal = document.getElementById('settingsModal');
-          document.getElementById('closeSettingsModal').onclick = () => settingsModal.classList.remove('open');
-
-          const userSettingsModal = document.getElementById('userSettingsModal');
-          document.getElementById('closeUserSettings').onclick = () => userSettingsModal.classList.remove('open');
-
-          document.getElementById('saveNameBtn').onclick = () => {
-            const newName = document.getElementById('changeNameInput').value.trim();
-            if (newName) {
-              localStorage.setItem('eagle_user_name', newName);
-              updateGreeting(newName);
-              userSettingsModal.classList.remove('open');
-              alert('Profile name updated successfully!');
-            }
-          };
-
-          // Schedule Events System
-          const eventDateInput = document.getElementById('eventDateInput');
-          const eventTitleInput = document.getElementById('eventTitleInput');
-          const addEventBtn = document.getElementById('addEventBtn');
-          const eventList = document.getElementById('eventList');
-
-          let events = JSON.parse(localStorage.getItem('eagle_events') || '[]');
-
-          function renderEvents() {
-            eventList.innerHTML = '';
-            if (events.length === 0) {
-              eventList.innerHTML = '<div style="color:#94a3b8; font-size:0.85rem;">No upcoming events saved.</div>';
-              return;
-            }
-            events.sort((a,b) => new Date(a.date) - new Date(b.date));
-            events.forEach((ev, idx) => {
-              const item = document.createElement('div');
-              item.style.cssText = 'background:rgba(30,41,59,0.6); padding:8px 12px; border-radius:8px; display:flex; justify-content:space-between; align-items:center; font-size:0.85rem;';
-              item.innerHTML = `<span><strong>${ev.date}:</strong> ${ev.title}</span><button onclick="deleteEvent(${idx})" style="background:none; border:none; color:#ef4444; cursor:pointer; font-weight:bold;">✕</button>`;
-              eventList.appendChild(item);
-            });
-          }
-
-          window.deleteEvent = function(idx) {
-            events.splice(idx, 1);
-            localStorage.setItem('eagle_events', JSON.stringify(events));
-            renderEvents();
-          };
-
-          addEventBtn.onclick = () => {
-            const date = eventDateInput.value;
-            const title = eventTitleInput.value.trim();
-            if (date && title) {
-              events.push({ date, title });
-              localStorage.setItem('eagle_events', JSON.stringify(events));
-              eventDateInput.value = '';
-              eventTitleInput.value = '';
-              renderEvents();
-            }
-          };
-          renderEvents();
-
-          // Scroll to Top
-          const scrollTopBtn = document.getElementById('scrollTopBtn');
-          scrollTopBtn.onclick = () => {
-            appRoot.scrollTo({ top: 0, behavior: 'smooth' });
-          };
-
-          // Custom Symbol Escape Key Setup
-          const escKeyInput = document.getElementById('escKeyInput');
-          const savedEscKey = localStorage.getItem('eagle_esc_symbol'] || ';';
-          escKeyInput.value = savedEscKey;
-
-          escKeyInput.oninput = (e) => {
-            const val = e.target.value;
-            if (/[a-zA-Z0-9\s]/.test(val)) {
-              alert('Only symbols allowed for the custom escape key!');
-              escKeyInput.value = savedEscKey;
-              return;
-            }
-            if (val) {
-              localStorage.setItem('eagle_esc_symbol', val);
-            }
-          };
-
-          window.addEventListener('keydown', (e) => {
-            const currentSymbol = localStorage.getItem('eagle_esc_symbol'] || ';';
-            if (e.key === currentSymbol) {
-              window.location.href = "https://www.google.com";
-            }
-          });
-
-          // Favorites System and Main Navigation View Modes
-          let favorites = JSON.parse(localStorage.getItem('eagle_favorites') || '[]');
-          const myHubView = document.getElementById('myHubView');
-          const gamesGrid = document.getElementById('gamesGrid');
-          const favoritesGrid = document.getElementById('favoritesGrid');
-          const mainNavSelect = document.getElementById('mainNavSelect');
-
-          function updateViewMode() {
-            const mode = mainNavSelect.value;
-            if (mode === 'hub') {
-              myHubView.style.display = 'flex';
-              gamesGrid.style.display = 'none';
-              renderFavoritesGrid();
-            } else if (mode === 'games') {
-              myHubView.style.display = 'none';
-              gamesGrid.style.display = 'grid';
-              document.querySelectorAll('#gamesGrid .game-card').forEach(card => card.style.display = 'flex');
-            } else if (mode === 'favorites') {
-              myHubView.style.display = 'none';
-              gamesGrid.style.display = 'grid';
-              document.querySelectorAll('#gamesGrid .game-card').forEach(card => {
-                const id = card.getAttribute('data-id');
-                if (favorites.includes(id)) card.style.display = 'flex';
-                else card.style.display = 'none';
-              });
-            }
-          }
-
-          function renderFavoritesGrid() {
-            favoritesGrid.innerHTML = '';
-            const allCards = document.querySelectorAll('#gamesGrid .game-card');
-            let count = 0;
-            allCards.forEach(card => {
-              const id = card.getAttribute('data-id');
-              if (favorites.includes(id)) {
-                const clone = card.cloneNode(true);
-                // Re-bind star action on clone
-                clone.querySelector('.fav-star').onclick = () => toggleFavorite(id);
-                favoritesGrid.appendChild(clone);
-                count++;
-              }
-            });
-            if (count === 0) {
-              favoritesGrid.innerHTML = '<div style="color:#94a3b8; font-size:0.9rem; grid-column: 1/-1;">No favorite games starred yet! Go to the Games tab to add some.</div>';
-            }
-          }
-
-          mainNavSelect.onchange = updateViewMode;
 
           function updateFavUI() {
             document.querySelectorAll('.game-card').forEach(card => {
               const id = card.getAttribute('data-id');
               const star = card.querySelector('.fav-star');
-              if (favorites.includes(id)) {
-                star.classList.add('active'); star.textContent = '★';
-              } else {
-                star.classList.remove('active'); star.textContent = '☆';
-              }
+              if (favorites.includes(id)) { star.classList.add('active'); star.textContent = '★'; }
+              else { star.classList.remove('active'); star.textContent = '☆'; }
             });
-            updateViewMode();
           }
 
-          window.toggleFavorite = function(id) {
-            if (favorites.includes(id)) favorites = favorites.filter(f => f !== id);
-            else favorites.push(id);
-            localStorage.setItem('eagle_favorites', JSON.stringify(favorites));
-            updateFavUI();
-          };
+          function renderFavorites() {
+            const container = document.getElementById('favoritesGrid');
+            container.innerHTML = '';
+            const allGames = document.querySelectorAll('#gamesView .game-card');
+            let count = 0;
+            allGames.forEach(card => {
+              const id = card.getAttribute('data-id');
+              if (favorites.includes(id)) {
+                const clone = card.cloneNode(true);
+                clone.querySelector('.fav-star').onclick = () => toggleFavorite(id);
+                container.appendChild(clone);
+                count++;
+              }
+            });
+            if (count === 0) {
+              container.innerHTML = '<div style="color:#94a3b8; font-size:0.85rem;">No favorite games starred yet! Switch to the Games tab to star some.</div>';
+            }
+          }
 
           updateFavUI();
-
-          // Owner Keypad Modal
-          const ownerModal = document.getElementById('ownerModal');
-          const cancelOwner = document.getElementById('cancelOwner');
-          const codeDisplay = document.getElementById('codeDisplay');
-          const ownerBroadcastPanel = document.getElementById('ownerBroadcastPanel');
-          const sendBroadcastBtn = document.getElementById('sendBroadcastBtn');
-          const broadcastInput = document.getElementById('broadcastInput');
-
-          let enteredCode = '';
-          cancelOwner.onclick = () => ownerModal.classList.remove('open');
-
-          window.pressKey = function(num) {
-            if (enteredCode.length < 4) {
-              enteredCode += num;
-              codeDisplay.textContent = enteredCode.padEnd(4, '_');
-              if (enteredCode.length === 4) {
-                if (enteredCode === '3166') {
-                  ownerBroadcastPanel.style.display = 'flex';
-                } else {
-                  alert('Incorrect Code!');
-                  enteredCode = '';
-                  codeDisplay.textContent = '____';
-                }
-              }
-            }
-          };
-
-          sendBroadcastBtn.onclick = async () => {
-            const msg = broadcastInput.value.trim();
-            if (msg) {
-              try {
-                sendBroadcastBtn.textContent = 'Sending...';
-                await fetch(BIN_URL, {
-                  method: 'PUT',
-                  headers: { 'Content-Type': 'application/json', 'X-Master-Key': MASTER_KEY },
-                  body: JSON.stringify({ message: msg })
-                });
-                alert('Broadcast notification sent!');
-                ownerModal.classList.remove('open');
-                syncAnnouncement();
-              } catch (e) {
-                alert('Broadcast failed.');
-              } finally {
-                sendBroadcastBtn.textContent = 'Send Notification';
-              }
-            }
-          };
-
-          // Bug Report Modal
-          const bugModal = document.getElementById('bugModal');
-          document.getElementById('cancelBug').onclick = () => bugModal.classList.remove('open');
-          document.getElementById('submitBug').onclick = () => {
-            alert('Bug report submitted!');
-            bugModal.classList.remove('open');
-          };
+          renderFavorites();
         });
         ]]>
       </script>
