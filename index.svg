@@ -5,21 +5,6 @@
       <style>
         * { box-sizing: border-box; }
 
-        /* Announcement Banner */
-        .top-banner {
-          width: 100%;
-          background: #0284c7;
-          color: #f8fafc;
-          text-align: center;
-          font-size: 0.75rem;
-          font-weight: 800;
-          padding: 6px;
-          letter-spacing: 0.5px;
-          z-index: 12;
-          position: sticky;
-          top: 0;
-        }
-
         /* Navbar */
         .navbar {
           width: 100%;
@@ -30,7 +15,7 @@
           justify-content: space-between;
           align-items: center;
           position: sticky;
-          top: 27px;
+          top: 0;
           z-index: 10;
         }
 
@@ -57,15 +42,30 @@
         .brand { font-weight: 900; font-size: 1.3rem; color: #38bdf8; display: flex; align-items: center; gap: 8px; }
         .meta-info { font-size: 0.75rem; color: #94a3b8; font-family: monospace; display: flex; gap: 10px; }
 
-        .weather-pill {
+        /* Notifications Dropdown */
+        .notif-wrapper { position: relative; }
+        .notif-btn {
           background: rgba(30, 41, 59, 0.6);
           border: 1px solid rgba(255, 255, 255, 0.1);
-          color: #7dd3fc;
-          padding: 6px 14px;
-          border-radius: 20px;
-          font-size: 0.8rem;
-          font-weight: 700;
+          color: #f8fafc;
+          padding: 8px 12px;
+          border-radius: 12px;
+          cursor: pointer;
+          font-size: 1.1rem;
+          position: relative;
         }
+        .notif-badge {
+          position: absolute; top: -4px; right: -4px;
+          background: #ef4444; color: #fff; font-size: 0.65rem; font-weight: 900;
+          padding: 2px 5px; border-radius: 10px; display: none;
+        }
+        .notif-dropdown {
+          position: absolute; top: 45px; right: 0; width: 300px;
+          background: #1e293b; border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 16px; padding: 16px; display: none; flex-direction: column; gap: 12px;
+          box-shadow: 0 10px 25px rgba(0,0,0,0.5); z-index: 50;
+        }
+        .notif-dropdown.open { display: flex; }
 
         /* Slide Drawer */
         .drawer-overlay {
@@ -95,7 +95,6 @@
 
         .color-presets { display: flex; gap: 8px; }
         .color-dot { width: 26px; height: 26px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.2); cursor: pointer; }
-        .color-dot:hover { transform: scale(1.1); }
 
         /* Modals */
         .modal-overlay {
@@ -106,7 +105,7 @@
 
         .modal-card {
           background: #1e293b; border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 20px; padding: 24px; width: 90%; max-width: 400px; display: flex; flex-direction: column; gap: 16px;
+          border-radius: 20px; padding: 24px; width: 90%; max-width: 440px; display: flex; flex-direction: column; gap: 16px; max-height: 90vh; overflow-y: auto;
         }
 
         .modal-input {
@@ -144,38 +143,18 @@
         .fav-star:hover { background: rgba(250, 204, 21, 0.2); border-color: #facc15; }
         .fav-star.active { color: #facc15; background: rgba(250, 204, 21, 0.15); border-color: #facc15; }
 
-        /* End of List Row */
         .end-of-list {
-          margin-top: 30px;
-          padding: 20px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 12px;
-          color: #94a3b8;
-          font-weight: 700;
-          font-size: 0.95rem;
-          border-top: 1px dashed rgba(255, 255, 255, 0.1);
+          margin-top: 30px; padding: 20px; display: flex; align-items: center; justify-content: center;
+          gap: 12px; color: #94a3b8; font-weight: 700; font-size: 0.95rem; border-top: 1px dashed rgba(255, 255, 255, 0.1);
         }
 
         .scroll-top-btn {
-          background: rgba(30, 41, 59, 0.8);
-          border: 1px solid rgba(255, 255, 255, 0.15);
-          color: #38bdf8;
-          width: 38px;
-          height: 38px;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          font-size: 1.1rem;
-          transition: 0.2s;
+          background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(255, 255, 255, 0.15);
+          color: #38bdf8; width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+          cursor: pointer; font-size: 1.1rem; transition: 0.2s;
         }
         .scroll-top-btn:hover { background: #38bdf8; color: #0f172a; }
       </style>
-
-      <div class="top-banner" id="globalBanner">🦅 eagle.io v27 🦅</div>
 
       <!-- Slide-out Drawer -->
       <div class="drawer-overlay" id="drawerOverlay"></div>
@@ -186,19 +165,10 @@
         </div>
         
         <div style="display:flex; flex-direction:column; gap:12px;">
-          <!-- Main Section -->
+          <div class="drawer-item" id="openScheduleBtn"><span>Open Schedule</span> <span>📅</span></div>
           <div class="drawer-item" id="ownerMenuBtn"><span>Owners Only</span> <span>🔒</span></div>
           <div class="drawer-item" id="proxyWizardBtn"><span>Proxy Wizard</span> <span>🧙‍♂️</span></div>
 
-          <!-- Quick Links Section -->
-          <div class="settings-section">
-            <div style="font-weight: bold; color: #38bdf8;">🔗 Quick Links</div>
-            <div style="display:flex; flex-direction:column; gap:8px;">
-              <a class="drawer-item" href="https://bluevalleyk12.nutrislice.com/menu/leawood-middle/lunch/" target="_blank" style="padding:10px 12px; font-size:0.85rem;"><span>Lunch Menu</span> <span>🍕</span></a>
-              <a class="drawer-item" href="https://maps.app.goo.gl/pXXP9qisj1fXQJqX8?g_st=ic" target="_blank" style="padding:10px 12px; font-size:0.85rem;"><span>LMS Map</span> <span>📍</span></a>
-            </div>
-          </div>
-          
           <!-- Background Customizer Section -->
           <div class="settings-section">
             <div style="font-weight: bold; color: #38bdf8;">🎨 Background Theme</div>
@@ -227,6 +197,24 @@
         </div>
       </div>
 
+      <!-- Schedule Modal -->
+      <div class="modal-overlay" id="scheduleModal">
+        <div class="modal-card">
+          <h3 style="margin:0; color:#38bdf8;">📅 SCHEDULE &amp; EVENTS (Up to 2030)</h3>
+          <div style="display:flex; gap:10px;">
+            <input type="date" class="modal-input" id="eventDateInput" min="2024-01-01" max="2030-12-31" />
+            <input type="text" class="modal-input" id="eventTitleInput" placeholder="Event description..." />
+          </div>
+          <button id="addEventBtn" style="background:#38bdf8; color:#0f172a; border:none; padding:10px; border-radius:10px; font-weight:bold; cursor:pointer;">Add Event</button>
+
+          <div style="border-top:1px solid rgba(255,255,255,0.1); padding-top:10px; max-height:220px; overflow-y:auto; display:flex; flex-direction:column; gap:8px;" id="eventList">
+            <!-- Event items populated dynamically -->
+          </div>
+
+          <button id="closeSchedule" style="background:rgba(51, 65, 85, 0.6); color:#fff; border:none; padding:8px; border-radius:10px; font-weight:bold; cursor:pointer;">Close</button>
+        </div>
+      </div>
+
       <!-- Owner Modal -->
       <div class="modal-overlay" id="ownerModal">
         <div class="modal-card">
@@ -247,8 +235,8 @@
 
           <div id="ownerBroadcastPanel" style="display:none; flex-direction:column; gap:10px; border-top:1px solid rgba(255,255,255,0.1); padding-top:12px;">
             <div style="color:#22c55e; font-weight:bold; font-size:0.85rem;">Access Granted! Broadcast Message:</div>
-            <input type="text" class="modal-input" id="broadcastInput" placeholder="Type banner announcement..." />
-            <button id="sendBroadcastBtn" style="background:#22c55e; color:#0f172a; border:none; padding:10px; border-radius:10px; font-weight:bold; cursor:pointer;">Broadcast Live</button>
+            <input type="text" class="modal-input" id="broadcastInput" placeholder="Type notification broadcast..." />
+            <button id="sendBroadcastBtn" style="background:#22c55e; color:#0f172a; border:none; padding:10px; border-radius:10px; font-weight:bold; cursor:pointer;">Send Notification</button>
           </div>
 
           <button id="cancelOwner" style="background:rgba(51, 65, 85, 0.6); color:#fff; border:none; padding:10px; border-radius:10px; font-weight:bold; cursor:pointer; margin-top:6px;">Close</button>
@@ -273,11 +261,17 @@
           <button class="liquid-btn" id="menuBtn">☰</button>
           <div>
             <div class="brand">🦅 eagle.io</div>
-            <div class="meta-info"><span>v27</span> • <span id="liveClock">00:00:00</span></div>
+            <div class="meta-info"><span>v28</span> • <span id="liveClock">00:00:00 CT</span></div>
           </div>
         </div>
         <div class="nav-right-group">
-          <div class="weather-pill">🌙 56°F Clear</div>
+          <div class="notif-wrapper">
+            <button class="notif-btn" id="notifBtn">🔔<span class="notif-badge" id="notifBadge">1</span></button>
+            <div class="notif-dropdown" id="notifDropdown">
+              <div style="font-weight:900; color:#38bdf8; font-size:0.9rem; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:6px;">📢 Global Announcements</div>
+              <div id="notifContent" style="font-size:0.85rem; color:#f8fafc; line-height:1.4;">No new announcements.</div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -299,7 +293,7 @@
             <div style="font-size:2.5rem;">🟩</div>
             <div style="font-size:1.3rem; font-weight:800;">Geometry Eagle</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Time your jumps to leap over spikes in this rhythm-based platformer.</div>
-            <a class="play-btn" href="geometry-eagle.svg?v=27">Play Game</a>
+            <a class="play-btn" href="geometry-eagle.svg?v=28">Play Game</a>
           </div>
 
           <!-- Game 2: Eagle Clicker -->
@@ -308,7 +302,7 @@
             <div style="font-size:2.5rem;">🦅</div>
             <div style="font-size:1.3rem; font-weight:800;">Eagle Clicker</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Click to gather feathers and buy nest upgrades for passive income.</div>
-            <a class="play-btn" href="eagle-clicker.svg?v=27">Play Game</a>
+            <a class="play-btn" href="eagle-clicker.svg?v=28">Play Game</a>
           </div>
 
           <!-- Game 3: To the Eagles -->
@@ -317,7 +311,7 @@
             <div style="font-size:2.5rem;">☁️</div>
             <div style="font-size:1.3rem; font-weight:800;">To the Eagles</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Bounce across moving clouds and climb as high as you can.</div>
-            <a class="play-btn" href="to-the-eagles.svg?v=27">Play Game</a>
+            <a class="play-btn" href="to-the-eagles.svg?v=28">Play Game</a>
           </div>
 
           <!-- Game 4: Eagle Pizza -->
@@ -326,7 +320,7 @@
             <div style="font-size:2.5rem;">🍕</div>
             <div style="font-size:1.3rem; font-weight:800;">Eagle Pizza</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Assemble custom orders, bake pizzas, and manage your pizzeria shop.</div>
-            <a class="play-btn" href="eagle-pizza.svg?v=27">Play Game</a>
+            <a class="play-btn" href="eagle-pizza.svg?v=28">Play Game</a>
           </div>
 
           <!-- Game 5: Teachers Quiz -->
@@ -335,7 +329,7 @@
             <div style="font-size:2.5rem;">📚</div>
             <div style="font-size:1.3rem; font-weight:800;">Teachers Quiz</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Test your knowledge on Leawood Middle teachers and school trivia!</div>
-            <a class="play-btn" href="teachers-quiz.svg?v=27">Play Quiz</a>
+            <a class="play-btn" href="teachers-quiz.svg?v=28">Play Quiz</a>
           </div>
 
           <!-- Game 6: Eagle Pong -->
@@ -344,7 +338,16 @@
             <div style="font-size:2.5rem;">🏓</div>
             <div style="font-size:1.3rem; font-weight:800;">Eagle Pong</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Classic retro paddle arcade game against an AI opponent.</div>
-            <a class="play-btn" href="eagle-pong.svg?v=27">Play Game</a>
+            <a class="play-btn" href="eagle-pong.svg?v=28">Play Game</a>
+          </div>
+
+          <!-- Game 7: Eagle Stack Tower -->
+          <div class="game-card" data-id="eagle-stack">
+            <div class="fav-star" onclick="toggleFavorite('eagle-stack')">★</div>
+            <div style="font-size:2.5rem;">🧱</div>
+            <div style="font-size:1.3rem; font-weight:800;">Eagle Stack Tower</div>
+            <div style="color:#94a3b8; font-size:0.95rem;">Precision-time your drops to stack blocks and reach the sky!</div>
+            <a class="play-btn" href="eagle-stack.svg?v=28">Play Game</a>
           </div>
 
         </div>
@@ -359,14 +362,96 @@
       <script type="text/javascript">
         <![CDATA[
         window.addEventListener('DOMContentLoaded', () => {
-          // Set Title
           document.title = "eagle.io";
 
-          // Clock
+          // Kansas / Central Time Zone Clock
           const clockEl = document.getElementById('liveClock');
           setInterval(() => {
-            clockEl.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            clockEl.textContent = new Date().toLocaleTimeString('en-US', {
+              timeZone: 'America/Chicago',
+              hour: '2-digit', minute: '2-digit', second: '2-digit'
+            }) + " CT";
           }, 1000);
+
+          // Notifications Logic
+          const notifBtn = document.getElementById('notifBtn');
+          const notifBadge = document.getElementById('notifBadge');
+          const notifDropdown = document.getElementById('notifDropdown');
+          const notifContent = document.getElementById('notifContent');
+
+          notifBtn.onclick = () => {
+            notifDropdown.classList.toggle('open');
+            notifBadge.style.display = 'none';
+          };
+
+          // JSONBin Announcements Sync
+          const BIN_URL = "https://api.jsonbin.io/v3/b/6adafef5ac6210605a4b0a6d";
+          const MASTER_KEY = "YOUR_MASTER_KEY_HERE";
+
+          async function syncAnnouncement() {
+            try {
+              const res = await fetch(BIN_URL, { headers: { 'X-Master-Key': MASTER_KEY } });
+              const data = await res.json();
+              if (data && data.record && data.record.message) {
+                notifContent.textContent = data.record.message;
+                notifBadge.style.display = 'block';
+              }
+            } catch (err) {
+              console.log('JSONBin sync offline or unconfigured');
+            }
+          }
+          syncAnnouncement();
+
+          // Schedule Modal & Events System
+          const openScheduleBtn = document.getElementById('openScheduleBtn');
+          const scheduleModal = document.getElementById('scheduleModal');
+          const closeSchedule = document.getElementById('closeSchedule');
+          const eventDateInput = document.getElementById('eventDateInput');
+          const eventTitleInput = document.getElementById('eventTitleInput');
+          const addEventBtn = document.getElementById('addEventBtn');
+          const eventList = document.getElementById('eventList');
+
+          let events = JSON.parse(localStorage.getItem('eagle_events') || '[]');
+
+          function renderEvents() {
+            eventList.innerHTML = '';
+            if (events.length === 0) {
+              eventList.innerHTML = '<div style="color:#94a3b8; font-size:0.85rem;">No upcoming events saved.</div>';
+              return;
+            }
+            events.sort((a,b) => new Date(a.date) - new Date(b.date));
+            events.forEach((ev, idx) => {
+              const item = document.createElement('div');
+              item.style.cssText = 'background:rgba(30,41,59,0.6); padding:8px 12px; border-radius:8px; display:flex; justify-content:space-between; align-items:center; font-size:0.85rem;';
+              item.innerHTML = `<span><strong>${ev.date}:</strong> ${ev.title}</span><button onclick="deleteEvent(${idx})" style="background:none; border:none; color:#ef4444; cursor:pointer; font-weight:bold;">✕</button>`;
+              eventList.appendChild(item);
+            });
+          }
+
+          window.deleteEvent = function(idx) {
+            events.splice(idx, 1);
+            localStorage.setItem('eagle_events', JSON.stringify(events));
+            renderEvents();
+          };
+
+          openScheduleBtn.onclick = () => {
+            toggleDrawer(false);
+            renderEvents();
+            scheduleModal.classList.add('open');
+          };
+          closeSchedule.onclick = () => scheduleModal.classList.remove('open');
+
+          addEventBtn.onclick = () => {
+            const date = eventDateInput.value;
+            const title = eventTitleInput.value.trim();
+            if (date && title) {
+              events.push({ date, title });
+              localStorage.setItem('eagle_events', JSON.stringify(events));
+              eventDateInput.value = '';
+              eventTitleInput.value = '';
+              renderEvents();
+            }
+          };
 
           // Scroll to Top
           const scrollTopBtn = document.getElementById('scrollTopBtn');
@@ -374,14 +459,12 @@
             appRoot.scrollTo({ top: 0, behavior: 'smooth' });
           };
 
-          // LocalStorage Background Load
+          // Background Theme Logic
           const appRoot = document.getElementById('appRoot');
           const savedBg = localStorage.getItem('eagle_bg');
-          if (savedBg) {
-            appRoot.style.background = savedBg;
-          }
+          if (savedBg) appRoot.style.background = savedBg;
 
-          window.setBgColor = function(color, textColor) {
+          window.setBgColor = function(color) {
             appRoot.style.background = color;
             localStorage.setItem('eagle_bg', color);
           };
@@ -393,20 +476,12 @@
             customHexInput.value = e.target.value;
             localStorage.setItem('eagle_bg', e.target.value);
           };
-          customHexInput.onchange = (e) => {
-            appRoot.style.background = e.target.value;
-            localStorage.setItem('eagle_bg', e.target.value);
-          };
 
-          // Escape Key Setup & Toggle
+          // Escape Key Redirect
           const escToggle = document.getElementById('escToggle');
           const savedEsc = localStorage.getItem('eagle_esc');
-          if (savedEsc !== null) {
-            escToggle.checked = (savedEsc === 'true');
-          }
-          escToggle.onchange = () => {
-            localStorage.setItem('eagle_esc', escToggle.checked);
-          };
+          if (savedEsc !== null) escToggle.checked = (savedEsc === 'true');
+          escToggle.onchange = () => localStorage.setItem('eagle_esc', escToggle.checked);
 
           window.addEventListener('keydown', (e) => {
             if (e.key === "'" && escToggle.checked) {
@@ -422,22 +497,17 @@
               const id = card.getAttribute('data-id');
               const star = card.querySelector('.fav-star');
               if (favorites.includes(id)) {
-                star.classList.add('active');
-                star.textContent = '★';
+                star.classList.add('active'); star.textContent = '★';
               } else {
-                star.classList.remove('active');
-                star.textContent = '☆';
+                star.classList.remove('active'); star.textContent = '☆';
               }
             });
             filterGames();
           }
 
           window.toggleFavorite = function(id) {
-            if (favorites.includes(id)) {
-              favorites = favorites.filter(fav => fav !== id);
-            } else {
-              favorites.push(id);
-            }
+            if (favorites.includes(id)) favorites = favorites.filter(f => f !== id);
+            else favorites.push(id);
             localStorage.setItem('eagle_favorites', JSON.stringify(favorites));
             updateFavUI();
           };
@@ -449,32 +519,11 @@
             const filterVal = gameFilter.value;
             document.querySelectorAll('.game-card').forEach(card => {
               const id = card.getAttribute('data-id');
-              if (filterVal === 'favorites' && !favorites.includes(id)) {
-                card.style.display = 'none';
-              } else {
-                card.style.display = 'flex';
-              }
+              if (filterVal === 'favorites' && !favorites.includes(id)) card.style.display = 'none';
+              else card.style.display = 'flex';
             });
           }
-
           updateFavUI();
-
-          // JSONBin Live Sync setup
-          const BIN_URL = "https://api.jsonbin.io/v3/b/6adafef5ac6210605a4b0a6d";
-          const MASTER_KEY = "YOUR_MASTER_KEY_HERE";
-
-          async function syncAnnouncement() {
-            try {
-              const res = await fetch(BIN_URL, { headers: { 'X-Master-Key': MASTER_KEY } });
-              const data = await res.json();
-              if (data && data.record && data.record.message) {
-                document.getElementById('globalBanner').textContent = `📢 ${data.record.message}`;
-              }
-            } catch (err) {
-              console.log('JSONBin sync offline or key unconfigured');
-            }
-          }
-          syncAnnouncement();
 
           // Drawer Controls
           const menuBtn = document.getElementById('menuBtn');
@@ -531,24 +580,24 @@
             const msg = broadcastInput.value.trim();
             if (msg) {
               try {
-                sendBroadcastBtn.textContent = 'Publishing...';
+                sendBroadcastBtn.textContent = 'Sending...';
                 await fetch(BIN_URL, {
                   method: 'PUT',
                   headers: { 'Content-Type': 'application/json', 'X-Master-Key': MASTER_KEY },
                   body: JSON.stringify({ message: msg })
                 });
-                alert('Broadcast live!');
+                alert('Broadcast notification sent!');
                 ownerModal.classList.remove('open');
                 syncAnnouncement();
               } catch (e) {
                 alert('Broadcast failed.');
               } finally {
-                sendBroadcastBtn.textContent = 'Broadcast Live';
+                sendBroadcastBtn.textContent = 'Send Notification';
               }
             }
           };
 
-          // Bug Report
+          // Bug Report Modal
           const reportBtn = document.getElementById('reportBtn');
           const bugModal = document.getElementById('bugModal');
           const cancelBug = document.getElementById('cancelBug');
