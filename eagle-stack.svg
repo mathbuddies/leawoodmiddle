@@ -1,0 +1,229 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 800 600" style="background: #070a12; font-family: system-ui, sans-serif; user-select: none;">
+  <defs>
+    <style>
+      .bg { fill: #070a12; }
+      .score-text { fill: #f8fafc; font-size: 36px; font-weight: 900; text-anchor: middle; }
+      .high-score-text { fill: #94a3b8; font-size: 16px; font-weight: 700; text-anchor: middle; }
+      .instructions { fill: #38bdf8; font-size: 16px; font-weight: 800; text-anchor: middle; }
+      
+      .back-btn { fill: rgba(30, 41, 59, 0.8); stroke: rgba(255, 255, 255, 0.1); rx: 10px; cursor: pointer; }
+      .back-btn:hover { fill: rgba(56, 189, 248, 0.2); }
+      .back-text { fill: #38bdf8; font-size: 14px; font-weight: bold; text-anchor: middle; dominant-baseline: middle; cursor: pointer; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="600" class="bg" />
+
+  <!-- Back to Hub Button -->
+  <g transform="translate(30, 25)" onclick="window.location.href='index.svg?v=28'">
+    <rect width="130" height="36" class="back-btn" />
+    <text x="65" y="19" class="back-text">← Back to Hub</text>
+  </g>
+
+  <!-- UI Text -->
+  <text x="400" y="60" class="score-text" id="scoreEl">0</text>
+  <text x="400" y="85" class="high-score-text" id="highScoreEl">BEST: 0</text>
+  <text x="400" y="560" class="instructions" id="guideText">PRESS SPACE OR CLICK TO DROP</text>
+
+  <!-- Tower Group (Moves down as tower grows) -->
+  <g id="towerGroup"></g>
+
+  <!-- Falling debris group -->
+  <g id="debrisGroup"></g>
+
+  <script type="text/javascript">
+    <![CDATA[
+    window.addEventListener('DOMContentLoaded', () => {
+      const towerGroup = document.getElementById('towerGroup');
+      const debrisGroup = document.getElementById('debrisGroup');
+      const scoreEl = document.getElementById('scoreEl');
+      const highScoreEl = document.getElementById('highScoreEl');
+      const guideText = document.getElementById('guideText');
+
+      let highScore = localStorage.getItem('eagle_stack_high') || 0;
+      highScoreEl.textContent = `BEST: ${highScore}`;
+
+      const BASE_Y = 500;
+      const BLOCK_HEIGHT = 24;
+      const COLORS = ['#38bdf8', '#818cf8', '#c084fc', '#f472b6', '#fb7185', '#facc15', '#4ade80'];
+
+      let blocks = [];
+      let movingBlock = null;
+      let score = 0;
+      let gameActive = true;
+      let direction = 1;
+      let speed = 4;
+      let currentX = 100;
+      let currentWidth = 200;
+      let cameraOffsetY = 0;
+
+      function createBase() {
+        const base = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        base.setAttribute('x', 300);
+        base.setAttribute('y', BASE_Y);
+        base.setAttribute('width', 200);
+        base.setAttribute('height', BLOCK_HEIGHT);
+        base.setAttribute('fill', '#0284c7');
+        base.setAttribute('rx', 4);
+        towerGroup.appendChild(base);
+
+        blocks.push({ x: 300, width: 200, y: BASE_Y });
+        spawnNextBlock();
+      }
+
+      function spawnNextBlock() {
+        if (!gameActive) return;
+
+        const nextY = BASE_Y - (blocks.length * BLOCK_HEIGHT);
+        const color = COLORS[blocks.length % COLORS.length];
+
+        movingBlock = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        movingBlock.setAttribute('x', currentX);
+        movingBlock.setAttribute('y', nextY);
+        movingBlock.setAttribute('width', currentWidth);
+        movingBlock.setAttribute('height', BLOCK_HEIGHT);
+        movingBlock.setAttribute('fill', color);
+        movingBlock.setAttribute('rx', 4);
+        towerGroup.appendChild(movingBlock);
+      }
+
+      function dropBlock() {
+        if (!gameActive || !movingBlock) return;
+
+        const prevBlock = blocks[blocks.length - 1];
+        const deltaX = currentX - prevBlock.x;
+        const overlap = currentWidth - Math.abs(deltaX);
+
+        if (overlap <= 0) {
+          // Missed completely - Game Over
+          gameActive = false;
+          movingBlock.style.transition = 'transform 0.5s, opacity 0.5s';
+          movingBlock.style.transform = `translateY(300px) rotate(${deltaX > 0 ? 30 : -30}deg)`;
+          movingBlock.style.opacity = '0';
+          guideText.textContent = 'GAME OVER! PRESS SPACE TO RESTART';
+          return;
+        }
+
+        // Perfect or partial placement
+        let newX = deltaX > 0 ? currentX : prevBlock.x;
+        let newWidth = overlap;
+
+        // Cut off the excess part
+        const cutWidth = currentWidth - overlap;
+        if (cutWidth > 2) {
+          const debrisX = deltaX > 0 ? newX + newWidth : currentX;
+          spawnDebris(debrisX, BASE_Y - (blocks.length * BLOCK_HEIGHT), cutWidth, movingBlock.getAttribute('fill'), deltaX > 0 ? 1 : -1);
+        }
+
+        // Adjust placed block
+        movingBlock.setAttribute('x', newX);
+        movingBlock.setAttribute('width', newWidth);
+        blocks.push({ x: newX, width: newWidth, y: BASE_Y - (blocks.length * BLOCK_HEIGHT) });
+
+        // Update score & difficulty
+        score++;
+        scoreEl.textContent = score;
+        if (score > highScore) {
+          highScore = score;
+          localStorage.setItem('eagle_stack_high', highScore);
+          highScoreEl.textContent = `BEST: ${highScore}`;
+        }
+
+        currentWidth = newWidth;
+        speed = Math.min(10, 4 + score * 0.3);
+        currentX = Math.random() > 0.5 ? 50 : 550;
+
+        // Scroll camera down if stack gets high
+        if (blocks.length > 8) {
+          cameraOffsetY += BLOCK_HEIGHT;
+          towerGroup.style.transform = `translateY(${cameraOffsetY}px)`;
+          debrisGroup.style.transform = `translateY(${cameraOffsetY}px)`;
+        }
+
+        spawnNextBlock();
+      }
+
+      function spawnDebris(x, y, width, color, dir) {
+        const debris = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        debris.setAttribute('x', x);
+        debris.setAttribute('y', y);
+        debris.setAttribute('width', width);
+        debris.setAttribute('height', BLOCK_HEIGHT);
+        debris.setAttribute('fill', color);
+        debris.setAttribute('rx', 2);
+        debrisGroup.appendChild(debris);
+
+        let debY = y;
+        let debX = x;
+        let opacity = 1;
+
+        function animateDebris() {
+          debY += 6;
+          debX += dir * 2;
+          opacity -= 0.03;
+          debris.setAttribute('y', debY);
+          debris.setAttribute('x', debX);
+          debris.setAttribute('opacity', opacity);
+
+          if (opacity > 0) {
+            requestAnimationFrame(animateDebris);
+          } else {
+            debris.remove();
+          }
+        }
+        requestAnimationFrame(animateDebris);
+      }
+
+      function restartGame() {
+        towerGroup.innerHTML = '';
+        debrisGroup.innerHTML = '';
+        towerGroup.style.transform = 'translateY(0px)';
+        debrisGroup.style.transform = 'translateY(0px)';
+        blocks = [];
+        score = 0;
+        cameraOffsetY = 0;
+        currentWidth = 200;
+        currentX = 100;
+        speed = 4;
+        gameActive = true;
+        scoreEl.textContent = '0';
+        guideText.textContent = 'PRESS SPACE OR CLICK TO DROP';
+        createBase();
+      }
+
+      function update() {
+        if (gameActive && movingBlock) {
+          currentX += speed * direction;
+          if (currentX <= 50 || currentX + currentWidth >= 750) {
+            direction *= -1;
+          }
+          movingBlock.setAttribute('x', currentX);
+        }
+        requestAnimationFrame(update);
+      }
+
+      // Input Handlers
+      window.addEventListener('keydown', (e) => {
+        if (e.key === ' ') {
+          if (!gameActive) restartGame();
+          else dropBlock();
+        }
+        if (e.key === "'") {
+          window.location.href = "https://www.google.com";
+        }
+      });
+
+      window.addEventListener('click', (e) => {
+        // Prevent click if hitting the back button
+        if (e.target.closest('g[onclick]')) return;
+        if (!gameActive) restartGame();
+        else dropBlock();
+      });
+
+      createBase();
+      requestAnimationFrame(update);
+    });
+    ]]>
+  </script>
+</svg>
