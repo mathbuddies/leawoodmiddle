@@ -36,13 +36,14 @@
           align-items: center;
           position: sticky;
           top: 0;
-          z-index: 10;
+          z-index: 100;
         }
 
         .nav-left-group, .nav-right-group {
           display: flex;
           align-items: center;
           gap: 16px;
+          position: relative;
         }
 
         .liquid-btn {
@@ -50,7 +51,7 @@
           backdrop-filter: blur(8px);
           border: 1px solid rgba(255, 255, 255, 0.12);
           color: #f8fafc;
-          padding: 8px 14px;
+          padding: 8px 16px;
           border-radius: 12px;
           cursor: pointer;
           display: flex;
@@ -63,6 +64,46 @@
 
         .brand { font-weight: 900; font-size: 1.3rem; color: #38bdf8; display: flex; align-items: center; gap: 8px; }
         .meta-info { font-size: 0.75rem; color: #94a3b8; font-family: monospace; display: flex; gap: 10px; }
+
+        /* Apps Dropdown Grid Suite */
+        .apps-dropdown {
+          position: absolute; top: 50px; left: 0; width: 340px;
+          background: rgba(15, 23, 42, 0.9);
+          backdrop-filter: blur(20px);
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          border-radius: 20px; padding: 20px; display: none; flex-direction: column; gap: 16px;
+          box-shadow: 0 15px 35px rgba(0,0,0,0.6); z-index: 200;
+        }
+        .apps-dropdown.open { display: flex; }
+
+        .apps-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 10px;
+        }
+
+        .app-tile {
+          background: rgba(30, 41, 59, 0.5);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          border-radius: 14px;
+          padding: 14px 8px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 6px;
+          cursor: pointer;
+          transition: 0.2s;
+          text-align: center;
+          color: #f8fafc;
+          font-size: 0.75rem;
+          font-weight: 700;
+        }
+        .app-tile:hover {
+          background: rgba(56, 189, 248, 0.2);
+          border-color: #38bdf8;
+          transform: translateY(-2px);
+        }
+        .app-tile span:first-child { font-size: 1.5rem; }
 
         /* Notifications Dropdown */
         .notif-wrapper { position: relative; }
@@ -88,32 +129,9 @@
           backdrop-filter: blur(16px);
           border: 1px solid rgba(255, 255, 255, 0.12);
           border-radius: 16px; padding: 16px; display: none; flex-direction: column; gap: 12px;
-          box-shadow: 0 10px 25px rgba(0,0,0,0.5); z-index: 50;
+          box-shadow: 0 10px 25px rgba(0,0,0,0.5); z-index: 200;
         }
         .notif-dropdown.open { display: flex; }
-
-        /* Slide Drawer (Apps Panel) */
-        .drawer-overlay {
-          position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-          background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px); z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.2s;
-        }
-        .drawer-overlay.open { opacity: 1; pointer-events: auto; }
-
-        .drawer {
-          position: fixed; top: 0; left: -320px; width: 320px; height: 100vh;
-          background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(20px);
-          border-right: 1px solid rgba(255, 255, 255, 0.1);
-          z-index: 101; display: flex; flex-direction: column; transition: left 0.2s; padding: 24px; gap: 16px; overflow-y: auto;
-        }
-        .drawer.open { left: 0; }
-
-        .drawer-item {
-          background: rgba(30, 41, 59, 0.45); border: 1px solid rgba(255, 255, 255, 0.08);
-          color: #f8fafc; padding: 12px 16px; border-radius: 12px; font-weight: 700;
-          text-decoration: none; display: flex; justify-content: space-between; align-items: center; cursor: pointer;
-          transition: 0.2s;
-        }
-        .drawer-item:hover { background: rgba(56, 189, 248, 0.25); border-color: #38bdf8; }
 
         .settings-section {
           background: rgba(30, 41, 59, 0.3); border: 1px solid rgba(255, 255, 255, 0.08);
@@ -126,12 +144,12 @@
         /* Modals - Liquid Glass */
         .modal-overlay {
           position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-          background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(8px); z-index: 200; display: none; align-items: center; justify-content: center;
+          background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(8px); z-index: 300; display: none; align-items: center; justify-content: center;
         }
         .modal-overlay.open { display: flex; }
 
         .modal-card {
-          background: rgba(30, 41, 59, 0.8); backdrop-filter: blur(20px);
+          background: rgba(30, 41, 59, 0.85); backdrop-filter: blur(20px);
           border: 1px solid rgba(255, 255, 255, 0.15);
           border-radius: 20px; padding: 24px; width: 90%; max-width: 440px; display: flex; flex-direction: column; gap: 16px; max-height: 90vh; overflow-y: auto;
           box-shadow: 0 15px 35px rgba(0,0,0,0.5);
@@ -206,59 +224,15 @@
       <!-- Custom Background Video -->
       <video id="bgVideo" autoplay="" muted="" loop="" playsinline=""></video>
 
-      <!-- Slide-out Drawer (Apps Suite) -->
-      <div class="drawer-overlay" id="drawerOverlay"></div>
-      <div class="drawer" id="drawer">
-        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:12px;">
-          <div style="font-weight:900; color:#38bdf8;">📱 APPS &amp; SETTINGS</div>
-          <button id="closeDrawer" style="background:none; border:none; color:#94a3b8; font-size:1.4rem; cursor:pointer;">✕</button>
-        </div>
-        
-        <div style="display:flex; flex-direction:column; gap:12px;">
-          <button class="drawer-item" onclick="goToLatestVersion()" style="background:#0284c7; color:#fff; border:none; font-size:0.9rem;"><span>Go to Latest Version</span> <span>🚀</span></button>
-          <div class="drawer-item" id="openScheduleBtn"><span>Schedule &amp; Events</span> <span>📅</span></div>
-          <div class="drawer-item" id="openUpdateLogBtn"><span>Update Log</span> <span>📜</span></div>
-          <div class="drawer-item" id="ownerMenuBtn"><span>Owners Only</span> <span>🔒</span></div>
-          <div class="drawer-item" id="proxyWizardBtn"><span>Proxy Wizard</span> <span>🧙‍♂️</span></div>
-
-          <!-- Background Customizer Section -->
-          <div class="settings-section">
-            <div style="font-weight: bold; color: #38bdf8;">🎨 Background Theme</div>
-            <div class="color-presets">
-              <div class="color-dot" style="background: #facc15;" title="Shiny Gold" onclick="setBgColor('#1c1917')"></div>
-              <div class="color-dot" style="background: #38bdf8;" title="Baby Blue" onclick="setBgColor('#0c203b')"></div>
-              <div class="color-dot" style="background: #f8fafc;" title="Very White" onclick="setBgColor('#e2e8f0')"></div>
-              <div class="color-dot" style="background: #070a12;" title="Dark Default" onclick="setBgColor('#070a12')"></div>
-            </div>
-            <div style="display:flex; flex-direction:column; gap:6px; margin-top:6px;">
-              <span style="font-size:0.75rem; color:#94a3b8;">Upload Video Background (MP4):</span>
-              <input type="file" id="bgVideoInput" accept="video/mp4" style="font-size:0.75rem; color:#f8fafc;" />
-              <button id="clearVideoBtn" style="background:rgba(239,68,68,0.2); color:#ef4444; border:1px solid rgba(239,68,68,0.3); padding:4px; border-radius:6px; font-size:0.75rem; cursor:pointer; display:none;">Remove Custom Video</button>
-            </div>
-          </div>
-
-          <!-- Escape Key Toggle Section -->
-          <div class="settings-section">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-              <span style="font-weight: bold; color: #38bdf8;">⚡ Escape Key (')</span>
-              <input type="checkbox" id="escToggle" style="width:18px; height:18px; cursor:pointer;" checked="checked" />
-            </div>
-            <div style="color: #94a3b8; font-size: 0.75rem;">Instantly redirects to Google when pressed.</div>
-          </div>
-
-          <div class="drawer-item" id="reportBtn"><span>Report Bug</span> <span>🐛</span></div>
-        </div>
-      </div>
-
       <!-- Update Log Modal -->
       <div class="modal-overlay" id="updateLogModal">
         <div class="modal-card">
           <h3 style="margin:0; color:#38bdf8;">📜 UPDATE LOG</h3>
           <div style="font-size:0.85rem; color:#94a3b8; line-height:1.5; display:flex; flex-direction:column; gap:10px; max-height:300px; overflow-y:auto;" id="updateLogContent">
-            <div><strong style="color:#f8fafc;">v32:</strong> Introduced Liquid Glass UI aesthetic, My Hub widget dashboard view, Games library view, and Apps menu drawer integration.</div>
-            <div><strong style="color:#f8fafc;">v31:</strong> Added Eagle Blocks puzzle game and relocated "Go to Latest Version" into menu.</div>
+            <div><strong style="color:#f8fafc;">v33:</strong> Transformed menu apps into a modern icon tile dropdown suite.</div>
+            <div><strong style="color:#f8fafc;">v32:</strong> Introduced Liquid Glass UI aesthetic, My Hub widget dashboard view, and Games library view.</div>
+            <div><strong style="color:#f8fafc;">v31:</strong> Added Eagle Blocks puzzle game and relocated "Go to Latest Version".</div>
             <div><strong style="color:#f8fafc;">v30:</strong> Added custom video background uploader with local storage persistence and intro welcome overlay.</div>
-            <div><strong style="color:#f8fafc;">v28-v29:</strong> Integrated notification bell dropdown for JSONBin announcements, Kansas central time clock, and Eagle Stack Tower.</div>
           </div>
           <button id="closeUpdateLog" style="background:rgba(51, 65, 85, 0.6); color:#fff; border:none; padding:8px; border-radius:10px; font-weight:bold; cursor:pointer;">Close</button>
         </div>
@@ -322,13 +296,81 @@
         </div>
       </div>
 
+      <!-- Settings / Themes Modal -->
+      <div class="modal-overlay" id="settingsModal">
+        <div class="modal-card">
+          <h3 style="margin:0; color:#38bdf8;">⚙️ THEMES &amp; SETTINGS</h3>
+          
+          <div class="settings-section">
+            <div style="font-weight: bold; color: #38bdf8;">🎨 Background Theme</div>
+            <div class="color-presets">
+              <div class="color-dot" style="background: #facc15;" title="Shiny Gold" onclick="setBgColor('#1c1917')"></div>
+              <div class="color-dot" style="background: #38bdf8;" title="Baby Blue" onclick="setBgColor('#0c203b')"></div>
+              <div class="color-dot" style="background: #f8fafc;" title="Very White" onclick="setBgColor('#e2e8f0')"></div>
+              <div class="color-dot" style="background: #070a12;" title="Dark Default" onclick="setBgColor('#070a12')"></div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:6px; margin-top:6px;">
+              <span style="font-size:0.75rem; color:#94a3b8;">Upload Video Background (MP4):</span>
+              <input type="file" id="bgVideoInput" accept="video/mp4" style="font-size:0.75rem; color:#f8fafc;" />
+              <button id="clearVideoBtn" style="background:rgba(239,68,68,0.2); color:#ef4444; border:1px solid rgba(239,68,68,0.3); padding:4px; border-radius:6px; font-size:0.75rem; cursor:pointer; display:none;">Remove Custom Video</button>
+            </div>
+          </div>
+
+          <div class="settings-section">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-weight: bold; color: #38bdf8;">⚡ Escape Key (')</span>
+              <input type="checkbox" id="escToggle" style="width:18px; height:18px; cursor:pointer;" checked="checked" />
+            </div>
+            <div style="color: #94a3b8; font-size: 0.75rem;">Instantly redirects to Google when pressed.</div>
+          </div>
+
+          <button id="closeSettingsModal" style="background:rgba(51, 65, 85, 0.6); color:#fff; border:none; padding:8px; border-radius:10px; font-weight:bold; cursor:pointer;">Close</button>
+        </div>
+      </div>
+
       <!-- Top Nav -->
       <div class="navbar" id="navTop">
         <div class="nav-left-group">
-          <button class="liquid-btn" id="menuBtn">☰ Apps</button>
+          <button class="liquid-btn" id="appsDropdownBtn">☰ Apps</button>
+          
+          <!-- Apps Dropdown Suite -->
+          <div class="apps-dropdown" id="appsDropdown">
+            <div style="font-weight:900; color:#38bdf8; font-size:0.9rem; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:6px;">📱 App Suite</div>
+            <div class="apps-grid">
+              <div class="app-tile" onclick="openApp('latest')">
+                <span>🚀</span>
+                <span>Latest</span>
+              </div>
+              <div class="app-tile" onclick="openApp('schedule')">
+                <span>📅</span>
+                <span>Schedule</span>
+              </div>
+              <div class="app-tile" onclick="openApp('themes')">
+                <span>🎨</span>
+                <span>Themes</span>
+              </div>
+              <div class="app-tile" onclick="openApp('updatelog')">
+                <span>📜</span>
+                <span>Updates</span>
+              </div>
+              <div class="app-tile" onclick="openApp('owner')">
+                <span>🔒</span>
+                <span>Owners</span>
+              </div>
+              <div class="app-tile" onclick="openApp('proxy')">
+                <span>🧙‍♂️</span>
+                <span>Proxy</span>
+              </div>
+              <div class="app-tile" onclick="openApp('bug')">
+                <span>🐛</span>
+                <span>Bug Report</span>
+              </div>
+            </div>
+          </div>
+
           <div>
             <div class="brand">🦅 eagle.io</div>
-            <div class="meta-info"><span>v32</span> • <span id="liveClock">00:00:00 CT</span></div>
+            <div class="meta-info"><span>v33</span> • <span id="liveClock">00:00:00 CT</span></div>
           </div>
         </div>
         <div class="nav-right-group">
@@ -353,7 +395,7 @@
           </select>
         </div>
 
-        <!-- My Hub Widgets Dashboard (Hidden by default unless selected) -->
+        <!-- My Hub Widgets Dashboard -->
         <div id="myHubView" style="display:none; flex-direction:column; gap:24px;">
           <div class="widgets-grid">
             <div class="widget-card">
@@ -383,7 +425,7 @@
             <div style="font-size:2.5rem;">🟩</div>
             <div style="font-size:1.3rem; font-weight:800;">Geometry Eagle</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Time your jumps to leap over spikes in this rhythm-based platformer.</div>
-            <a class="play-btn" href="geometry-eagle.svg?v=32">Play Game</a>
+            <a class="play-btn" href="geometry-eagle.svg?v=33">Play Game</a>
           </div>
 
           <!-- Game 2: Eagle Clicker -->
@@ -392,7 +434,7 @@
             <div style="font-size:2.5rem;">🦅</div>
             <div style="font-size:1.3rem; font-weight:800;">Eagle Clicker</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Click to gather feathers and buy nest upgrades for passive income.</div>
-            <a class="play-btn" href="eagle-clicker.svg?v=32">Play Game</a>
+            <a class="play-btn" href="eagle-clicker.svg?v=33">Play Game</a>
           </div>
 
           <!-- Game 3: To the Eagles -->
@@ -401,7 +443,7 @@
             <div style="font-size:2.5rem;">☁️</div>
             <div style="font-size:1.3rem; font-weight:800;">To the Eagles</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Bounce across moving clouds and climb as high as you can.</div>
-            <a class="play-btn" href="to-the-eagles.svg?v=32">Play Game</a>
+            <a class="play-btn" href="to-the-eagles.svg?v=33">Play Game</a>
           </div>
 
           <!-- Game 4: Eagle Pizza -->
@@ -410,7 +452,7 @@
             <div style="font-size:2.5rem;">🍕</div>
             <div style="font-size:1.3rem; font-weight:800;">Eagle Pizza</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Assemble custom orders, bake pizzas, and manage your pizzeria shop.</div>
-            <a class="play-btn" href="eagle-pizza.svg?v=32">Play Game</a>
+            <a class="play-btn" href="eagle-pizza.svg?v=33">Play Game</a>
           </div>
 
           <!-- Game 5: Teachers Quiz -->
@@ -419,7 +461,7 @@
             <div style="font-size:2.5rem;">📚</div>
             <div style="font-size:1.3rem; font-weight:800;">Teachers Quiz</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Test your knowledge on Leawood Middle teachers and school trivia!</div>
-            <a class="play-btn" href="teachers-quiz.svg?v=32">Play Quiz</a>
+            <a class="play-btn" href="teachers-quiz.svg?v=33">Play Quiz</a>
           </div>
 
           <!-- Game 6: Eagle Pong -->
@@ -428,7 +470,7 @@
             <div style="font-size:2.5rem;">🏓</div>
             <div style="font-size:1.3rem; font-weight:800;">Eagle Pong</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Classic retro paddle arcade game against an AI opponent.</div>
-            <a class="play-btn" href="eagle-pong.svg?v=32">Play Game</a>
+            <a class="play-btn" href="eagle-pong.svg?v=33">Play Game</a>
           </div>
 
           <!-- Game 7: Eagle Stack Tower -->
@@ -437,7 +479,7 @@
             <div style="font-size:2.5rem;">🧱</div>
             <div style="font-size:1.3rem; font-weight:800;">Eagle Stack Tower</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Precision-time your drops to stack blocks and reach the sky!</div>
-            <a class="play-btn" href="eagle-stack.svg?v=32">Play Game</a>
+            <a class="play-btn" href="eagle-stack.svg?v=33">Play Game</a>
           </div>
 
           <!-- Game 8: Eagle Blocks -->
@@ -446,7 +488,7 @@
             <div style="font-size:2.5rem;">🟨</div>
             <div style="font-size:1.3rem; font-weight:800;">Eagle Blocks</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Clear full rows and columns with yellow, white, and gold blocks.</div>
-            <a class="play-btn" href="eagle-blocks.svg?v=32">Play Game</a>
+            <a class="play-btn" href="eagle-blocks.svg?v=33">Play Game</a>
           </div>
 
         </div>
@@ -488,15 +530,53 @@
             localStorage.setItem('eagle_notes', e.target.value);
           };
 
+          // Apps Dropdown Suite Logic
+          const appsDropdownBtn = document.getElementById('appsDropdownBtn');
+          const appsDropdown = document.getElementById('appsDropdown');
+
+          appsDropdownBtn.onclick = (e) => {
+            e.stopPropagation();
+            appsDropdown.classList.toggle('open');
+            notifDropdown.classList.remove('open');
+          };
+
+          window.openApp = function(appName) {
+            appsDropdown.classList.remove('open');
+            if (appName === 'latest') goToLatestVersion();
+            else if (appName === 'schedule') scheduleModal.classList.add('open');
+            else if (appName === 'themes') settingsModal.classList.add('open');
+            else if (appName === 'updatelog') updateLogModal.classList.add('open');
+            else if (appName === 'owner') {
+              enteredCode = '';
+              codeDisplay.textContent = '____';
+              ownerBroadcastPanel.style.display = 'none';
+              ownerModal.classList.add('open');
+            }
+            else if (appName === 'proxy') alert('Proxy Wizard is currently a placeholder.');
+            else if (appName === 'bug') bugModal.classList.add('open');
+          };
+
+          // Close dropdowns on outside click
+          window.addEventListener('click', (e) => {
+            if (!appsDropdown.contains(e.target) && e.target !== appsDropdownBtn) {
+              appsDropdown.classList.remove('open');
+            }
+            if (!notifDropdown.contains(e.target) && !notifBtn.contains(e.target)) {
+              notifDropdown.classList.remove('open');
+            }
+          });
+
           // Notifications Logic
           const notifBtn = document.getElementById('notifBtn');
           const notifBadge = document.getElementById('notifBadge');
           const notifDropdown = document.getElementById('notifDropdown');
           const notifContent = document.getElementById('notifContent');
 
-          notifBtn.onclick = () => {
+          notifBtn.onclick = (e) => {
+            e.stopPropagation();
             notifDropdown.classList.toggle('open');
             notifBadge.style.display = 'none';
+            appsDropdown.classList.remove('open');
           };
 
           // JSONBin Announcements Sync
@@ -567,18 +647,20 @@
             localStorage.setItem('eagle_bg', color);
           };
 
-          // Update Log Modal Controls
-          const openUpdateLogBtn = document.getElementById('openUpdateLogBtn');
+          // Modal Controls
           const updateLogModal = document.getElementById('updateLogModal');
           const closeUpdateLog = document.getElementById('closeUpdateLog');
-
-          openUpdateLogBtn.onclick = () => { toggleDrawer(false); updateLogModal.classList.add('open'); };
           closeUpdateLog.onclick = () => updateLogModal.classList.remove('open');
 
-          // Schedule Modal & Events System
-          const openScheduleBtn = document.getElementById('openScheduleBtn');
           const scheduleModal = document.getElementById('scheduleModal');
           const closeSchedule = document.getElementById('closeSchedule');
+          closeSchedule.onclick = () => scheduleModal.classList.remove('open');
+
+          const settingsModal = document.getElementById('settingsModal');
+          const closeSettingsModal = document.getElementById('closeSettingsModal');
+          closeSettingsModal.onclick = () => settingsModal.classList.remove('open');
+
+          // Schedule Events System
           const eventDateInput = document.getElementById('eventDateInput');
           const eventTitleInput = document.getElementById('eventTitleInput');
           const addEventBtn = document.getElementById('addEventBtn');
@@ -607,13 +689,6 @@
             renderEvents();
           };
 
-          openScheduleBtn.onclick = () => {
-            toggleDrawer(false);
-            renderEvents();
-            scheduleModal.classList.add('open');
-          };
-          closeSchedule.onclick = () => scheduleModal.classList.remove('open');
-
           addEventBtn.onclick = () => {
             const date = eventDateInput.value;
             const title = eventTitleInput.value.trim();
@@ -625,6 +700,7 @@
               renderEvents();
             }
           };
+          renderEvents();
 
           // Scroll to Top
           const scrollTopBtn = document.getElementById('scrollTopBtn');
@@ -647,14 +723,12 @@
           // Favorites System & Main Navigation View Modes
           let favorites = JSON.parse(localStorage.getItem('eagle_favorites') || '[]');
           const myHubView = document.getElementById('myHubView');
-          const gamesGrid = document.getElementById('gamesGrid');
           const mainNavSelect = document.getElementById('mainNavSelect');
 
           function updateViewMode() {
             const mode = mainNavSelect.value;
             if (mode === 'hub') {
               myHubView.style.display = 'flex';
-              // Show only favorite cards in My Hub
               document.querySelectorAll('.game-card').forEach(card => {
                 const id = card.getAttribute('data-id');
                 if (favorites.includes(id)) card.style.display = 'flex';
@@ -699,23 +773,7 @@
 
           updateFavUI();
 
-          // Drawer Controls (Apps Menu)
-          const menuBtn = document.getElementById('menuBtn');
-          const drawer = document.getElementById('drawer');
-          const drawerOverlay = document.getElementById('drawerOverlay');
-          const closeDrawer = document.getElementById('closeDrawer');
-
-          function toggleDrawer(open) {
-            drawer.classList.toggle('open', open);
-            drawerOverlay.classList.toggle('open', open);
-          }
-
-          menuBtn.onclick = () => toggleDrawer(true);
-          closeDrawer.onclick = () => toggleDrawer(false);
-          drawerOverlay.onclick = () => toggleDrawer(false);
-
-          // Owner Keypad
-          const ownerMenuBtn = document.getElementById('ownerMenuBtn');
+          // Owner Keypad Modal
           const ownerModal = document.getElementById('ownerModal');
           const cancelOwner = document.getElementById('cancelOwner');
           const codeDisplay = document.getElementById('codeDisplay');
@@ -724,14 +782,6 @@
           const broadcastInput = document.getElementById('broadcastInput');
 
           let enteredCode = '';
-
-          ownerMenuBtn.onclick = () => {
-            toggleDrawer(false);
-            enteredCode = '';
-            codeDisplay.textContent = '____';
-            ownerBroadcastPanel.style.display = 'none';
-            ownerModal.classList.add('open');
-          };
           cancelOwner.onclick = () => ownerModal.classList.remove('open');
 
           window.pressKey = function(num) {
@@ -772,12 +822,10 @@
           };
 
           // Bug Report Modal
-          const reportBtn = document.getElementById('reportBtn');
           const bugModal = document.getElementById('bugModal');
           const cancelBug = document.getElementById('cancelBug');
           const submitBug = document.getElementById('submitBug');
 
-          reportBtn.onclick = () => { toggleDrawer(false); bugModal.classList.add('open'); };
           cancelBug.onclick = () => bugModal.classList.remove('open');
           submitBug.onclick = () => {
             alert('Bug report submitted!');
