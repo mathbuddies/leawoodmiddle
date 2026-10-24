@@ -5,6 +5,7 @@
       <style>
         * { box-sizing: border-box; }
 
+        /* Announcement Banner */
         .top-banner {
           width: 100%;
           background: #0284c7;
@@ -19,6 +20,7 @@
           top: 0;
         }
 
+        /* Navbar */
         .navbar {
           width: 100%;
           padding: 16px 32px;
@@ -119,12 +121,12 @@
         .play-btn { background: #38bdf8; color: #0f172a; font-weight: 800; padding: 12px; border-radius: 12px; text-align: center; }
       </style>
 
-      <div class="top-banner">🦅 EAGLE ARCADE v23 🦅</div>
+      <div class="top-banner" id="globalBanner">🦅 EAGLE ARCADE v24 🦅</div>
 
       <!-- Slide-out Drawer -->
       <div class="drawer-overlay" id="drawerOverlay"></div>
       <div class="drawer" id="drawer">
-        <div style="display:flex; justify-style:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:12px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:12px;">
           <div style="font-weight:900; color:#38bdf8;">⚙️ MENU</div>
           <button id="closeDrawer" style="background:none; border:none; color:#94a3b8; font-size:1.4rem; cursor:pointer;">✕</button>
         </div>
@@ -153,7 +155,14 @@
             <button class="key-btn" onclick="pressKey('9')">9</button>
             <button class="key-btn" onclick="pressKey('0')" style="grid-column: 2;">0</button>
           </div>
-          <button id="cancelOwner" style="background:rgba(51, 65, 85, 0.6); color:#fff; border:none; padding:10px; border-radius:10px; font-weight:bold; cursor:pointer;">Close</button>
+
+          <div id="ownerBroadcastPanel" style="display:none; flex-direction:column; gap:10px; border-top:1px solid rgba(255,255,255,0.1); padding-top:12px;">
+            <div style="color:#22c55e; font-weight:bold; font-size:0.85rem;">Access Granted! Broadcast Message:</div>
+            <input type="text" class="modal-input" id="broadcastInput" placeholder="Type banner announcement..." />
+            <button id="sendBroadcastBtn" style="background:#22c55e; color:#0f172a; border:none; padding:10px; border-radius:10px; font-weight:bold; cursor:pointer;">Broadcast Live</button>
+          </div>
+
+          <button id="cancelOwner" style="background:rgba(51, 65, 85, 0.6); color:#fff; border:none; padding:10px; border-radius:10px; font-weight:bold; cursor:pointer; margin-top:6px;">Close</button>
         </div>
       </div>
 
@@ -175,7 +184,7 @@
           <button class="liquid-btn" id="menuBtn">☰</button>
           <div>
             <div class="brand">🦅 LMS GAMING HUB</div>
-            <div class="meta-info"><span>v23</span> • <span id="liveClock">00:00:00</span></div>
+            <div class="meta-info"><span>v24</span> • <span id="liveClock">00:00:00</span></div>
           </div>
         </div>
         <div class="nav-right-group">
@@ -188,35 +197,35 @@
         <h1 class="hero-title">EAGLE ARCADE</h1>
 
         <div class="games-grid">
-          <a class="game-card" href="geometry-eagle.svg?v=23">
+          <a class="game-card" href="geometry-eagle.svg?v=24">
             <div style="font-size:2.5rem;">🟩</div>
             <div style="font-size:1.3rem; font-weight:800;">Geometry Eagle</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Time your jumps to leap over spikes in this rhythm-based platformer.</div>
             <div class="play-btn">Play Game</div>
           </a>
 
-          <a class="game-card" href="eagle-clicker.svg?v=23">
+          <a class="game-card" href="eagle-clicker.svg?v=24">
             <div style="font-size:2.5rem;">🦅</div>
             <div style="font-size:1.3rem; font-weight:800;">Eagle Clicker</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Click to gather feathers and buy nest upgrades for passive income.</div>
             <div class="play-btn">Play Game</div>
           </a>
 
-          <a class="game-card" href="to-the-eagles.svg?v=23">
+          <a class="game-card" href="to-the-eagles.svg?v=24">
             <div style="font-size:2.5rem;">☁️</div>
             <div style="font-size:1.3rem; font-weight:800;">To the Eagles</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Bounce across moving clouds and climb as high as you can.</div>
             <div class="play-btn">Play Game</div>
           </a>
 
-          <a class="game-card" href="eagle-pizza.svg?v=23">
+          <a class="game-card" href="eagle-pizza.svg?v=24">
             <div style="font-size:2.5rem;">🍕</div>
             <div style="font-size:1.3rem; font-weight:800;">Eagle Pizza</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Assemble custom orders, bake pizzas, and manage your pizzeria shop.</div>
             <div class="play-btn">Play Game</div>
           </a>
 
-          <a class="game-card" href="teachers-quiz.svg?v=23">
+          <a class="game-card" href="teachers-quiz.svg?v=24">
             <div style="font-size:2.5rem;">📚</div>
             <div style="font-size:1.3rem; font-weight:800;">Teachers Quiz</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Test your knowledge on Leawood Middle teachers and school trivia!</div>
@@ -233,6 +242,23 @@
           setInterval(() => {
             clockEl.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
           }, 1000);
+
+          // JSONBin Live Sync setup
+          const BIN_URL = "https://api.jsonbin.io/v3/b/6adafef5ac6210605a4b0a6d";
+          const MASTER_KEY = "YOUR_MASTER_KEY_HERE";
+
+          async function syncAnnouncement() {
+            try {
+              const res = await fetch(BIN_URL, { headers: { 'X-Master-Key': MASTER_KEY } });
+              const data = await res.json();
+              if (data && data.record && data.record.message) {
+                document.getElementById('globalBanner').textContent = `📢 ${data.record.message}`;
+              }
+            } catch (err) {
+              console.log('JSONBin sync offline or key unconfigured');
+            }
+          }
+          syncAnnouncement();
 
           // Drawer Controls
           const menuBtn = document.getElementById('menuBtn');
@@ -254,12 +280,17 @@
           const ownerModal = document.getElementById('ownerModal');
           const cancelOwner = document.getElementById('cancelOwner');
           const codeDisplay = document.getElementById('codeDisplay');
+          const ownerBroadcastPanel = document.getElementById('ownerBroadcastPanel');
+          const sendBroadcastBtn = document.getElementById('sendBroadcastBtn');
+          const broadcastInput = document.getElementById('broadcastInput');
+
           let enteredCode = '';
 
           ownerMenuBtn.onclick = () => {
             toggleDrawer(false);
             enteredCode = '';
             codeDisplay.textContent = '____';
+            ownerBroadcastPanel.style.display = 'none';
             ownerModal.classList.add('open');
           };
           cancelOwner.onclick = () => ownerModal.classList.remove('open');
@@ -270,13 +301,33 @@
               codeDisplay.textContent = enteredCode.padEnd(4, '_');
               if (enteredCode.length === 4) {
                 if (enteredCode === '3166') {
-                  alert('Access Granted, Owner!');
-                  ownerModal.classList.remove('open');
+                  ownerBroadcastPanel.style.display = 'flex';
                 } else {
                   alert('Incorrect Code!');
                   enteredCode = '';
                   codeDisplay.textContent = '____';
                 }
+              }
+            }
+          };
+
+          sendBroadcastBtn.onclick = async () => {
+            const msg = broadcastInput.value.trim();
+            if (msg) {
+              try {
+                sendBroadcastBtn.textContent = 'Publishing...';
+                await fetch(BIN_URL, {
+                  method: 'PUT',
+                  headers: { 'Content-Type': 'application/json', 'X-Master-Key': MASTER_KEY },
+                  body: JSON.stringify({ message: msg })
+                });
+                alert('Broadcast live!');
+                ownerModal.classList.remove('open');
+                syncAnnouncement();
+              } catch (e) {
+                alert('Broadcast failed.');
+              } finally {
+                sendBroadcastBtn.textContent = 'Broadcast Live';
               }
             }
           };
