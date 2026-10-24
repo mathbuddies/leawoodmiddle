@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
   <foreignObject width="100%" height="100%">
-    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100vw; height: 100vh; margin: 0; padding: 0; background: #070a12; font-family: system-ui, -apple-system, sans-serif; color: #f8fafc; display: flex; flex-direction: column; overflow-x: hidden; overflow-y: auto; user-select: none; position: relative;">
+    <div xmlns="http://www.w3.org/1999/xhtml" id="appRoot" style="width: 100vw; height: 100vh; margin: 0; padding: 0; background: #070a12; font-family: system-ui, -apple-system, sans-serif; color: #f8fafc; display: flex; flex-direction: column; overflow-x: hidden; overflow-y: auto; user-select: none; position: relative; transition: background 0.3s;">
       
       <style>
         * { box-sizing: border-box; }
@@ -77,16 +77,25 @@
         .drawer {
           position: fixed; top: 0; left: -320px; width: 320px; height: 100vh;
           background: #0f172a; border-right: 1px solid rgba(255, 255, 255, 0.1);
-          z-index: 101; display: flex; flex-direction: column; transition: left 0.2s; padding: 24px; gap: 20px;
+          z-index: 101; display: flex; flex-direction: column; transition: left 0.2s; padding: 24px; gap: 16px; overflow-y: auto;
         }
         .drawer.open { left: 0; }
 
         .drawer-item {
           background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(255, 255, 255, 0.08);
-          color: #f8fafc; padding: 14px 16px; border-radius: 12px; font-weight: 700;
+          color: #f8fafc; padding: 12px 16px; border-radius: 12px; font-weight: 700;
           text-decoration: none; display: flex; justify-content: space-between; align-items: center; cursor: pointer;
         }
         .drawer-item:hover { background: rgba(56, 189, 248, 0.2); }
+
+        .settings-section {
+          background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(255, 255, 255, 0.08);
+          border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 10px; font-size: 0.85rem;
+        }
+
+        .color-presets { display: flex; gap: 8px; }
+        .color-dot { width: 26px; height: 26px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.2); cursor: pointer; }
+        .color-dot:hover { transform: scale(1.1); }
 
         /* Modals */
         .modal-overlay {
@@ -110,28 +119,69 @@
         .key-btn:hover { background: #38bdf8; color: #0f172a; }
 
         .hub-container { max-width: 1200px; width: 100%; margin: 0 auto; padding: 40px 30px; display: flex; flex-direction: column; gap: 30px; }
-        .hero-title { font-size: 3rem; font-weight: 900; margin: 0; text-align: center; color: #38bdf8; }
         
+        .hub-header-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
+        .hero-title { font-size: 3rem; font-weight: 900; margin: 0; color: #38bdf8; }
+        
+        .filter-select {
+          background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(255, 255, 255, 0.1);
+          color: #f8fafc; padding: 10px 16px; border-radius: 12px; font-weight: bold; outline: none; cursor: pointer;
+        }
+
         .games-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
         .game-card {
           background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(255, 255, 255, 0.08);
-          border-radius: 18px; padding: 24px; display: flex; flex-direction: column; gap: 16px; text-decoration: none; color: inherit; transition: 0.2s;
+          border-radius: 18px; padding: 24px; display: flex; flex-direction: column; gap: 16px; text-decoration: none; color: inherit; transition: 0.2s; position: relative;
         }
         .game-card:hover { border-color: #38bdf8; transform: translateY(-4px); }
         .play-btn { background: #38bdf8; color: #0f172a; font-weight: 800; padding: 12px; border-radius: 12px; text-align: center; }
+        
+        .fav-star {
+          position: absolute; top: 20px; right: 20px; background: rgba(15, 23, 42, 0.6);
+          border: 1px solid rgba(255,255,255,0.1); width: 36px; height: 36px; border-radius: 50%;
+          display: flex; align-items: center; justify-content: center; font-size: 1.1rem; cursor: pointer; transition: 0.2s;
+        }
+        .fav-star:hover { background: rgba(250, 204, 21, 0.2); border-color: #facc15; }
+        .fav-star.active { color: #facc15; background: rgba(250, 204, 21, 0.15); border-color: #facc15; }
       </style>
 
-      <div class="top-banner" id="globalBanner">🦅 EAGLE ARCADE v25 🦅</div>
+      <div class="top-banner" id="globalBanner">🦅 eagle.io v26 🦅</div>
 
       <!-- Slide-out Drawer -->
       <div class="drawer-overlay" id="drawerOverlay"></div>
       <div class="drawer" id="drawer">
         <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:12px;">
-          <div style="font-weight:900; color:#38bdf8;">⚙️ MENU</div>
+          <div style="font-weight:900; color:#38bdf8;">⚙️ SETTINGS &amp; MENU</div>
           <button id="closeDrawer" style="background:none; border:none; color:#94a3b8; font-size:1.4rem; cursor:pointer;">✕</button>
         </div>
-        <div style="display:flex; flex-direction:column; gap:12px; margin-top:10px;">
+        
+        <div style="display:flex; flex-direction:column; gap:12px;">
           <div class="drawer-item" id="ownerMenuBtn"><span>Owners Only</span> <span>🔒</span></div>
+          
+          <!-- Background Customizer Section -->
+          <div class="settings-section">
+            <div style="font-weight: bold; color: #38bdf8;">🎨 Background Theme</div>
+            <div class="color-presets">
+              <div class="color-dot" style="background: #facc15;" title="Shiny Gold" onclick="setBgColor('#1c1917', '#facc15')"></div>
+              <div class="color-dot" style="background: #38bdf8;" title="Baby Blue" onclick="setBgColor('#0c203b', '#38bdf8')"></div>
+              <div class="color-dot" style="background: #f8fafc;" title="Very White" onclick="setBgColor('#e2e8f0', '#0f172a')"></div>
+              <div class="color-dot" style="background: #070a12;" title="Dark Default" onclick="setBgColor('#070a12', '#f8fafc')"></div>
+            </div>
+            <div style="display:flex; gap:8px; align-items:center; margin-top:4px;">
+              <input type="color" id="customColorPicker" style="background:none; border:none; width:30px; height:30px; cursor:pointer;" />
+              <input type="text" id="customHexInput" class="modal-input" placeholder="#070a12" style="padding:6px 10px; font-size:0.8rem;" />
+            </div>
+          </div>
+
+          <!-- Escape Key Toggle Section -->
+          <div class="settings-section">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-weight: bold; color: #38bdf8;">⚡ Escape Key (')</span>
+              <input type="checkbox" id="escToggle" style="width:18px; height:18px; cursor:pointer;" checked="checked" />
+            </div>
+            <div style="color: #94a3b8; font-size: 0.75rem;">Instantly redirects to Google when pressed.</div>
+          </div>
+
           <a class="drawer-item" href="https://bluevalleyk12.nutrislice.com/menu/leawood-middle/lunch/" target="_blank"><span>Lunch Menu</span> <span>🍕</span></a>
           <div class="drawer-item" id="reportBtn"><span>Report Bug</span> <span>🐛</span></div>
           <a class="drawer-item" href="https://maps.app.goo.gl/pXXP9qisj1fXQJqX8?g_st=ic" target="_blank"><span>LMS Map</span> <span>📍</span></a>
@@ -183,8 +233,8 @@
         <div class="nav-left-group">
           <button class="liquid-btn" id="menuBtn">☰</button>
           <div>
-            <div class="brand">🦅 LMS GAMING HUB</div>
-            <div class="meta-info"><span>v25</span> • <span id="liveClock">00:00:00</span></div>
+            <div class="brand">🦅 eagle.io</div>
+            <div class="meta-info"><span>v26</span> • <span id="liveClock">00:00:00</span></div>
           </div>
         </div>
         <div class="nav-right-group">
@@ -194,67 +244,169 @@
 
       <!-- Hub Content -->
       <div class="hub-container">
-        <h1 class="hero-title">EAGLE ARCADE</h1>
+        <div class="hub-header-row">
+          <h1 class="hero-title">EAGLE ARCADE</h1>
+          <select class="filter-select" id="gameFilter">
+            <option value="all">🎮 All Games</option>
+            <option value="favorites">⭐ Favorite Games</option>
+          </select>
+        </div>
 
-        <div class="games-grid">
+        <div class="games-grid" id="gamesGrid">
+          
           <!-- Game 1: Geometry Eagle -->
-          <a class="game-card" href="geometry-eagle.svg?v=25">
+          <div class="game-card" data-id="geometry-eagle">
+            <div class="fav-star" onclick="toggleFavorite('geometry-eagle')">★</div>
             <div style="font-size:2.5rem;">🟩</div>
             <div style="font-size:1.3rem; font-weight:800;">Geometry Eagle</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Time your jumps to leap over spikes in this rhythm-based platformer.</div>
-            <div class="play-btn">Play Game</div>
-          </a>
+            <a class="play-btn" href="geometry-eagle.svg?v=26">Play Game</a>
+          </div>
 
           <!-- Game 2: Eagle Clicker -->
-          <a class="game-card" href="eagle-clicker.svg?v=25">
+          <div class="game-card" data-id="eagle-clicker">
+            <div class="fav-star" onclick="toggleFavorite('eagle-clicker')">★</div>
             <div style="font-size:2.5rem;">🦅</div>
             <div style="font-size:1.3rem; font-weight:800;">Eagle Clicker</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Click to gather feathers and buy nest upgrades for passive income.</div>
-            <div class="play-btn">Play Game</div>
-          </a>
+            <a class="play-btn" href="eagle-clicker.svg?v=26">Play Game</a>
+          </div>
 
           <!-- Game 3: To the Eagles -->
-          <a class="game-card" href="to-the-eagles.svg?v=25">
+          <div class="game-card" data-id="to-the-eagles">
+            <div class="fav-star" onclick="toggleFavorite('to-the-eagles')">★</div>
             <div style="font-size:2.5rem;">☁️</div>
             <div style="font-size:1.3rem; font-weight:800;">To the Eagles</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Bounce across moving clouds and climb as high as you can.</div>
-            <div class="play-btn">Play Game</div>
-          </a>
+            <a class="play-btn" href="to-the-eagles.svg?v=26">Play Game</a>
+          </div>
 
           <!-- Game 4: Eagle Pizza -->
-          <a class="game-card" href="eagle-pizza.svg?v=25">
+          <div class="game-card" data-id="eagle-pizza">
+            <div class="fav-star" onclick="toggleFavorite('eagle-pizza')">★</div>
             <div style="font-size:2.5rem;">🍕</div>
             <div style="font-size:1.3rem; font-weight:800;">Eagle Pizza</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Assemble custom orders, bake pizzas, and manage your pizzeria shop.</div>
-            <div class="play-btn">Play Game</div>
-          </a>
+            <a class="play-btn" href="eagle-pizza.svg?v=26">Play Game</a>
+          </div>
 
           <!-- Game 5: Teachers Quiz -->
-          <a class="game-card" href="teachers-quiz.svg?v=25">
+          <div class="game-card" data-id="teachers-quiz">
+            <div class="fav-star" onclick="toggleFavorite('teachers-quiz')">★</div>
             <div style="font-size:2.5rem;">📚</div>
             <div style="font-size:1.3rem; font-weight:800;">Teachers Quiz</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Test your knowledge on Leawood Middle teachers and school trivia!</div>
-            <div class="play-btn">Play Quiz</div>
-          </a>
+            <a class="play-btn" href="teachers-quiz.svg?v=26">Play Quiz</a>
+          </div>
 
-          <!-- Game 6: Eagle Pong (NEW) -->
-          <a class="game-card" href="eagle-pong.svg?v=25">
+          <!-- Game 6: Eagle Pong -->
+          <div class="game-card" data-id="eagle-pong">
+            <div class="fav-star" onclick="toggleFavorite('eagle-pong')">★</div>
             <div style="font-size:2.5rem;">🏓</div>
             <div style="font-size:1.3rem; font-weight:800;">Eagle Pong</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Classic retro paddle arcade game against an AI opponent.</div>
-            <div class="play-btn">Play Game</div>
-          </a>
+            <a class="play-btn" href="eagle-pong.svg?v=26">Play Game</a>
+          </div>
+
         </div>
       </div>
 
       <script type="text/javascript">
         <![CDATA[
         window.addEventListener('DOMContentLoaded', () => {
+          // Set Title
+          document.title = "eagle.io";
+
           // Clock
           const clockEl = document.getElementById('liveClock');
           setInterval(() => {
             clockEl.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
           }, 1000);
+
+          // LocalStorage Background Load
+          const appRoot = document.getElementById('appRoot');
+          const savedBg = localStorage.getItem('eagle_bg');
+          if (savedBg) {
+            appRoot.style.background = savedBg;
+          }
+
+          window.setBgColor = function(color, textColor) {
+            appRoot.style.background = color;
+            localStorage.setItem('eagle_bg', color);
+          };
+
+          const customColorPicker = document.getElementById('customColorPicker');
+          const customHexInput = document.getElementById('customHexInput');
+          customColorPicker.oninput = (e) => {
+            appRoot.style.background = e.target.value;
+            customHexInput.value = e.target.value;
+            localStorage.setItem('eagle_bg', e.target.value);
+          };
+          customHexInput.onchange = (e) => {
+            appRoot.style.background = e.target.value;
+            localStorage.setItem('eagle_bg', e.target.value);
+          };
+
+          // Escape Key Setup & Toggle
+          const escToggle = document.getElementById('escToggle');
+          const savedEsc = localStorage.getItem('eagle_esc');
+          if (savedEsc !== null) {
+            escToggle.checked = (savedEsc === 'true');
+          }
+          escToggle.onchange = () => {
+            localStorage.setItem('eagle_esc', escToggle.checked);
+          };
+
+          window.addEventListener('keydown', (e) => {
+            if (e.key === "'" && escToggle.checked) {
+              window.location.href = "https://www.google.com";
+            }
+          });
+
+          // Favorites System
+          let favorites = JSON.parse(localStorage.getItem('eagle_favorites') || '[]');
+
+          function updateFavUI() {
+            document.querySelectorAll('.game-card').forEach(card => {
+              const id = card.getAttribute('data-id');
+              const star = card.querySelector('.fav-star');
+              if (favorites.includes(id)) {
+                star.classList.add('active');
+                star.textContent = '★';
+              } else {
+                star.classList.remove('active');
+                star.textContent = '☆';
+              }
+            });
+            filterGames();
+          }
+
+          window.toggleFavorite = function(id) {
+            if (favorites.includes(id)) {
+              favorites = favorites.filter(fav => fav !== id);
+            } else {
+              favorites.push(id);
+            }
+            localStorage.setItem('eagle_favorites', JSON.stringify(favorites));
+            updateFavUI();
+          };
+
+          const gameFilter = document.getElementById('gameFilter');
+          gameFilter.onchange = filterGames;
+
+          function filterGames() {
+            const filterVal = gameFilter.value;
+            document.querySelectorAll('.game-card').forEach(card => {
+              const id = card.getAttribute('data-id');
+              if (filterVal === 'favorites' && !favorites.includes(id)) {
+                card.style.display = 'none';
+              } else {
+                card.style.display = 'flex';
+              }
+            });
+          }
+
+          updateFavUI();
 
           // JSONBin Live Sync setup
           const BIN_URL = "https://api.jsonbin.io/v3/b/6adafef5ac6210605a4b0a6d";
@@ -357,11 +509,6 @@
             alert('Bug report submitted!');
             bugModal.classList.remove('open');
           };
-
-          // Escape key redirect
-          window.addEventListener('keydown', (e) => {
-            if (e.key === '`') window.location.href = "https://www.google.com";
-          });
         });
         ]]>
       </script>
