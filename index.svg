@@ -122,8 +122,8 @@
         <div class="modal-card">
           <h3 style="margin:0; color:var(--accent-color);">Update Log</h3>
           <div style="font-size:0.85rem; color:#94a3b8; line-height:1.5; display:flex; flex-direction:column; gap:10px;">
-            <div><strong>v45:</strong> Fixed game container display bindings so all 8 games render instantly and reliably.</div>
-            <div><strong>v44:</strong> Restored Eagle Stack Tower and Eagle Blocks, and added back-to-top buttons.</div>
+            <div><strong>v46:</strong> Added Flappy Eagle game tile linking directly to flappy-eagle.svg with dynamic latest-version link routing.</div>
+            <div><strong>v45:</strong> Fixed game container display bindings.</div>
           </div>
           <button onclick="closeModal('updateLogModal')" class="liquid-btn" style="justify-content:center; margin-top:10px;">Close Updates</button>
         </div>
@@ -203,7 +203,7 @@
 
           <div>
             <div class="brand">eagle.io</div>
-            <div class="meta-info">v45 • <span id="liveClock">00:00:00</span></div>
+            <div class="meta-info">v46 • <span id="liveClock">00:00:00</span></div>
           </div>
         </div>
 
@@ -315,6 +315,14 @@
             <div style="color:#94a3b8; font-size:0.9rem;">Clear full rows and columns with yellow, white, and gold blocks.</div>
             <a class="play-btn" href="eagle-blocks.svg">Play Game</a>
           </div>
+
+          <div class="game-card" data-id="flappy-eagle">
+            <div class="fav-star" onclick="toggleFavorite('flappy-eagle')">★</div>
+            <div style="font-size:2.5rem;">🦅</div>
+            <div style="font-size:1.2rem; font-weight:800;">Flappy Eagle</div>
+            <div style="color:#94a3b8; font-size:0.9rem;">Auto-moves forward! Press spacebar or click to jump and dodge narrow pathways.</div>
+            <a class="play-btn" href="flappy-eagle.svg">Play Game</a>
+          </div>
         </div>
 
         <!-- Back to Top Row -->
@@ -334,7 +342,7 @@
 
         window.openApp = function(app) {
           document.getElementById('appsDropdown').classList.remove('open');
-          if (app === 'latest') window.location.href = 'index.svg';
+          if (app === 'latest') window.location.href = 'index.svg?' + Date.now();
           if (app === 'settings') document.getElementById('settingsModal').classList.add('open');
           if (app === 'schedule') document.getElementById('scheduleModal').classList.add('open');
           if (app === 'updates') document.getElementById('updateLogModal').classList.add('open');
@@ -454,6 +462,12 @@
           }
 
           renderEvents();
+
+          // Auto-update all game links to always fetch the latest version dynamically
+          document.querySelectorAll('.game-card .play-btn').forEach(function(btn) {
+            const currentHref = btn.getAttribute('href').split('?')[0];
+            btn.setAttribute('href', currentHref + '?v=' + Date.now());
+          });
 
           setInterval(function() {
             const now = new Date();
