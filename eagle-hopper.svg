@@ -1,0 +1,313 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+  <foreignObject width="100%" height="100%">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100vw; height: 100vh; margin: 0; padding: 0; background: #070a12; font-family: system-ui, -apple-system, sans-serif; color: #f8fafc; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; user-select: none;">
+      
+      <style type="text/css">
+        <![CDATA[
+        * { box-sizing: border-box; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: #070a12; overflow: hidden; }
+        .arcade-container {
+          position: relative; width: 100%; max-width: 480px; height: 100%; max-height: 720px;
+          background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.15);
+          display: flex; flex-direction: column; align-items: center; justify-content: center;
+          box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+        }
+        canvas { display: block; background: linear-gradient(to bottom, #1e293b, #0f172a); cursor: pointer; width: 100%; height: 100%; }
+        .back-link {
+          position: absolute; top: 16px; left: 16px; background: rgba(30, 41, 59, 0.8);
+          border: 1px solid rgba(255, 255, 255, 0.15); color: #f8fafc; padding: 8px 14px;
+          border-radius: 10px; text-decoration: none; font-weight: bold; font-size: 0.85rem; z-index: 10;
+        }
+        .back-link:hover { background: #38bdf8; color: #0f172a; }
+        ]]>
+      </style>
+
+      <div class="arcade-container">
+        <!-- Dynamic Back to Hub Link pointing to latest version -->
+        <a class="back-link" id="backHubBtn" href="index.svg">← Back to Hub</a>
+        <canvas id="gameCanvas" width="480" height="720"></canvas>
+      </div>
+
+      <script type="text/javascript">
+        <![CDATA[
+        // Ensure Back to Hub button always loads the latest version dynamically
+        document.getElementById('backHubBtn').setAttribute('href', 'index.svg?v=' + Date.now());
+
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let gameState = 'START'; // START, PLAYING, GAMEOVER
+        let score = 0;
+        let highscore = parseInt(localStorage.getItem('eagle_hopper_highscore') || '0', 10);
+
+        const gridSize = 40;
+        const eagle = {
+          gridX: 6,
+          gridY: 15,
+          x: 6 * gridSize,
+          y: 15 * gridSize,
+          size: 32
+        };
+
+        let lanes = [];
+        let cameraY = 0;
+
+        function initLanes() {
+          lanes = [];
+          // Generate initial lanes from y = 0 to 20
+          for (let i = 0; i < 25; i++) {
+            lanes.push(createLane(i));
+          }
+        }
+
+        function createLane(yIndex) {
+          let type = 'grass';
+          if (yIndex > 3 && yIndex < 12) {
+            let r = Math.random();
+            if (r < 0.45) type = 'road';
+            else if (r < 0.8) type = 'river';
+            else type = 'grass';
+          } else if (yIndex >= 12) {
+            type = 'grass'; // Safe start area
+          }
+
+          let obstacles = [];
+          let speed = 0;
+
+          if (type === 'road') {
+            speed = (Math.random() * 2 + 2) * (Math.random() < 0.5 ? 1 : -1);
+            let count = Math.floor(Math.random() * 2) + 1;
+            for (let i = 0; i < count; i++) {
+              obstacles.push({
+                x: i * 200 + Math.random() * 50,
+                width: 70,
+                color: '#ef4444'
+              });
+            }
+          } else if (type === 'river') {
+            speed = (Math.random() * 1.5 + 1.5) * (Math.random() < 0.5 ? 1 : -1);
+            let count = Math.floor(Math.random() * 2) + 2;
+            for (let i = 0; i < count; i++) {
+              obstacles.push({
+                x: i * 180 + Math.random() * 60,
+                width: 90,
+                color: '#b45309'
+              });
+            }
+          }
+
+          return { y: yIndex, type: type, speed: speed, obstacles: obstacles };
+        }
+
+        function resetGame() {
+          eagle.gridX = 6;
+          eagle.gridY = 16;
+          eagle.x = eagle.gridX * gridSize;
+          eagle.y = eagle.gridY * gridSize;
+          score = 0;
+          cameraY = 0;
+          initLanes();
+          gameState = 'PLAYING';
+        }
+
+        function startGame() {
+          if (gameState === 'START' || gameState === 'GAMEOVER') {
+            resetGame();
+          }
+        }
+
+        // Controls
+        window.addEventListener('keydown', function(e) {
+          if (gameState !== 'PLAYING') {
+            if (e.code === 'Space') {
+              e.preventDefault();
+              startGame();
+            }
+            return;
+          }
+
+          if (e.code === 'ArrowUp' || e.code === 'KeyW') {
+            eagle.gridY--;
+            score++;
+            if (score > highscore) {
+              highscore = score;
+              localStorage.setItem('eagle_hopper_highscore', highscore);
+            }
+            // Add new lane ahead if needed
+            if (eagle.gridY < lanes[0].y + 5) {
+              lanes.unshift(createLane(lanes[0].y - 1));
+            }
+          } else if (e.code === 'ArrowDown' || e.code === 'KeyS') {
+            if (eagle.gridY < 18) eagle.gridY++;
+          } else if (e.code === 'ArrowLeft' || e.code === 'KeyA') {
+            if (eagle.gridX > 0) eagle.gridX--;
+          } else if (e.code === 'ArrowRight' || e.code === 'KeyD') {
+            if (eagle.gridX < (canvas.width / gridSize) - 1) eagle.gridX++;
+          }
+        });
+
+        canvas.addEventListener('click', function() {
+          if (gameState === 'START' || gameState === 'GAMEOVER') {
+            startGame();
+          }
+        });
+
+        function update() {
+          if (gameState !== 'PLAYING') return;
+
+          // Smoothly interpolate pixel position toward grid position
+          let targetX = eagle.gridX * gridSize + (gridSize - eagle.size) / 2;
+          let targetY = eagle.gridY * gridSize + (gridSize - eagle.size) / 2;
+          eagle.x += (targetX - eagle.x) * 0.3;
+          eagle.y += (targetY - eagle.y) * 0.3;
+
+          // Camera follow eagle vertical position
+          let targetCameraY = eagle.y - 350;
+          cameraY += (targetCameraY - cameraY) * 0.1;
+
+          // Update Lane obstacles
+          let currentLane = lanes.find(l => l.y === eagle.gridY);
+          let onLog = false;
+
+          for (let i = 0; i < lanes.length; i++) {
+            let lane = lanes[i];
+            if (lane.type === 'road' || lane.type === 'river') {
+              for (let j = 0; j < lane.obstacles.length; j++) {
+                let obs = lane.obstacles[j];
+                obs.x += lane.speed;
+
+                // Screen wrapping for obstacles
+                if (lane.speed > 0 && obs.x > canvas.width) obs.x = -obs.width;
+                if (lane.speed < 0 && obs.x < -obs.width) obs.x = canvas.width;
+
+                // Collision detection
+                if (lane.y === eagle.gridY) {
+                  let eagleLeft = eagle.x;
+                  let eagleRight = eagle.x + eagle.size;
+                  let obsLeft = obs.x;
+                  let obsRight = obs.x + obs.width;
+
+                  if (eagleRight > obsLeft && eagleLeft < obsRight) {
+                    if (lane.type === 'road') {
+                      gameState = 'GAMEOVER'; // Hit by car
+                    } else if (lane.type === 'river') {
+                      onLog = true;
+                      eagle.x += lane.speed; // Ride log
+                      eagle.gridX = Math.floor((eagle.x + eagle.size/2) / gridSize);
+                    }
+                  }
+                }
+              }
+            }
+          }
+
+          // If on a river lane but not on any log -> drown
+          if (currentLane && currentLane.type === 'river' && !onLog) {
+            gameState = 'GAMEOVER';
+          }
+
+          // Out of bounds horizontally check
+          if (eagle.x < 0 || eagle.x > canvas.width - eagle.size) {
+            gameState = 'GAMEOVER';
+          }
+        }
+
+        function draw() {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+          ctx.save();
+          ctx.translate(0, -cameraY);
+
+          // Draw Lanes
+          for (let i = 0; i < lanes.length; i++) {
+            let lane = lanes[i];
+            let ly = lane.y * gridSize;
+
+            // Lane Background Color
+            if (lane.type === 'grass') ctx.fillStyle = lane.y % 2 === 0 ? '#1e293b' : '#111827';
+            else if (lane.type === 'road') ctx.fillStyle = '#334155';
+            else if (lane.type === 'river') ctx.fillStyle = '#0284c7';
+
+            ctx.fillRect(0, ly, canvas.width, gridSize);
+
+            // Draw Lane Obstacles (Cars or Logs)
+            for (let j = 0; j < lane.obstacles.length; j++) {
+              let obs = lane.obstacles[j];
+              ctx.fillStyle = obs.color;
+              ctx.beginPath();
+              ctx.roundRect(obs.x, ly + 6, obs.width, gridSize - 12, 6);
+              ctx.fill();
+            }
+          }
+
+          // Draw Eagle
+          ctx.fillStyle = '#facc15';
+          ctx.beginPath();
+          ctx.arc(eagle.x + eagle.size/2, eagle.y + eagle.size/2, eagle.size/2, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.lineWidth = 2;
+          ctx.strokeStyle = '#f8fafc';
+          ctx.stroke();
+          ctx.closePath();
+
+          // Beak
+          ctx.fillStyle = '#f97316';
+          ctx.fillRect(eagle.x + eagle.size - 4, eagle.y + eagle.size/2 - 3, 8, 6);
+
+          ctx.restore();
+
+          // UI / HUD (Fixed to Screen)
+          if (gameState === 'START') {
+            ctx.fillStyle = 'rgba(15, 23, 42, 0.88)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#38bdf8';
+            ctx.font = '900 36px system-ui';
+            ctx.textAlign = 'center';
+            ctx.fillText('EAGLE HOPPER', canvas.width / 2, canvas.height / 2 - 50);
+            ctx.fillStyle = '#f8fafc';
+            ctx.font = '600 15px system-ui';
+            ctx.fillText('Hop across roads and rivers safely!', canvas.width / 2, canvas.height / 2 - 5);
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '500 14px system-ui';
+            ctx.fillText('Use Arrow Keys / WASD to Move', canvas.width / 2, canvas.height / 2 + 30);
+            ctx.fillStyle = '#facc15';
+            ctx.font = 'bold 16px system-ui';
+            ctx.fillText('High Score: ' + highscore, canvas.width / 2, canvas.height / 2 + 80);
+            ctx.fillStyle = '#38bdf8';
+            ctx.fillText('Click or Press Space to Play', canvas.width / 2, canvas.height / 2 + 120);
+          } else if (gameState === 'PLAYING') {
+            ctx.fillStyle = '#f8fafc';
+            ctx.font = '900 32px system-ui';
+            ctx.textAlign = 'center';
+            ctx.fillText(score, canvas.width / 2, 55);
+          } else if (gameState === 'GAMEOVER') {
+            ctx.fillStyle = 'rgba(15, 23, 42, 0.92)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#ef4444';
+            ctx.font = '900 38px system-ui';
+            ctx.textAlign = 'center';
+            ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2 - 50);
+            ctx.fillStyle = '#f8fafc';
+            ctx.font = '700 20px system-ui';
+            ctx.fillText('Score: ' + score, canvas.width / 2, canvas.height / 2);
+            ctx.fillStyle = '#facc15';
+            ctx.fillText('High Score: ' + highscore, canvas.width / 2, canvas.height / 2 + 40);
+            ctx.fillStyle = '#38bdf8';
+            ctx.font = '600 16px system-ui';
+            ctx.fillText('Click or Press Space to Restart', canvas.width / 2, canvas.height / 2 + 100);
+          }
+        }
+
+        function loop() {
+          update();
+          draw();
+          requestAnimationFrame(loop);
+        }
+
+        loop();
+        ]]>
+      </script>
+
+    </div>
+  </foreignObject>
+</svg>
