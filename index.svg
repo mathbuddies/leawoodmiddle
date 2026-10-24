@@ -57,18 +57,6 @@
         }
         .liquid-btn:hover { background: rgba(56, 189, 248, 0.2); border-color: #38bdf8; }
 
-        .latest-btn {
-          background: #0284c7;
-          color: #f8fafc;
-          border: none;
-          padding: 8px 14px;
-          border-radius: 12px;
-          font-weight: 800;
-          cursor: pointer;
-          transition: 0.2s;
-        }
-        .latest-btn:hover { background: #38bdf8; color: #0f172a; }
-
         .brand { font-weight: 900; font-size: 1.3rem; color: #38bdf8; display: flex; align-items: center; gap: 8px; }
         .meta-info { font-size: 0.75rem; color: #94a3b8; font-family: monospace; display: flex; gap: 10px; }
 
@@ -201,13 +189,13 @@
         </div>
         
         <div style="display:flex; flex-direction:column; gap:12px;">
-          <button class="drawer-item" onclick="goToLatestVersion()" style="background:#0284c7; color:#fff; border:none;"><span>Go to Latest Version</span> <span>🚀</span></button>
+          <button class="drawer-item" onclick="goToLatestVersion()" style="background:#0284c7; color:#fff; border:none; font-size:0.9rem;"><span>Go to Latest Version</span> <span>🚀</span></button>
           <div class="drawer-item" id="openScheduleBtn"><span>Open Schedule</span> <span>📅</span></div>
           <div class="drawer-item" id="openUpdateLogBtn"><span>Update Log</span> <span>📜</span></div>
           <div class="drawer-item" id="ownerMenuBtn"><span>Owners Only</span> <span>🔒</span></div>
           <div class="drawer-item" id="proxyWizardBtn"><span>Proxy Wizard</span> <span>🧙‍♂️</span></div>
 
-          <!-- Background Uploader & Customizer Section -->
+          <!-- Background Customizer Section -->
           <div class="settings-section">
             <div style="font-weight: bold; color: #38bdf8;">🎨 Background Theme</div>
             <div class="color-presets">
@@ -241,7 +229,8 @@
         <div class="modal-card">
           <h3 style="margin:0; color:#38bdf8;">📜 UPDATE LOG</h3>
           <div style="font-size:0.85rem; color:#94a3b8; line-height:1.5; display:flex; flex-direction:column; gap:10px; max-height:300px; overflow-y:auto;" id="updateLogContent">
-            <div><strong style="color:#f8fafc;">v30:</strong> Added "Go to Latest Version" cache-bypass button, custom video background uploader with local storage persistence, intro welcome overlay, and update log history.</div>
+            <div><strong style="color:#f8fafc;">v31:</strong> Added Eagle Blocks puzzle game, moved "Go to Latest Version" button to menu, bug fixes and layout optimization.</div>
+            <div><strong style="color:#f8fafc;">v30:</strong> Added custom video background uploader with local storage persistence, intro welcome overlay animation, and update log history.</div>
             <div><strong style="color:#f8fafc;">v28-v29:</strong> Integrated notification bell dropdown for JSONBin live announcements, Kansas central time clock, and Eagle Stack Tower game.</div>
             <div><strong style="color:#f8fafc;">v26-v27:</strong> Added favorites filtering system, escape key toggle setting, custom RGB/hex background color picker, and smooth scroll-to-top feature.</div>
             <div><strong style="color:#f8fafc;">v1-v25:</strong> Initial arcade hub creation, single-file SVG foreignObject architecture, individual game integrations (Pong, Geometry Eagle, Pizza, Clicker, etc.).</div>
@@ -314,11 +303,10 @@
           <button class="liquid-btn" id="menuBtn">☰</button>
           <div>
             <div class="brand">🦅 eagle.io</div>
-            <div class="meta-info"><span>v30</span> • <span id="liveClock">00:00:00 CT</span></div>
+            <div class="meta-info"><span>v31</span> • <span id="liveClock">00:00:00 CT</span></div>
           </div>
         </div>
         <div class="nav-right-group">
-          <button class="latest-btn" onclick="goToLatestVersion()">🚀 Go to Latest Version</button>
           <div class="notif-wrapper">
             <button class="notif-btn" id="notifBtn">🔔<span class="notif-badge" id="notifBadge">1</span></button>
             <div class="notif-dropdown" id="notifDropdown">
@@ -347,7 +335,7 @@
             <div style="font-size:2.5rem;">🟩</div>
             <div style="font-size:1.3rem; font-weight:800;">Geometry Eagle</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Time your jumps to leap over spikes in this rhythm-based platformer.</div>
-            <a class="play-btn" href="geometry-eagle.svg?v=30">Play Game</a>
+            <a class="play-btn" href="geometry-eagle.svg?v=31">Play Game</a>
           </div>
 
           <!-- Game 2: Eagle Clicker -->
@@ -356,7 +344,7 @@
             <div style="font-size:2.5rem;">🦅</div>
             <div style="font-size:1.3rem; font-weight:800;">Eagle Clicker</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Click to gather feathers and buy nest upgrades for passive income.</div>
-            <a class="play-btn" href="eagle-clicker.svg?v=30">Play Game</a>
+            <a class="play-btn" href="eagle-clicker.svg?v=31">Play Game</a>
           </div>
 
           <!-- Game 3: To the Eagles -->
@@ -365,7 +353,7 @@
             <div style="font-size:2.5rem;">☁️</div>
             <div style="font-size:1.3rem; font-weight:800;">To the Eagles</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Bounce across moving clouds and climb as high as you can.</div>
-            <a class="play-btn" href="to-the-eagles.svg?v=30">Play Game</a>
+            <a class="play-btn" href="to-the-eagles.svg?v=31">Play Game</a>
           </div>
 
           <!-- Game 4: Eagle Pizza -->
@@ -374,7 +362,7 @@
             <div style="font-size:2.5rem;">🍕</div>
             <div style="font-size:1.3rem; font-weight:800;">Eagle Pizza</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Assemble custom orders, bake pizzas, and manage your pizzeria shop.</div>
-            <a class="play-btn" href="eagle-pizza.svg?v=30">Play Game</a>
+            <a class="play-btn" href="eagle-pizza.svg?v=31">Play Game</a>
           </div>
 
           <!-- Game 5: Teachers Quiz -->
@@ -383,7 +371,7 @@
             <div style="font-size:2.5rem;">📚</div>
             <div style="font-size:1.3rem; font-weight:800;">Teachers Quiz</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Test your knowledge on Leawood Middle teachers and school trivia!</div>
-            <a class="play-btn" href="teachers-quiz.svg?v=30">Play Quiz</a>
+            <a class="play-btn" href="teachers-quiz.svg?v=31">Play Quiz</a>
           </div>
 
           <!-- Game 6: Eagle Pong -->
@@ -392,7 +380,7 @@
             <div style="font-size:2.5rem;">🏓</div>
             <div style="font-size:1.3rem; font-weight:800;">Eagle Pong</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Classic retro paddle arcade game against an AI opponent.</div>
-            <a class="play-btn" href="eagle-pong.svg?v=30">Play Game</a>
+            <a class="play-btn" href="eagle-pong.svg?v=31">Play Game</a>
           </div>
 
           <!-- Game 7: Eagle Stack Tower -->
@@ -401,7 +389,16 @@
             <div style="font-size:2.5rem;">🧱</div>
             <div style="font-size:1.3rem; font-weight:800;">Eagle Stack Tower</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Precision-time your drops to stack blocks and reach the sky!</div>
-            <a class="play-btn" href="eagle-stack.svg?v=30">Play Game</a>
+            <a class="play-btn" href="eagle-stack.svg?v=31">Play Game</a>
+          </div>
+
+          <!-- Game 8: Eagle Blocks (NEW) -->
+          <div class="game-card" data-id="eagle-blocks">
+            <div class="fav-star" onclick="toggleFavorite('eagle-blocks')">★</div>
+            <div style="font-size:2.5rem;">🟨</div>
+            <div style="font-size:1.3rem; font-weight:800;">Eagle Blocks</div>
+            <div style="color:#94a3b8; font-size:0.95rem;">Clear full rows and columns with yellow, white, and gold blocks.</div>
+            <a class="play-btn" href="eagle-blocks.svg?v=31">Play Game</a>
           </div>
 
         </div>
