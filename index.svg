@@ -81,6 +81,10 @@
         .fav-star:hover { background: rgba(250, 204, 21, 0.2); border-color: #facc15; }
         .fav-star.active { color: #facc15; background: rgba(250, 204, 21, 0.15); border-color: #facc15; }
 
+        .end-of-list { margin-top: 20px; padding: 20px; display: flex; align-items: center; justify-content: center; gap: 12px; color: #94a3b8; font-weight: 700; font-size: 0.90rem; border-top: 1px dashed rgba(255, 255, 255, 0.1); }
+        .scroll-top-btn { background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(255, 255, 255, 0.15); color: var(--accent-color); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1rem; transition: 0.2s; }
+        .scroll-top-btn:hover { background: var(--accent-color); color: #0f172a; }
+
         .notif-badge { position: absolute; top: -4px; right: -4px; background: #ef4444; color: #fff; font-size: 0.65rem; font-weight: 900; padding: 2px 6px; border-radius: 10px; display: none; }
         ]]>
       </style>
@@ -118,8 +122,8 @@
         <div class="modal-card">
           <h3 style="margin:0; color:var(--accent-color);">Update Log</h3>
           <div style="font-size:0.85rem; color:#94a3b8; line-height:1.5; display:flex; flex-direction:column; gap:10px;">
-            <div><strong>v43:</strong> Sanitized all URL attributes and fully validated CDATA blocks to resolve XML parser errors.</div>
-            <div><strong>v42:</strong> Wrapped styles and scripts inside strict CDATA blocks.</div>
+            <div><strong>v44:</strong> Restored Eagle Stack Tower and Eagle Blocks, and added a back-to-top button on all pages.</div>
+            <div><strong>v43:</strong> Sanitized all URL attributes and fully validated CDATA blocks.</div>
           </div>
           <button onclick="closeModal('updateLogModal')" class="liquid-btn" style="justify-content:center; margin-top:10px;">Close Updates</button>
         </div>
@@ -199,7 +203,7 @@
 
           <div>
             <div class="brand">eagle.io</div>
-            <div class="meta-info">v43 • <span id="liveClock">00:00:00</span></div>
+            <div class="meta-info">v44 • <span id="liveClock">00:00:00</span></div>
           </div>
         </div>
 
@@ -215,7 +219,7 @@
       </div>
 
       <!-- Main Hub Container -->
-      <div class="container">
+      <div class="container" id="topContainer">
         <div class="header-row">
           <h1 class="hero-title" id="heroGreeting">My Hub</h1>
           <select class="select-box" id="mainNavSelect">
@@ -295,6 +299,28 @@
             <div style="color:#94a3b8; font-size:0.9rem;">Classic retro paddle arcade game against an AI opponent.</div>
             <a class="play-btn" href="eagle-pong.svg">Play Game</a>
           </div>
+
+          <div class="game-card" data-id="eagle-stack">
+            <div class="fav-star" onclick="toggleFavorite('eagle-stack')">★</div>
+            <div style="font-size:2.5rem;">🧱</div>
+            <div style="font-size:1.2rem; font-weight:800;">Eagle Stack Tower</div>
+            <div style="color:#94a3b8; font-size:0.9rem;">Precision-time your drops to stack blocks and reach the sky!</div>
+            <a class="play-btn" href="eagle-stack.svg">Play Game</a>
+          </div>
+
+          <div class="game-card" data-id="eagle-blocks">
+            <div class="fav-star" onclick="toggleFavorite('eagle-blocks')">★</div>
+            <div style="font-size:2.5rem;">🟨</div>
+            <div style="font-size:1.2rem; font-weight:800;">Eagle Blocks</div>
+            <div style="color:#94a3b8; font-size:0.9rem;">Clear full rows and columns with yellow, white, and gold blocks.</div>
+            <a class="play-btn" href="eagle-blocks.svg">Play Game</a>
+          </div>
+        </div>
+
+        <!-- Back to Top Row -->
+        <div class="end-of-list">
+          <span>End of list. Go back to top?</span>
+          <button class="scroll-top-btn" id="scrollTopBtn" title="Back to Top">⬆</button>
         </div>
       </div>
 
@@ -449,6 +475,13 @@
           notifBtn.onclick = function(e) { e.stopPropagation(); notifDropdown.classList.toggle('open'); appsDropdown.classList.remove('open'); document.getElementById('notifBadge').style.display = 'none'; };
 
           window.onclick = function() { appsDropdown.classList.remove('open'); notifDropdown.classList.remove('open'); };
+
+          // Scroll to Top action
+          const scrollTopBtn = document.getElementById('scrollTopBtn');
+          const appRoot = document.getElementById('appRoot');
+          scrollTopBtn.onclick = function() {
+            appRoot.scrollTo({ top: 0, behavior: 'smooth' });
+          };
 
           const navSelect = document.getElementById('mainNavSelect');
           const hubView = document.getElementById('myHubView');
