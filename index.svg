@@ -247,9 +247,9 @@
         <div class="modal-card">
           <h3 style="margin:0; color:var(--accent-color);">UPDATE LOG</h3>
           <div style="font-size:0.85rem; color:#94a3b8; line-height:1.5; display:flex; flex-direction:column; gap:10px; max-height:300px; overflow-y:auto;" id="updateLogContent">
+            <div><strong style="color:#f8fafc;">v38:</strong> Added custom browser tab title ("eagle.io") and inline orange "e.io" favicon icon.</div>
             <div><strong style="color:#f8fafc;">v37:</strong> Removed all plain ampersands to ensure absolute XML compatibility.</div>
-            <div><strong style="color:#f8fafc;">v35:</strong> Added first-visit interactive onboarding tutorial and name storage, personalized hub greetings, layout style switcher, user settings app, and custom symbol-only escape key.</div>
-            <div><strong style="color:#f8fafc;">v33:</strong> Transformed menu apps into a modern icon tile dropdown suite with Liquid Glass UI styling.</div>
+            <div><strong style="color:#f8fafc;">v35:</strong> Added first-visit interactive onboarding tutorial and name storage, personalized hub greetings, and layout style switcher.</div>
           </div>
           <button id="closeUpdateLog" style="background:rgba(51, 65, 85, 0.6); color:#fff; border:none; padding:8px; border-radius:10px; font-weight:bold; cursor:pointer;">Close</button>
         </div>
@@ -408,7 +408,7 @@
 
           <div>
             <div class="brand">eagle.io</div>
-            <div class="meta-info"><span>v37</span> • <span id="liveClock">00:00:00 CT</span></div>
+            <div class="meta-info"><span>v38</span> • <span id="liveClock">00:00:00 CT</span></div>
           </div>
         </div>
         <div class="nav-right-group">
@@ -469,7 +469,7 @@
             <div style="font-size:2.5rem;">🟩</div>
             <div style="font-size:1.3rem; font-weight:800;">Geometry Eagle</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Time your jumps to leap over spikes in this rhythm-based platformer.</div>
-            <a class="play-btn" href="geometry-eagle.svg?v=37">Play Game</a>
+            <a class="play-btn" href="geometry-eagle.svg?v=38">Play Game</a>
           </div>
 
           <!-- Game 2: Eagle Clicker -->
@@ -478,7 +478,7 @@
             <div style="font-size:2.5rem;">🦅</div>
             <div style="font-size:1.3rem; font-weight:800;">Eagle Clicker</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Click to gather feathers and buy nest upgrades for passive income.</div>
-            <a class="play-btn" href="eagle-clicker.svg?v=37">Play Game</a>
+            <a class="play-btn" href="eagle-clicker.svg?v=38">Play Game</a>
           </div>
 
           <!-- Game 3: To the Eagles -->
@@ -487,7 +487,7 @@
             <div style="font-size:2.5rem;">☁️</div>
             <div style="font-size:1.3rem; font-weight:800;">To the Eagles</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Bounce across moving clouds and climb as high as you can.</div>
-            <a class="play-btn" href="to-the-eagles.svg?v=37">Play Game</a>
+            <a class="play-btn" href="to-the-eagles.svg?v=38">Play Game</a>
           </div>
 
           <!-- Game 4: Eagle Pizza -->
@@ -496,7 +496,7 @@
             <div style="font-size:2.5rem;">🍕</div>
             <div style="font-size:1.3rem; font-weight:800;">Eagle Pizza</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Assemble custom orders, bake pizzas, and manage your pizzeria shop.</div>
-            <a class="play-btn" href="eagle-pizza.svg?v=37">Play Game</a>
+            <a class="play-btn" href="eagle-pizza.svg?v=38">Play Game</a>
           </div>
 
           <!-- Game 5: Teachers Quiz -->
@@ -505,7 +505,7 @@
             <div style="font-size:2.5rem;">📚</div>
             <div style="font-size:1.3rem; font-weight:800;">Teachers Quiz</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Test your knowledge on Leawood Middle teachers and school trivia!</div>
-            <a class="play-btn" href="teachers-quiz.svg?v=37">Play Quiz</a>
+            <a class="play-btn" href="teachers-quiz.svg?v=38">Play Quiz</a>
           </div>
 
           <!-- Game 6: Eagle Pong -->
@@ -514,7 +514,7 @@
             <div style="font-size:2.5rem;">🏓</div>
             <div style="font-size:1.3rem; font-weight:800;">Eagle Pong</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Classic retro paddle arcade game against an AI opponent.</div>
-            <a class="play-btn" href="eagle-pong.svg?v=37">Play Game</a>
+            <a class="play-btn" href="eagle-pong.svg?v=38">Play Game</a>
           </div>
 
           <!-- Game 7: Eagle Stack Tower -->
@@ -523,7 +523,7 @@
             <div style="font-size:2.5rem;">🧱</div>
             <div style="font-size:1.3rem; font-weight:800;">Eagle Stack Tower</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Precision-time your drops to stack blocks and reach the sky!</div>
-            <a class="play-btn" href="eagle-stack.svg?v=37">Play Game</a>
+            <a class="play-btn" href="eagle-stack.svg?v=38">Play Game</a>
           </div>
 
           <!-- Game 8: Eagle Blocks -->
@@ -532,7 +532,7 @@
             <div style="font-size:2.5rem;">🟨</div>
             <div style="font-size:1.3rem; font-weight:800;">Eagle Blocks</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Clear full rows and columns with yellow, white, and gold blocks.</div>
-            <a class="play-btn" href="eagle-blocks.svg?v=37">Play Game</a>
+            <a class="play-btn" href="eagle-blocks.svg?v=38">Play Game</a>
           </div>
 
         </div>
@@ -584,6 +584,25 @@
 
         window.addEventListener('DOMContentLoaded', () => {
           document.title = "eagle.io";
+
+          // Set custom orange e.io favicon dynamically
+          const canvas = document.createElement('canvas');
+          canvas.width = 64;
+          canvas.height = 64;
+          const ctx = canvas.getContext('2d');
+          ctx.fillStyle = '#070a12';
+          ctx.fillRect(0, 0, 64, 64);
+          ctx.fillStyle = '#f97316'; // Orange text
+          ctx.font = 'bold 22px system-ui, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText('e.io', 32, 34);
+
+          let link = document.querySelector("link[rel*='icon']") || document.createElement('link');
+          link.type = 'image/x-icon';
+          link.rel = 'shortcut icon';
+          link.href = canvas.toDataURL('image/png');
+          document.getElementsByTagName('head')[0].appendChild(link);
 
           // Check First Visit Tutorial
           const tutDone = localStorage.getItem('eagle_tut_done');
