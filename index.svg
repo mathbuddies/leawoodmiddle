@@ -185,23 +185,26 @@
         .filter-select:hover { border-color: var(--accent-color); }
 
         /* Widgets Section (My Hub View) */
-        .widgets-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; margin-bottom: 10px; }
+        .widgets-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
         .widget-card {
-          background: rgba(30, 41, 59, 0.35); backdrop-filter: blur(10px);
-          border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 18px; padding: 20px;
-          display: flex; flex-direction: column; gap: 10px;
+          background: rgba(30, 41, 59, 0.4); backdrop-filter: blur(12px);
+          border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 24px;
+          display: flex; flex-direction: column; gap: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+          transition: 0.2s;
         }
-        .widget-title { font-size: 0.9rem; font-weight: 800; color: var(--accent-color); display: flex; align-items: center; gap: 8px; }
+        .widget-card:hover { border-color: var(--accent-color); transform: translateY(-2px); }
+        .widget-title { font-size: 0.95rem; font-weight: 800; color: var(--accent-color); display: flex; align-items: center; gap: 8px; }
 
         /* Games Grid */
         .games-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
         .game-card {
-          background: rgba(30, 41, 59, 0.35); backdrop-filter: blur(12px);
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          border-radius: 18px; padding: 24px; display: flex; flex-direction: column; gap: 16px; text-decoration: none; color: inherit; transition: 0.2s; position: relative;
+          background: rgba(30, 41, 59, 0.4); backdrop-filter: blur(14px);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 20px; padding: 24px; display: flex; flex-direction: column; gap: 16px; text-decoration: none; color: inherit; transition: 0.2s; position: relative;
+          box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
-        .game-card:hover { border-color: var(--accent-color); transform: translateY(-4px); background: rgba(30, 41, 59, 0.5); }
-        .play-btn { background: var(--accent-color); color: #0f172a; font-weight: 800; padding: 12px; border-radius: 12px; text-align: center; }
+        .game-card:hover { border-color: var(--accent-color); transform: translateY(-4px); background: rgba(30, 41, 59, 0.6); }
+        .play-btn { background: var(--accent-color); color: #0f172a; font-weight: 800; padding: 12px; border-radius: 14px; text-align: center; box-shadow: 0 4px 15px var(--accent-glow); }
         
         .fav-star {
           position: absolute; top: 20px; right: 20px; background: rgba(15, 23, 42, 0.5);
@@ -234,7 +237,7 @@
         </div>
         <div class="tutorial-card" id="tutStep2" style="display:none;">
           <h2 style="margin:0; color:var(--accent-color);">Quick Tour</h2>
-          <p style="color:#94a3b8; font-size:0.9rem; margin:0;">Use the <b>Apps</b> menu in the top left to open Themes, Schedule, and Settings. Check out <b>My Hub</b> for your personalized dashboard and favorite games!</p>
+          <p style="color:#94a3b8; font-size:0.9rem; margin:0;">Use the <b>Apps</b> menu in the top left to open Themes, Schedule, and Settings. Check out <b>My Hub</b> for your personalized dashboard and widgets!</p>
           <button onclick="finishTutorial()" style="background:var(--accent-color); color:#0f172a; border:none; padding:10px; border-radius:12px; font-weight:bold; cursor:pointer;">Get Started</button>
         </div>
       </div>
@@ -247,8 +250,8 @@
         <div class="modal-card">
           <h3 style="margin:0; color:var(--accent-color);">UPDATE LOG</h3>
           <div style="font-size:0.85rem; color:#94a3b8; line-height:1.5; display:flex; flex-direction:column; gap:10px; max-height:300px; overflow-y:auto;" id="updateLogContent">
-            <div><strong style="color:#f8fafc;">v38:</strong> Added custom browser tab title ("eagle.io") and inline orange "e.io" favicon icon.</div>
-            <div><strong style="color:#f8fafc;">v37:</strong> Removed all plain ampersands to ensure absolute XML compatibility.</div>
+            <div><strong style="color:#f8fafc;">v39:</strong> Separated My Hub widgets dashboard from the Games library page. Localized clock time while maintaining Leawood weather. Enhanced sleek liquid glass design.</div>
+            <div><strong style="color:#f8fafc;">v38:</strong> Added custom browser tab title and orange "e.io" favicon icon.</div>
             <div><strong style="color:#f8fafc;">v35:</strong> Added first-visit interactive onboarding tutorial and name storage, personalized hub greetings, and layout style switcher.</div>
           </div>
           <button id="closeUpdateLog" style="background:rgba(51, 65, 85, 0.6); color:#fff; border:none; padding:8px; border-radius:10px; font-weight:bold; cursor:pointer;">Close</button>
@@ -408,7 +411,7 @@
 
           <div>
             <div class="brand">eagle.io</div>
-            <div class="meta-info"><span>v38</span> • <span id="liveClock">00:00:00 CT</span></div>
+            <div class="meta-info"><span>v39</span> • <span id="liveClock">00:00:00</span></div>
           </div>
         </div>
         <div class="nav-right-group">
@@ -427,7 +430,7 @@
         <div class="hub-header-row">
           <h1 class="hero-title" id="heroGreeting">How is it going, Gamer?</h1>
           <div style="display:flex; gap:12px; align-items:center;">
-            <select class="filter-select" id="layoutStyleSelect">
+            <select class="filter-select" id="layoutStyleSelect" style="display:none;">
               <option value="grid">Grid Layout</option>
               <option value="compact">Compact Layout</option>
             </select>
@@ -439,29 +442,32 @@
           </div>
         </div>
 
-        <!-- My Hub Widgets Dashboard -->
-        <div id="myHubView" style="display:none; flex-direction:column; gap:24px;">
+        <!-- My Hub Widgets Dashboard View -->
+        <div id="myHubView" style="display:flex; flex-direction:column; gap:24px;">
           <div class="widgets-grid">
             <div class="widget-card">
-              <div class="widget-title">Live Kansas Time</div>
-              <div style="font-size:1.5rem; font-weight:900; color:#f8fafc;" id="widgetClock">00:00:00 CT</div>
-              <div style="font-size:0.8rem; color:#94a3b8;">Central Time Zone active.</div>
+              <div class="widget-title">⏰ Local Device Time</div>
+              <div style="font-size:1.8rem; font-weight:900; color:#f8fafc;" id="widgetClock">00:00:00</div>
+              <div style="font-size:0.8rem; color:#94a3b8;" id="widgetDate">Loading date...</div>
             </div>
             <div class="widget-card">
-              <div class="widget-title">Weather Conditions</div>
-              <div style="font-size:1.5rem; font-weight:900; color:#7dd3fc;">56°F Clear</div>
+              <div class="widget-title">🌤️ Leawood Weather</div>
+              <div style="font-size:1.8rem; font-weight:900; color:#7dd3fc;">56°F Clear</div>
               <div style="font-size:0.8rem; color:#94a3b8;">Leawood, Kansas area.</div>
             </div>
             <div class="widget-card">
-              <div class="widget-title">Quick Notes</div>
+              <div class="widget-title">📝 Quick Personal Notes</div>
               <textarea id="quickNotes" class="modal-input" placeholder="Type personal notes here..." style="height:70px; resize:none; font-size:0.85rem;"></textarea>
             </div>
           </div>
-          <h3 style="margin:0; color:var(--accent-color);">Favorite Game Shortcuts</h3>
+          <h3 style="margin:0; color:var(--accent-color);">⭐ Favorite Game Shortcuts</h3>
+          <div class="games-grid" id="favoritesGrid">
+            <!-- Populated dynamically via script -->
+          </div>
         </div>
 
-        <!-- Games Grid -->
-        <div class="games-grid" id="gamesGrid">
+        <!-- Games Grid View -->
+        <div class="games-grid" id="gamesGrid" style="display:none;">
           
           <!-- Game 1: Geometry Eagle -->
           <div class="game-card" data-id="geometry-eagle">
@@ -469,7 +475,7 @@
             <div style="font-size:2.5rem;">🟩</div>
             <div style="font-size:1.3rem; font-weight:800;">Geometry Eagle</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Time your jumps to leap over spikes in this rhythm-based platformer.</div>
-            <a class="play-btn" href="geometry-eagle.svg?v=38">Play Game</a>
+            <a class="play-btn" href="geometry-eagle.svg?v=39">Play Game</a>
           </div>
 
           <!-- Game 2: Eagle Clicker -->
@@ -478,7 +484,7 @@
             <div style="font-size:2.5rem;">🦅</div>
             <div style="font-size:1.3rem; font-weight:800;">Eagle Clicker</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Click to gather feathers and buy nest upgrades for passive income.</div>
-            <a class="play-btn" href="eagle-clicker.svg?v=38">Play Game</a>
+            <a class="play-btn" href="eagle-clicker.svg?v=39">Play Game</a>
           </div>
 
           <!-- Game 3: To the Eagles -->
@@ -487,7 +493,7 @@
             <div style="font-size:2.5rem;">☁️</div>
             <div style="font-size:1.3rem; font-weight:800;">To the Eagles</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Bounce across moving clouds and climb as high as you can.</div>
-            <a class="play-btn" href="to-the-eagles.svg?v=38">Play Game</a>
+            <a class="play-btn" href="to-the-eagles.svg?v=39">Play Game</a>
           </div>
 
           <!-- Game 4: Eagle Pizza -->
@@ -496,7 +502,7 @@
             <div style="font-size:2.5rem;">🍕</div>
             <div style="font-size:1.3rem; font-weight:800;">Eagle Pizza</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Assemble custom orders, bake pizzas, and manage your pizzeria shop.</div>
-            <a class="play-btn" href="eagle-pizza.svg?v=38">Play Game</a>
+            <a class="play-btn" href="eagle-pizza.svg?v=39">Play Game</a>
           </div>
 
           <!-- Game 5: Teachers Quiz -->
@@ -505,7 +511,7 @@
             <div style="font-size:2.5rem;">📚</div>
             <div style="font-size:1.3rem; font-weight:800;">Teachers Quiz</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Test your knowledge on Leawood Middle teachers and school trivia!</div>
-            <a class="play-btn" href="teachers-quiz.svg?v=38">Play Quiz</a>
+            <a class="play-btn" href="teachers-quiz.svg?v=39">Play Quiz</a>
           </div>
 
           <!-- Game 6: Eagle Pong -->
@@ -514,7 +520,7 @@
             <div style="font-size:2.5rem;">🏓</div>
             <div style="font-size:1.3rem; font-weight:800;">Eagle Pong</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Classic retro paddle arcade game against an AI opponent.</div>
-            <a class="play-btn" href="eagle-pong.svg?v=38">Play Game</a>
+            <a class="play-btn" href="eagle-pong.svg?v=39">Play Game</a>
           </div>
 
           <!-- Game 7: Eagle Stack Tower -->
@@ -523,7 +529,7 @@
             <div style="font-size:2.5rem;">🧱</div>
             <div style="font-size:1.3rem; font-weight:800;">Eagle Stack Tower</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Precision-time your drops to stack blocks and reach the sky!</div>
-            <a class="play-btn" href="eagle-stack.svg?v=38">Play Game</a>
+            <a class="play-btn" href="eagle-stack.svg?v=39">Play Game</a>
           </div>
 
           <!-- Game 8: Eagle Blocks -->
@@ -532,7 +538,7 @@
             <div style="font-size:2.5rem;">🟨</div>
             <div style="font-size:1.3rem; font-weight:800;">Eagle Blocks</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Clear full rows and columns with yellow, white, and gold blocks.</div>
-            <a class="play-btn" href="eagle-blocks.svg?v=38">Play Game</a>
+            <a class="play-btn" href="eagle-blocks.svg?v=39">Play Game</a>
           </div>
 
         </div>
@@ -592,7 +598,7 @@
           const ctx = canvas.getContext('2d');
           ctx.fillStyle = '#070a12';
           ctx.fillRect(0, 0, 64, 64);
-          ctx.fillStyle = '#f97316'; // Orange text
+          ctx.fillStyle = '#f97316';
           ctx.font = 'bold 22px system-ui, sans-serif';
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
@@ -633,38 +639,17 @@
             setAccentColor(e.target.value);
           };
 
-          // Layout Style Selector
-          const layoutStyleSelect = document.getElementById('layoutStyleSelect');
-          const savedLayout = localStorage.getItem('eagle_layout') || 'grid';
-          layoutStyleSelect.value = savedLayout;
-          applyLayout(savedLayout);
-
-          layoutStyleSelect.onchange = (e) => {
-            applyLayout(e.target.value);
-            localStorage.setItem('eagle_layout', e.target.value);
-          };
-
-          function applyLayout(style) {
-            const grid = document.getElementById('gamesGrid');
-            if (style === 'compact') {
-              grid.style.gridTemplateColumns = 'repeat(auto-fit, minmax(220px, 1fr))';
-              grid.style.gap = '14px';
-            } else {
-              grid.style.gridTemplateColumns = 'repeat(auto-fit, minmax(300px, 1fr))';
-              grid.style.gap = '24px';
-            }
-          }
-
-          // Kansas / Central Time Zone Clock
+          // Local Device Time and Date Clock
           const clockEl = document.getElementById('liveClock');
           const widgetClock = document.getElementById('widgetClock');
+          const widgetDate = document.getElementById('widgetDate');
           setInterval(() => {
-            const timeStr = new Date().toLocaleTimeString('en-US', {
-              timeZone: 'America/Chicago',
-              hour: '2-digit', minute: '2-digit', second: '2-digit'
-            }) + " CT";
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString();
+            const dateStr = now.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
             clockEl.textContent = timeStr;
             if (widgetClock) widgetClock.textContent = timeStr;
+            if (widgetDate) widgetDate.textContent = dateStr;
           }, 1000);
 
           // Quick Notes Persistence
@@ -691,7 +676,7 @@
             else if (appName === 'schedule') scheduleModal.classList.add('open');
             else if (appName === 'themes') settingsModal.classList.add('open');
             else if (appName === 'user') {
-              document.getElementById('changeNameInput').value = localStorage.getItem('eagle_user_name') || '';
+              document.getElementById('changeNameInput').value = localStorage.getItem('eagle_user_name'] || '';
               userSettingsModal.classList.add('open');
             }
             else if (appName === 'updatelog') updateLogModal.classList.add('open');
@@ -705,7 +690,6 @@
             else if (appName === 'bug') bugModal.classList.add('open');
           };
 
-          // Close dropdowns on outside click
           window.addEventListener('click', (e) => {
             if (!appsDropdown.contains(e.target) && e.target !== appsDropdownBtn) {
               appsDropdown.classList.remove('open');
@@ -728,7 +712,6 @@
             appsDropdown.classList.remove('open');
           };
 
-          // JSONBin Announcements Sync
           const BIN_URL = "https://api.jsonbin.io/v3/b/6adafef5ac6210605a4b0a6d";
           const MASTER_KEY = "YOUR_MASTER_KEY_HERE";
 
@@ -746,7 +729,7 @@
           }
           syncAnnouncement();
 
-          // Custom Video Background Uploader and LocalStorage
+          // Custom Video Background Uploader
           const appRoot = document.getElementById('appRoot');
           const bgVideo = document.getElementById('bgVideo');
           const bgVideoInput = document.getElementById('bgVideoInput');
@@ -856,7 +839,7 @@
 
           // Custom Symbol Escape Key Setup
           const escKeyInput = document.getElementById('escKeyInput');
-          const savedEscKey = localStorage.getItem('eagle_esc_symbol') || ';';
+          const savedEscKey = localStorage.getItem('eagle_esc_symbol'] || ';';
           escKeyInput.value = savedEscKey;
 
           escKeyInput.oninput = (e) => {
@@ -872,7 +855,7 @@
           };
 
           window.addEventListener('keydown', (e) => {
-            const currentSymbol = localStorage.getItem('eagle_esc_symbol') || ';';
+            const currentSymbol = localStorage.getItem('eagle_esc_symbol'] || ';';
             if (e.key === currentSymbol) {
               window.location.href = "https://www.google.com";
             }
@@ -881,29 +864,47 @@
           // Favorites System and Main Navigation View Modes
           let favorites = JSON.parse(localStorage.getItem('eagle_favorites') || '[]');
           const myHubView = document.getElementById('myHubView');
+          const gamesGrid = document.getElementById('gamesGrid');
+          const favoritesGrid = document.getElementById('favoritesGrid');
           const mainNavSelect = document.getElementById('mainNavSelect');
 
           function updateViewMode() {
             const mode = mainNavSelect.value;
             if (mode === 'hub') {
               myHubView.style.display = 'flex';
-              document.querySelectorAll('.game-card').forEach(card => {
-                const id = card.getAttribute('data-id');
-                if (favorites.includes(id)) card.style.display = 'flex';
-                else card.style.display = 'none';
-              });
+              gamesGrid.style.display = 'none';
+              renderFavoritesGrid();
             } else if (mode === 'games') {
               myHubView.style.display = 'none';
-              document.querySelectorAll('.game-card').forEach(card => {
-                card.style.display = 'flex';
-              });
+              gamesGrid.style.display = 'grid';
+              document.querySelectorAll('#gamesGrid .game-card').forEach(card => card.style.display = 'flex');
             } else if (mode === 'favorites') {
               myHubView.style.display = 'none';
-              document.querySelectorAll('.game-card').forEach(card => {
+              gamesGrid.style.display = 'grid';
+              document.querySelectorAll('#gamesGrid .game-card').forEach(card => {
                 const id = card.getAttribute('data-id');
                 if (favorites.includes(id)) card.style.display = 'flex';
                 else card.style.display = 'none';
               });
+            }
+          }
+
+          function renderFavoritesGrid() {
+            favoritesGrid.innerHTML = '';
+            const allCards = document.querySelectorAll('#gamesGrid .game-card');
+            let count = 0;
+            allCards.forEach(card => {
+              const id = card.getAttribute('data-id');
+              if (favorites.includes(id)) {
+                const clone = card.cloneNode(true);
+                // Re-bind star action on clone
+                clone.querySelector('.fav-star').onclick = () => toggleFavorite(id);
+                favoritesGrid.appendChild(clone);
+                count++;
+              }
+            });
+            if (count === 0) {
+              favoritesGrid.innerHTML = '<div style="color:#94a3b8; font-size:0.9rem; grid-column: 1/-1;">No favorite games starred yet! Go to the Games tab to add some.</div>';
             }
           }
 
