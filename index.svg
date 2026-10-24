@@ -5,6 +5,24 @@
       <style>
         * { box-sizing: border-box; }
 
+        /* Intro Welcome Overlay */
+        #introOverlay {
+          position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+          background: #070a12; z-index: 9999; display: flex; align-items: center; justify-content: center;
+          font-size: 2.5rem; font-weight: 900; color: #38bdf8; letter-spacing: 2px;
+          animation: fadeOutOverlay 0.6s ease 1.8s forwards; pointer-events: none;
+        }
+        @keyframes fadeOutOverlay {
+          0% { opacity: 1; }
+          100% { opacity: 0; visibility: hidden; }
+        }
+
+        /* Background Video Element */
+        #bgVideo {
+          position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+          object-fit: cover; pointer-events: none; z-index: -1; opacity: 0.35; display: none;
+        }
+
         /* Navbar */
         .navbar {
           width: 100%;
@@ -38,6 +56,18 @@
           font-weight: bold;
         }
         .liquid-btn:hover { background: rgba(56, 189, 248, 0.2); border-color: #38bdf8; }
+
+        .latest-btn {
+          background: #0284c7;
+          color: #f8fafc;
+          border: none;
+          padding: 8px 14px;
+          border-radius: 12px;
+          font-weight: 800;
+          cursor: pointer;
+          transition: 0.2s;
+        }
+        .latest-btn:hover { background: #38bdf8; color: #0f172a; }
 
         .brand { font-weight: 900; font-size: 1.3rem; color: #38bdf8; display: flex; align-items: center; gap: 8px; }
         .meta-info { font-size: 0.75rem; color: #94a3b8; font-family: monospace; display: flex; gap: 10px; }
@@ -156,6 +186,12 @@
         .scroll-top-btn:hover { background: #38bdf8; color: #0f172a; }
       </style>
 
+      <!-- Intro Welcome Overlay -->
+      <div id="introOverlay">Welcome to eagle.io</div>
+
+      <!-- Custom Background Video -->
+      <video id="bgVideo" autoplay="" muted="" loop="" playsinline=""></video>
+
       <!-- Slide-out Drawer -->
       <div class="drawer-overlay" id="drawerOverlay"></div>
       <div class="drawer" id="drawer">
@@ -165,11 +201,13 @@
         </div>
         
         <div style="display:flex; flex-direction:column; gap:12px;">
+          <button class="drawer-item" onclick="goToLatestVersion()" style="background:#0284c7; color:#fff; border:none;"><span>Go to Latest Version</span> <span>🚀</span></button>
           <div class="drawer-item" id="openScheduleBtn"><span>Open Schedule</span> <span>📅</span></div>
+          <div class="drawer-item" id="openUpdateLogBtn"><span>Update Log</span> <span>📜</span></div>
           <div class="drawer-item" id="ownerMenuBtn"><span>Owners Only</span> <span>🔒</span></div>
           <div class="drawer-item" id="proxyWizardBtn"><span>Proxy Wizard</span> <span>🧙‍♂️</span></div>
 
-          <!-- Background Customizer Section -->
+          <!-- Background Uploader & Customizer Section -->
           <div class="settings-section">
             <div style="font-weight: bold; color: #38bdf8;">🎨 Background Theme</div>
             <div class="color-presets">
@@ -178,9 +216,10 @@
               <div class="color-dot" style="background: #f8fafc;" title="Very White" onclick="setBgColor('#e2e8f0', '#0f172a')"></div>
               <div class="color-dot" style="background: #070a12;" title="Dark Default" onclick="setBgColor('#070a12', '#f8fafc')"></div>
             </div>
-            <div style="display:flex; gap:8px; align-items:center; margin-top:4px;">
-              <input type="color" id="customColorPicker" style="background:none; border:none; width:30px; height:30px; cursor:pointer;" />
-              <input type="text" id="customHexInput" class="modal-input" placeholder="#070a12" style="padding:6px 10px; font-size:0.8rem;" />
+            <div style="display:flex; flex-direction:column; gap:6px; margin-top:6px;">
+              <span style="font-size:0.75rem; color:#94a3b8;">Upload Video Background (MP4):</span>
+              <input type="file" id="bgVideoInput" accept="video/mp4" style="font-size:0.75rem; color:#f8fafc;" />
+              <button id="clearVideoBtn" style="background:rgba(239,68,68,0.2); color:#ef4444; border:1px solid rgba(239,68,68,0.3); padding:4px; border-radius:6px; font-size:0.75rem; cursor:pointer; display:none;">Remove Custom Video</button>
             </div>
           </div>
 
@@ -194,6 +233,20 @@
           </div>
 
           <div class="drawer-item" id="reportBtn"><span>Report Bug</span> <span>🐛</span></div>
+        </div>
+      </div>
+
+      <!-- Update Log Modal -->
+      <div class="modal-overlay" id="updateLogModal">
+        <div class="modal-card">
+          <h3 style="margin:0; color:#38bdf8;">📜 UPDATE LOG</h3>
+          <div style="font-size:0.85rem; color:#94a3b8; line-height:1.5; display:flex; flex-direction:column; gap:10px; max-height:300px; overflow-y:auto;" id="updateLogContent">
+            <div><strong style="color:#f8fafc;">v30:</strong> Added "Go to Latest Version" cache-bypass button, custom video background uploader with local storage persistence, intro welcome overlay, and update log history.</div>
+            <div><strong style="color:#f8fafc;">v28-v29:</strong> Integrated notification bell dropdown for JSONBin live announcements, Kansas central time clock, and Eagle Stack Tower game.</div>
+            <div><strong style="color:#f8fafc;">v26-v27:</strong> Added favorites filtering system, escape key toggle setting, custom RGB/hex background color picker, and smooth scroll-to-top feature.</div>
+            <div><strong style="color:#f8fafc;">v1-v25:</strong> Initial arcade hub creation, single-file SVG foreignObject architecture, individual game integrations (Pong, Geometry Eagle, Pizza, Clicker, etc.).</div>
+          </div>
+          <button id="closeUpdateLog" style="background:rgba(51, 65, 85, 0.6); color:#fff; border:none; padding:8px; border-radius:10px; font-weight:bold; cursor:pointer;">Close</button>
         </div>
       </div>
 
@@ -261,10 +314,11 @@
           <button class="liquid-btn" id="menuBtn">☰</button>
           <div>
             <div class="brand">🦅 eagle.io</div>
-            <div class="meta-info"><span>v28</span> • <span id="liveClock">00:00:00 CT</span></div>
+            <div class="meta-info"><span>v30</span> • <span id="liveClock">00:00:00 CT</span></div>
           </div>
         </div>
         <div class="nav-right-group">
+          <button class="latest-btn" onclick="goToLatestVersion()">🚀 Go to Latest Version</button>
           <div class="notif-wrapper">
             <button class="notif-btn" id="notifBtn">🔔<span class="notif-badge" id="notifBadge">1</span></button>
             <div class="notif-dropdown" id="notifDropdown">
@@ -293,7 +347,7 @@
             <div style="font-size:2.5rem;">🟩</div>
             <div style="font-size:1.3rem; font-weight:800;">Geometry Eagle</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Time your jumps to leap over spikes in this rhythm-based platformer.</div>
-            <a class="play-btn" href="geometry-eagle.svg?v=28">Play Game</a>
+            <a class="play-btn" href="geometry-eagle.svg?v=30">Play Game</a>
           </div>
 
           <!-- Game 2: Eagle Clicker -->
@@ -302,7 +356,7 @@
             <div style="font-size:2.5rem;">🦅</div>
             <div style="font-size:1.3rem; font-weight:800;">Eagle Clicker</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Click to gather feathers and buy nest upgrades for passive income.</div>
-            <a class="play-btn" href="eagle-clicker.svg?v=28">Play Game</a>
+            <a class="play-btn" href="eagle-clicker.svg?v=30">Play Game</a>
           </div>
 
           <!-- Game 3: To the Eagles -->
@@ -311,7 +365,7 @@
             <div style="font-size:2.5rem;">☁️</div>
             <div style="font-size:1.3rem; font-weight:800;">To the Eagles</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Bounce across moving clouds and climb as high as you can.</div>
-            <a class="play-btn" href="to-the-eagles.svg?v=28">Play Game</a>
+            <a class="play-btn" href="to-the-eagles.svg?v=30">Play Game</a>
           </div>
 
           <!-- Game 4: Eagle Pizza -->
@@ -320,7 +374,7 @@
             <div style="font-size:2.5rem;">🍕</div>
             <div style="font-size:1.3rem; font-weight:800;">Eagle Pizza</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Assemble custom orders, bake pizzas, and manage your pizzeria shop.</div>
-            <a class="play-btn" href="eagle-pizza.svg?v=28">Play Game</a>
+            <a class="play-btn" href="eagle-pizza.svg?v=30">Play Game</a>
           </div>
 
           <!-- Game 5: Teachers Quiz -->
@@ -329,7 +383,7 @@
             <div style="font-size:2.5rem;">📚</div>
             <div style="font-size:1.3rem; font-weight:800;">Teachers Quiz</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Test your knowledge on Leawood Middle teachers and school trivia!</div>
-            <a class="play-btn" href="teachers-quiz.svg?v=28">Play Quiz</a>
+            <a class="play-btn" href="teachers-quiz.svg?v=30">Play Quiz</a>
           </div>
 
           <!-- Game 6: Eagle Pong -->
@@ -338,7 +392,7 @@
             <div style="font-size:2.5rem;">🏓</div>
             <div style="font-size:1.3rem; font-weight:800;">Eagle Pong</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Classic retro paddle arcade game against an AI opponent.</div>
-            <a class="play-btn" href="eagle-pong.svg?v=28">Play Game</a>
+            <a class="play-btn" href="eagle-pong.svg?v=30">Play Game</a>
           </div>
 
           <!-- Game 7: Eagle Stack Tower -->
@@ -347,7 +401,7 @@
             <div style="font-size:2.5rem;">🧱</div>
             <div style="font-size:1.3rem; font-weight:800;">Eagle Stack Tower</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Precision-time your drops to stack blocks and reach the sky!</div>
-            <a class="play-btn" href="eagle-stack.svg?v=28">Play Game</a>
+            <a class="play-btn" href="eagle-stack.svg?v=30">Play Game</a>
           </div>
 
         </div>
@@ -361,6 +415,12 @@
 
       <script type="text/javascript">
         <![CDATA[
+        // Automatic Cache-Bypass Redirect Handler
+        window.goToLatestVersion = function() {
+          const freshTimestamp = Date.now();
+          window.location.href = `index.svg?v=${freshTimestamp}`;
+        };
+
         window.addEventListener('DOMContentLoaded', () => {
           document.title = "eagle.io";
 
@@ -401,6 +461,64 @@
             }
           }
           syncAnnouncement();
+
+          // Custom Video Background Uploader & LocalStorage
+          const appRoot = document.getElementById('appRoot');
+          const bgVideo = document.getElementById('bgVideo');
+          const bgVideoInput = document.getElementById('bgVideoInput');
+          const clearVideoBtn = document.getElementById('clearVideoBtn');
+
+          const savedVideo = localStorage.getItem('eagle_bg_video');
+          if (savedVideo) {
+            bgVideo.src = savedVideo;
+            bgVideo.style.display = 'block';
+            clearVideoBtn.style.display = 'block';
+          }
+
+          bgVideoInput.onchange = (e) => {
+            const file = e.target.files[0];
+            if (file) {
+              const reader = new FileReader();
+              reader.onload = function(event) {
+                const base64Video = event.target.result;
+                localStorage.setItem('eagle_bg_video', base64Video);
+                bgVideo.src = base64Video;
+                bgVideo.style.display = 'block';
+                clearVideoBtn.style.display = 'block';
+              };
+              reader.readAsDataURL(file);
+            }
+          };
+
+          clearVideoBtn.onclick = () => {
+            localStorage.removeItem('eagle_bg_video');
+            bgVideo.pause();
+            bgVideo.removeAttribute('src');
+            bgVideo.style.display = 'none';
+            clearVideoBtn.style.display = 'none';
+            bgVideoInput.value = '';
+          };
+
+          // Background Solid Color Theme Logic
+          const savedBg = localStorage.getItem('eagle_bg');
+          if (savedBg && !savedVideo) appRoot.style.background = savedBg;
+
+          window.setBgColor = function(color) {
+            localStorage.removeItem('eagle_bg_video');
+            bgVideo.pause();
+            bgVideo.style.display = 'none';
+            clearVideoBtn.style.display = 'none';
+            appRoot.style.background = color;
+            localStorage.setItem('eagle_bg', color);
+          };
+
+          // Update Log Modal Controls
+          const openUpdateLogBtn = document.getElementById('openUpdateLogBtn');
+          const updateLogModal = document.getElementById('updateLogModal');
+          const closeUpdateLog = document.getElementById('closeUpdateLog');
+
+          openUpdateLogBtn.onclick = () => { toggleDrawer(false); updateLogModal.classList.add('open'); };
+          closeUpdateLog.onclick = () => updateLogModal.classList.remove('open');
 
           // Schedule Modal & Events System
           const openScheduleBtn = document.getElementById('openScheduleBtn');
@@ -457,24 +575,6 @@
           const scrollTopBtn = document.getElementById('scrollTopBtn');
           scrollTopBtn.onclick = () => {
             appRoot.scrollTo({ top: 0, behavior: 'smooth' });
-          };
-
-          // Background Theme Logic
-          const appRoot = document.getElementById('appRoot');
-          const savedBg = localStorage.getItem('eagle_bg');
-          if (savedBg) appRoot.style.background = savedBg;
-
-          window.setBgColor = function(color) {
-            appRoot.style.background = color;
-            localStorage.setItem('eagle_bg', color);
-          };
-
-          const customColorPicker = document.getElementById('customColorPicker');
-          const customHexInput = document.getElementById('customHexInput');
-          customColorPicker.oninput = (e) => {
-            appRoot.style.background = e.target.value;
-            customHexInput.value = e.target.value;
-            localStorage.setItem('eagle_bg', e.target.value);
           };
 
           // Escape Key Redirect
