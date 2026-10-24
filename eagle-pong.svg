@@ -1,0 +1,142 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 800 500" style="background: #070a12; font-family: system-ui, sans-serif;">
+  <defs>
+    <style>
+      .bg { fill: #070a12; }
+      .court-line { stroke: rgba(255, 255, 255, 0.15); stroke-dasharray: 10 10; stroke-width: 4; }
+      .paddle { fill: #38bdf8; rx: 6px; }
+      .ball { fill: #f8fafc; filter: drop-shadow(0 0 8px #38bdf8); }
+      .score { fill: rgba(248, 250, 252, 0.8); font-size: 48px; font-weight: 900; text-anchor: middle; font-family: monospace; }
+      .instructions { fill: #94a3b8; font-size: 14px; text-anchor: middle; font-weight: bold; }
+      
+      .back-btn { fill: rgba(30, 41, 59, 0.7); stroke: rgba(255, 255, 255, 0.1); rx: 10px; cursor: pointer; transition: 0.2s; }
+      .back-btn:hover { fill: rgba(56, 189, 248, 0.2); }
+      .back-text { fill: #38bdf8; font-size: 14px; font-weight: bold; text-anchor: middle; dominant-baseline: middle; cursor: pointer; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="500" class="bg" />
+
+  <!-- Back to Hub Button -->
+  <g transform="translate(30, 25)" onclick="window.location.href='index.svg?v=24'">
+    <rect width="130" height="36" class="back-btn" />
+    <text x="65" y="19" class="back-text">← Back to Hub</text>
+  </g>
+
+  <!-- Center Net Line -->
+  <line x1="400" y1="0" x2="400" y2="500" class="court-line" />
+
+  <!-- Scores -->
+  <text x="250" y="80" class="score" id="playerScore">0</text>
+  <text x="550" y="80" class="score" id="aiScore">0</text>
+  <text x="400" y="470" class="instructions">Use W / S or Arrow Keys to Move • Press SPACE to Serve</text>
+
+  <!-- Paddles & Ball -->
+  <rect x="30" y="210" width="16" height="80" class="paddle" id="playerPaddle" />
+  <rect x="754" y="210" width="16" height="80" class="paddle" id="aiPaddle" />
+  <circle cx="400" cy="250" r="10" class="ball" id="ball" />
+
+  <script type="text/javascript">
+    <![CDATA[
+    window.addEventListener('DOMContentLoaded', () => {
+      const ball = document.getElementById('ball');
+      const playerPaddle = document.getElementById('playerPaddle');
+      const aiPaddle = document.getElementById('aiPaddle');
+      const playerScoreEl = document.getElementById('playerScore');
+      const aiScoreEl = document.getElementById('aiScore');
+
+      let ballX = 400, ballY = 250;
+      let ballVX = 0, ballVY = 0;
+      let playerY = 210, aiY = 210;
+      let playerScore = 0, aiScore = 0;
+      let gameStarted = false;
+
+      const paddleHeight = 80;
+      const paddleWidth = 16;
+      const boardHeight = 500;
+      const boardWidth = 800;
+
+      let keys = {};
+      window.addEventListener('keydown', (e) => {
+        keys[e.key] = true;
+        if (e.key === ' ' && !gameStarted) {
+          startBall();
+        }
+        if (e.key === '`') {
+          window.location.href = "https://www.google.com";
+        }
+      });
+      window.addEventListener('keyup', (e) => { keys[e.key] = false; });
+
+      function startBall() {
+        gameStarted = true;
+        ballX = 400;
+        ballY = 250;
+        const angle = (Math.random() * 0.6 - 0.3);
+        const speed = 5;
+        const direction = Math.random() > 0.5 ? 1 : -1;
+        ballVX = direction * speed * Math.cos(angle);
+        ballVY = speed * Math.sin(angle);
+      }
+
+      function update() {
+        if (gameStarted) {
+          ballX += ballVX;
+          ballY += ballVY;
+
+          if (ballY <= 10 || ballY >= boardHeight - 10) {
+            ballVY = -ballVY;
+          }
+
+          if ((keys['w'] || keys['W'] || keys['ArrowUp']) && playerY > 10) {
+            playerY -= 7;
+          }
+          if ((keys['s'] || keys['S'] || keys['ArrowDown']) && playerY < boardHeight - paddleHeight - 10) {
+            playerY += 7;
+          }
+
+          if (aiY + paddleHeight / 2 < ballY - 15) aiY += 4.5;
+          if (aiY + paddleHeight / 2 > ballY + 15) aiY -= 4.5;
+          aiY = Math.max(10, Math.min(boardHeight - paddleHeight - 10, aiY));
+
+          // Player collision
+          if (ballX <= 30 + paddleWidth && ballY >= playerY && ballY <= playerY + paddleHeight) {
+            ballVX = -ballVX * 1.05;
+            let deltaY = ballY - (playerY + paddleHeight / 2);
+            ballVY = deltaY * 0.15;
+          }
+          // AI collision
+          if (ballX >= 754 - 10 && ballY >= aiY && ballY <= aiY + paddleHeight) {
+            ballVX = -ballVX * 1.05;
+            let deltaY = ballY - (aiY + paddleHeight / 2);
+            ballVY = deltaY * 0.15;
+          }
+
+          if (ballX < 0) {
+            aiScore++;
+            aiScoreEl.textContent = aiScore;
+            gameStarted = false;
+            ballVX = 0; ballVY = 0;
+            ballX = 400; ballY = 250;
+          } else if (ballX > boardWidth) {
+            playerScore++;
+            playerScoreEl.textContent = playerScore;
+            gameStarted = false;
+            ballVX = 0; ballVY = 0;
+            ballX = 400; ballY = 250;
+          }
+        }
+
+        playerPaddle.setAttribute('y', playerY);
+        aiPaddle.setAttribute('y', aiY);
+        ball.setAttribute('cx', ballX);
+        ball.setAttribute('cy', ballY);
+
+        requestAnimationFrame(update);
+      }
+
+      requestAnimationFrame(update);
+    });
+    ]]>
+  </script>
+</svg>
