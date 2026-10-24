@@ -2,11 +2,14 @@
   <foreignObject width="100%" height="100%">
     <div xmlns="http://www.w3.org/1999/xhtml" id="appRoot" style="width: 100vw; height: 100vh; margin: 0; padding: 0; background: #070a12; font-family: system-ui, -apple-system, sans-serif; color: #f8fafc; display: flex; flex-direction: column; overflow-x: hidden; overflow-y: auto; user-select: none; position: relative;">
       
-      <style>
+      <style type="text/css">
+        <![CDATA[
         * { box-sizing: border-box; }
-        :root { --accent-color: #38bdf8; --accent-glow: rgba(56, 189, 248, 0.25); }
+        :root { 
+          --accent-color: #38bdf8; 
+          --accent-glow: rgba(56, 189, 248, 0.25); 
+        }
 
-        /* Navbar Suite */
         .navbar {
           width: 100%; padding: 16px 28px; background: rgba(15, 23, 42, 0.9);
           border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -20,12 +23,11 @@
           color: #f8fafc; padding: 8px 16px; border-radius: 12px; cursor: pointer; font-weight: bold; font-size: 0.9rem;
           display: flex; align-items: center; gap: 8px; transition: 0.2s;
         }
-        .liquid-btn:hover { background: var(--accent-color); color: #0f172a; border-color: var(--accent-color); box-shadow: 0 0 15px var(--accent-glow); }
+        .liquid-btn:hover { background: var(--accent-color); color: #0f172a; border-color: var(--accent-color); }
 
         .brand { font-weight: 900; font-size: 1.3rem; color: var(--accent-color); letter-spacing: -0.5px; }
         .meta-info { font-size: 0.75rem; color: #94a3b8; font-family: monospace; }
 
-        /* Apps Dropdown Suite Grid */
         .apps-dropdown {
           position: absolute; top: 52px; left: 0; width: 360px; background: rgba(15, 23, 42, 0.95);
           border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 20px; padding: 18px;
@@ -39,10 +41,9 @@
           border-radius: 12px; padding: 12px 8px; display: flex; flex-direction: column; align-items: center; gap: 6px;
           cursor: pointer; transition: 0.2s; text-align: center; color: #f8fafc; font-size: 0.75rem; font-weight: 700;
         }
-        .app-tile:hover { background: var(--accent-glow); border-color: var(--accent-color); transform: translateY(-2px); }
+        .app-tile:hover { background: var(--accent-color); color: #0f172a; transform: translateY(-2px); }
         .app-tile span:first-child { font-size: 1.4rem; }
 
-        /* Modals */
         .modal-overlay {
           position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
           background: rgba(0, 0, 0, 0.75); z-index: 300; display: none; align-items: center; justify-content: center;
@@ -58,49 +59,46 @@
           color: #f8fafc; padding: 12px; border-radius: 10px; outline: none; font-size: 0.9rem;
         }
 
-        /* Keypad for Owner Access */
         .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
         .key-btn { background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(255, 255, 255, 0.12); color: #f8fafc; padding: 14px; border-radius: 10px; font-size: 1.2rem; font-weight: 800; cursor: pointer; text-align: center; }
         .key-btn:hover { background: var(--accent-color); color: #0f172a; }
 
-        /* Layout & Hub */
         .container { max-width: 1200px; width: 100%; margin: 0 auto; padding: 40px 24px; display: flex; flex-direction: column; gap: 30px; }
         .header-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
-        .hero-title { font-size: 2.8rem; font-weight: 900; margin: 0; color: var(--accent-color); text-shadow: 0 2px 10px var(--accent-glow); }
+        .hero-title { font-size: 2.8rem; font-weight: 900; margin: 0; color: var(--accent-color); }
         .select-box { background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(255, 255, 255, 0.12); color: #f8fafc; padding: 10px 18px; border-radius: 14px; font-weight: bold; outline: none; cursor: pointer; }
 
-        /* Widgets Grid */
         .widgets-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
         .widget-card { background: rgba(30, 41, 59, 0.35); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 18px; padding: 22px; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
         .widget-title { font-size: 0.9rem; font-weight: 800; color: var(--accent-color); display: flex; align-items: center; gap: 8px; }
 
-        /* Games Grid */
         .games-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
         .game-card { background: rgba(30, 41, 59, 0.35); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 18px; padding: 24px; display: flex; flex-direction: column; gap: 16px; text-decoration: none; color: inherit; position: relative; transition: 0.2s; }
         .game-card:hover { border-color: var(--accent-color); transform: translateY(-3px); background: rgba(30, 41, 59, 0.5); }
-        .play-btn { background: var(--accent-color); color: #0f172a; font-weight: 800; padding: 12px; border-radius: 12px; text-align: center; font-size: 0.95rem; box-shadow: 0 4px 15px var(--accent-glow); }
+        .play-btn { background: var(--accent-color); color: #0f172a; font-weight: 800; padding: 12px; border-radius: 12px; text-align: center; font-size: 0.95rem; }
         
         .fav-star { position: absolute; top: 20px; right: 20px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.12); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; cursor: pointer; transition: 0.2s; }
         .fav-star:hover { background: rgba(250, 204, 21, 0.2); border-color: #facc15; }
         .fav-star.active { color: #facc15; background: rgba(250, 204, 21, 0.15); border-color: #facc15; }
 
         .notif-badge { position: absolute; top: -4px; right: -4px; background: #ef4444; color: #fff; font-size: 0.65rem; font-weight: 900; padding: 2px 6px; border-radius: 10px; display: none; }
+        ]]>
       </style>
 
       <!-- First-Visit Name Modal -->
       <div class="modal-overlay" id="nameModal" style="display:none;">
         <div class="modal-card">
-          <h2 style="margin:0; color:var(--accent-color);">👋 Welcome to eagle.io</h2>
+          <h2 style="margin:0; color:var(--accent-color);">Welcome to eagle.io</h2>
           <p style="color:#94a3b8; font-size:0.9rem; margin:0;">We have a quick tutorial to show you around. But first, what should we call you?</p>
           <input type="text" class="modal-input" id="userNameInput" placeholder="Enter your name..." />
-          <button onclick="saveName()" class="liquid-btn" style="background:var(--accent-color); color:#0f172a; justify-content:center;">Get Started ➔</button>
+          <button onclick="saveName()" class="liquid-btn" style="background:var(--accent-color); color:#0f172a; justify-content:center;">Get Started</button>
         </div>
       </div>
 
       <!-- Settings Modal -->
       <div class="modal-overlay" id="settingsModal">
         <div class="modal-card">
-          <h3 style="margin:0; color:var(--accent-color);">🎨 Themes and Settings</h3>
+          <h3 style="margin:0; color:var(--accent-color);">Themes and Settings</h3>
           <div style="display:flex; flex-direction:column; gap:10px;">
             <span style="font-size:0.9rem; font-weight:bold; color:#f8fafc;">Primary Accent Color:</span>
             <div style="display:flex; gap:12px;">
@@ -118,10 +116,10 @@
       <!-- Update Log Modal -->
       <div class="modal-overlay" id="updateLogModal">
         <div class="modal-card">
-          <h3 style="margin:0; color:var(--accent-color);">📜 Update Log</h3>
+          <h3 style="margin:0; color:var(--accent-color);">Update Log</h3>
           <div style="font-size:0.85rem; color:#94a3b8; line-height:1.5; display:flex; flex-direction:column; gap:10px;">
-            <div><strong>v41:</strong> Expanded full app suite tray, restored custom owner console, event scheduling, bug reporters, and smooth non-laggy hardware rendering.</div>
-            <div><strong>v40:</strong> Stripped out heavy backdrop-filter blur filters for maximum speed on Chromebooks and iPads.</div>
+            <div><strong>v42:</strong> Wrapped all styles and scripts inside strict CDATA blocks to completely eliminate XML parsing entity errors.</div>
+            <div><strong>v41:</strong> Expanded full app suite tray, owner console, schedule, and bug reporters.</div>
           </div>
           <button onclick="closeModal('updateLogModal')" class="liquid-btn" style="justify-content:center; margin-top:10px;">Close Updates</button>
         </div>
@@ -130,7 +128,7 @@
       <!-- Schedule Modal -->
       <div class="modal-overlay" id="scheduleModal">
         <div class="modal-card">
-          <h3 style="margin:0; color:var(--accent-color);">📅 Schedule and Events (Up to 2030)</h3>
+          <h3 style="margin:0; color:var(--accent-color);">Schedule and Events (Up to 2030)</h3>
           <div style="display:flex; gap:10px;">
             <input type="date" class="modal-input" id="eventDate" min="2024-01-01" max="2030-12-31" />
             <input type="text" class="modal-input" id="eventTitle" placeholder="Event description..." />
@@ -144,7 +142,7 @@
       <!-- Owner Modal -->
       <div class="modal-overlay" id="ownerModal">
         <div class="modal-card">
-          <h3 style="margin:0; color:#facc15;">🔒 Owner Access Console</h3>
+          <h3 style="margin:0; color:#facc15;">Owner Access Console</h3>
           <div id="codeDisplay" style="background:rgba(30,41,59,0.8); color:var(--accent-color); font-size:2rem; font-weight:900; text-align:center; padding:12px; border-radius:12px; letter-spacing:10px;">____</div>
           <div class="keypad">
             <button class="key-btn" onclick="pressKey('1')">1</button>
@@ -170,7 +168,7 @@
       <!-- Bug Modal -->
       <div class="modal-overlay" id="bugModal">
         <div class="modal-card">
-          <h3 style="margin:0; color:var(--accent-color);">🐛 Report a Bug</h3>
+          <h3 style="margin:0; color:var(--accent-color);">Report a Bug</h3>
           <input type="text" class="modal-input" id="bugInput" placeholder="Describe the bug or issue..." />
           <div style="display:flex; justify-content:flex-end; gap:10px;">
             <button onclick="closeModal('bugModal')" class="liquid-btn">Cancel</button>
@@ -182,11 +180,11 @@
       <!-- Navbar -->
       <div class="navbar">
         <div class="nav-left">
-          <button class="liquid-btn" id="appsDropdownBtn">☰ Apps Menu</button>
+          <button class="liquid-btn" id="appsDropdownBtn">Apps Menu</button>
           
           <!-- Apps Dropdown Suite Tray -->
           <div class="apps-dropdown" id="appsDropdown">
-            <div style="font-weight:900; color:var(--accent-color); font-size:0.85rem; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:6px;">📱 App Suite Tray</div>
+            <div style="font-weight:900; color:var(--accent-color); font-size:0.85rem; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:6px;">App Suite Tray</div>
             <div class="apps-grid">
               <div class="app-tile" onclick="openApp('latest')"><span>🚀</span><span>Latest</span></div>
               <div class="app-tile" onclick="openApp('schedule')"><span>📅</span><span>Schedule</span></div>
@@ -200,8 +198,8 @@
           </div>
 
           <div>
-            <div class="brand">🦅 eagle.io</div>
-            <div class="meta-info">v41 • <span id="liveClock">00:00:00</span></div>
+            <div class="brand">eagle.io</div>
+            <div class="meta-info">v42 • <span id="liveClock">00:00:00</span></div>
           </div>
         </div>
 
@@ -209,7 +207,7 @@
           <div style="position:relative;">
             <button class="liquid-btn" id="notifBtn" style="padding:8px 12px; font-size:1.1rem;">🔔<span class="notif-badge" id="notifBadge">1</span></button>
             <div class="apps-dropdown" id="notifDropdown" style="right:0; left:auto; width:280px; top:48px;">
-              <div style="font-weight:900; color:var(--accent-color); font-size:0.85rem; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:6px;">📢 Global Announcements</div>
+              <div style="font-weight:900; color:var(--accent-color); font-size:0.85rem; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:6px;">Global Announcements</div>
               <div id="notifContent" style="font-size:0.85rem; color:#f8fafc; line-height:1.4;">No new announcements.</div>
             </div>
           </div>
@@ -221,8 +219,8 @@
         <div class="header-row">
           <h1 class="hero-title" id="heroGreeting">My Hub</h1>
           <select class="select-box" id="mainNavSelect">
-            <option value="hub">⭐ My Hub Dashboard</option>
-            <option value="games">🎮 Games Library</option>
+            <option value="hub">My Hub Dashboard</option>
+            <option value="games">Games Library</option>
           </select>
         </div>
 
@@ -230,21 +228,21 @@
         <div id="myHubView" style="display:flex; flex-direction:column; gap:24px;">
           <div class="widgets-grid">
             <div class="widget-card">
-              <div class="widget-title">⏰ Local Device Time</div>
+              <div class="widget-title">Local Device Time</div>
               <div style="font-size:1.8rem; font-weight:900; color:#f8fafc;" id="widgetClock">00:00:00</div>
               <div style="font-size:0.8rem; color:#94a3b8;" id="widgetDate">Loading date...</div>
             </div>
             <div class="widget-card">
-              <div class="widget-title">🌤️ Leawood Weather</div>
+              <div class="widget-title">Leawood Weather</div>
               <div style="font-size:1.8rem; font-weight:900; color:#7dd3fc;">56°F Clear</div>
               <div style="font-size:0.8rem; color:#94a3b8;">Leawood, Kansas area.</div>
             </div>
             <div class="widget-card">
-              <div class="widget-title">📝 Quick Personal Notes</div>
+              <div class="widget-title">Quick Personal Notes</div>
               <textarea id="quickNotes" class="modal-input" placeholder="Type personal notes here..." style="height:70px; resize:none; font-size:0.85rem;"></textarea>
             </div>
           </div>
-          <h3 style="margin:0; color:var(--accent-color);">📌 Favorite Game Shortcuts</h3>
+          <h3 style="margin:0; color:var(--accent-color);">Favorite Game Shortcuts</h3>
           <div class="games-grid" id="favoritesGrid"></div>
         </div>
 
@@ -255,7 +253,7 @@
             <div style="font-size:2.5rem;">🟩</div>
             <div style="font-size:1.2rem; font-weight:800;">Geometry Eagle</div>
             <div style="color:#94a3b8; font-size:0.9rem;">Time your jumps to leap over spikes in this rhythm platformer.</div>
-            <a class="play-btn" href="geometry-eagle.svg?v=41">Play Game</a>
+            <a class="play-btn" href="geometry-eagle.svg?v=42">Play Game</a>
           </div>
 
           <div class="game-card" data-id="eagle-clicker">
@@ -263,7 +261,7 @@
             <div style="font-size:2.5rem;">🦅</div>
             <div style="font-size:1.2rem; font-weight:800;">Eagle Clicker</div>
             <div style="color:#94a3b8; font-size:0.9rem;">Gather feathers and buy nest upgrades for passive income.</div>
-            <a class="play-btn" href="eagle-clicker.svg?v=41">Play Game</a>
+            <a class="play-btn" href="eagle-clicker.svg?v=42">Play Game</a>
           </div>
 
           <div class="game-card" data-id="to-the-eagles">
@@ -271,7 +269,7 @@
             <div style="font-size:2.5rem;">☁️</div>
             <div style="font-size:1.2rem; font-weight:800;">To the Eagles</div>
             <div style="color:#94a3b8; font-size:0.9rem;">Bounce across moving clouds and climb as high as possible.</div>
-            <a class="play-btn" href="to-the-eagles.svg?v=41">Play Game</a>
+            <a class="play-btn" href="to-the-eagles.svg?v=42">Play Game</a>
           </div>
 
           <div class="game-card" data-id="eagle-pizza">
@@ -279,7 +277,7 @@
             <div style="font-size:2.5rem;">🍕</div>
             <div style="font-size:1.2rem; font-weight:800;">Eagle Pizza</div>
             <div style="color:#94a3b8; font-size:0.9rem;">Assemble custom orders and manage your pizza shop.</div>
-            <a class="play-btn" href="eagle-pizza.svg?v=41">Play Game</a>
+            <a class="play-btn" href="eagle-pizza.svg?v=42">Play Game</a>
           </div>
 
           <div class="game-card" data-id="teachers-quiz">
@@ -287,7 +285,7 @@
             <div style="font-size:2.5rem;">📚</div>
             <div style="font-size:1.2rem; font-weight:800;">Teachers Quiz</div>
             <div style="color:#94a3b8; font-size:0.9rem;">Test your knowledge on Leawood Middle teachers and school trivia!</div>
-            <a class="play-btn" href="teachers-quiz.svg?v=41">Play Quiz</a>
+            <a class="play-btn" href="teachers-quiz.svg?v=42">Play Quiz</a>
           </div>
 
           <div class="game-card" data-id="eagle-pong">
@@ -295,7 +293,7 @@
             <div style="font-size:2.5rem;">🏓</div>
             <div style="font-size:1.2rem; font-weight:800;">Eagle Pong</div>
             <div style="color:#94a3b8; font-size:0.9rem;">Classic retro paddle arcade game against an AI opponent.</div>
-            <a class="play-btn" href="eagle-pong.svg?v=41">Play Game</a>
+            <a class="play-btn" href="eagle-pong.svg?v=42">Play Game</a>
           </div>
         </div>
       </div>
@@ -346,7 +344,6 @@
           document.getElementById('heroGreeting').textContent = `Welcome back, ${name}!`;
         }
 
-        // Owner Keypad Logic
         let enteredCode = '';
         window.pressKey = function(num) {
           if (enteredCode.length < 4) {
@@ -386,7 +383,6 @@
           closeModal('bugModal');
         };
 
-        // Schedule Events System
         let events = JSON.parse(localStorage.getItem('eagle_events') || '[]');
         window.addEvent = function() {
           const date = document.getElementById('eventDate').value;
@@ -412,7 +408,7 @@
             list.innerHTML = '<div style="color:#94a3b8;">No scheduled events.</div>';
             return;
           }
-          events.sort((a,b) => new Date(a.date) - new Date(b.date));
+          events.sort((a, b) => new Date(a.date) - new Date(b.date));
           events.forEach((ev, idx) => {
             const item = document.createElement('div');
             item.style.cssText = 'background:rgba(30,41,59,0.6); padding:8px 12px; border-radius:8px; display:flex; justify-content:space-between; align-items:center;';
@@ -433,7 +429,6 @@
 
           renderEvents();
 
-          // Clock Loop
           setInterval(() => {
             const now = new Date();
             document.getElementById('liveClock').textContent = now.toLocaleTimeString();
@@ -441,12 +436,10 @@
             document.getElementById('widgetDate').textContent = now.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
           }, 1000);
 
-          // Notes
           const notes = document.getElementById('quickNotes');
           notes.value = localStorage.getItem('eagle_notes') || '';
           notes.oninput = (e) => localStorage.setItem('eagle_notes', e.target.value);
 
-          // Dropdown Toggles
           const appsDropdownBtn = document.getElementById('appsDropdownBtn');
           const appsDropdown = document.getElementById('appsDropdown');
           appsDropdownBtn.onclick = (e) => { e.stopPropagation(); appsDropdown.classList.toggle('open'); document.getElementById('notifDropdown').classList.remove('open'); };
@@ -457,7 +450,6 @@
 
           window.onclick = () => { appsDropdown.classList.remove('open'); notifDropdown.classList.remove('open'); };
 
-          // View Switching
           const navSelect = document.getElementById('mainNavSelect');
           const hubView = document.getElementById('myHubView');
           const gamesView = document.getElementById('gamesView');
@@ -473,7 +465,6 @@
             }
           };
 
-          // Favorites System
           let favorites = JSON.parse(localStorage.getItem('eagle_favs') || '[]');
 
           window.toggleFavorite = function(id) {
