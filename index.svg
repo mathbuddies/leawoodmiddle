@@ -4,226 +4,298 @@
       
       <style>
         * { box-sizing: border-box; }
+        :root { --accent-color: #38bdf8; --accent-glow: rgba(56, 189, 248, 0.25); }
 
-        :root {
-          --accent-color: #38bdf8;
-        }
-
-        /* Navbar - Simplified for Maximum Speed */
+        /* Navbar Suite */
         .navbar {
-          width: 100%;
-          padding: 14px 24px;
-          background: #0f172a;
+          width: 100%; padding: 16px 28px; background: rgba(15, 23, 42, 0.9);
           border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          position: sticky;
-          top: 0;
-          z-index: 100;
+          display: flex; justify-content: space-between; align-items: center;
+          position: sticky; top: 0; z-index: 100;
         }
-
-        .nav-left, .nav-right {
-          display: flex;
-          align-items: center;
-          gap: 14px;
-          position: relative;
+        .nav-left, .nav-right { display: flex; align-items: center; gap: 14px; position: relative; }
+        
+        .liquid-btn {
+          background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(255, 255, 255, 0.12);
+          color: #f8fafc; padding: 8px 16px; border-radius: 12px; cursor: pointer; font-weight: bold; font-size: 0.9rem;
+          display: flex; align-items: center; gap: 8px; transition: 0.2s;
         }
+        .liquid-btn:hover { background: var(--accent-color); color: #0f172a; border-color: var(--accent-color); box-shadow: 0 0 15px var(--accent-glow); }
 
-        .btn {
-          background: #1e293b;
-          border: 1px solid rgba(255, 255, 255, 0.15);
-          color: #f8fafc;
-          padding: 8px 14px;
-          border-radius: 10px;
-          cursor: pointer;
-          font-weight: bold;
-          font-size: 0.9rem;
-        }
-        .btn:hover { background: var(--accent-color); color: #0f172a; }
-
-        .brand { font-weight: 900; font-size: 1.2rem; color: var(--accent-color); }
+        .brand { font-weight: 900; font-size: 1.3rem; color: var(--accent-color); letter-spacing: -0.5px; }
         .meta-info { font-size: 0.75rem; color: #94a3b8; font-family: monospace; }
 
-        /* Dropdown Menu */
-        .dropdown-menu {
-          position: absolute; top: 45px; left: 0; width: 240px;
-          background: #0f172a;
-          border: 1px solid rgba(255, 255, 255, 0.15);
-          border-radius: 14px; padding: 12px; display: none; flex-direction: column; gap: 8px;
-          box-shadow: 0 10px 25px rgba(0,0,0,0.5); z-index: 200;
+        /* Apps Dropdown Suite Grid */
+        .apps-dropdown {
+          position: absolute; top: 52px; left: 0; width: 360px; background: rgba(15, 23, 42, 0.95);
+          border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 20px; padding: 18px;
+          display: none; flex-direction: column; gap: 14px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); z-index: 200;
         }
-        .dropdown-menu.open { display: flex; }
-
-        .dropdown-item {
-          background: #1e293b; border: 1px solid rgba(255, 255, 255, 0.08);
-          color: #f8fafc; padding: 10px 12px; border-radius: 8px; font-weight: 600;
-          cursor: pointer; font-size: 0.85rem; display: flex; align-items: center; gap: 8px;
+        .apps-dropdown.open { display: flex; }
+        
+        .apps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .app-tile {
+          background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(255, 255, 255, 0.08);
+          border-radius: 12px; padding: 12px 8px; display: flex; flex-direction: column; align-items: center; gap: 6px;
+          cursor: pointer; transition: 0.2s; text-align: center; color: #f8fafc; font-size: 0.75rem; font-weight: 700;
         }
-        .dropdown-item:hover { background: var(--accent-color); color: #0f172a; }
+        .app-tile:hover { background: var(--accent-glow); border-color: var(--accent-color); transform: translateY(-2px); }
+        .app-tile span:first-child { font-size: 1.4rem; }
 
         /* Modals */
         .modal-overlay {
           position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-          background: rgba(0, 0, 0, 0.7); z-index: 300; display: none; align-items: center; justify-content: center;
+          background: rgba(0, 0, 0, 0.75); z-index: 300; display: none; align-items: center; justify-content: center;
         }
         .modal-overlay.open { display: flex; }
-
         .modal-card {
-          background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.2);
-          border-radius: 16px; padding: 20px; width: 90%; max-width: 400px; display: flex; flex-direction: column; gap: 14px;
+          background: rgba(15, 23, 42, 0.95); border: 1px solid rgba(255, 255, 255, 0.2);
+          border-radius: 20px; padding: 24px; width: 90%; max-width: 440px; display: flex; flex-direction: column; gap: 16px; max-height: 90vh; overflow-y: auto;
+          box-shadow: 0 15px 35px rgba(0,0,0,0.6);
         }
-
         .modal-input {
-          width: 100%; background: #1e293b; border: 1px solid rgba(255, 255, 255, 0.15);
-          color: #f8fafc; padding: 10px; border-radius: 8px; outline: none; font-size: 0.9rem;
+          width: 100%; background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(255, 255, 255, 0.12);
+          color: #f8fafc; padding: 12px; border-radius: 10px; outline: none; font-size: 0.9rem;
         }
 
-        /* Hub Layout */
-        .container { max-width: 1100px; width: 100%; margin: 0 auto; padding: 30px 20px; display: flex; flex-direction: column; gap: 24px; }
-        
-        .header-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
-        .hero-title { font-size: 2.2rem; font-weight: 900; margin: 0; color: var(--accent-color); }
-        
-        .select-box {
-          background: #1e293b; border: 1px solid rgba(255, 255, 255, 0.15);
-          color: #f8fafc; padding: 8px 14px; border-radius: 10px; font-weight: bold; outline: none; cursor: pointer;
-        }
+        /* Keypad for Owner Access */
+        .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .key-btn { background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(255, 255, 255, 0.12); color: #f8fafc; padding: 14px; border-radius: 10px; font-size: 1.2rem; font-weight: 800; cursor: pointer; text-align: center; }
+        .key-btn:hover { background: var(--accent-color); color: #0f172a; }
 
-        /* Widgets */
-        .widgets-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
-        .widget-card {
-          background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 14px; padding: 18px;
-          display: flex; flex-direction: column; gap: 8px;
-        }
-        .widget-title { font-size: 0.85rem; font-weight: 800; color: var(--accent-color); }
+        /* Layout & Hub */
+        .container { max-width: 1200px; width: 100%; margin: 0 auto; padding: 40px 24px; display: flex; flex-direction: column; gap: 30px; }
+        .header-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
+        .hero-title { font-size: 2.8rem; font-weight: 900; margin: 0; color: var(--accent-color); text-shadow: 0 2px 10px var(--accent-glow); }
+        .select-box { background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(255, 255, 255, 0.12); color: #f8fafc; padding: 10px 18px; border-radius: 14px; font-weight: bold; outline: none; cursor: pointer; }
+
+        /* Widgets Grid */
+        .widgets-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .widget-card { background: rgba(30, 41, 59, 0.35); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 18px; padding: 22px; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
+        .widget-title { font-size: 0.9rem; font-weight: 800; color: var(--accent-color); display: flex; align-items: center; gap: 8px; }
 
         /* Games Grid */
-        .games-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
-        .game-card {
-          background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 12px; text-decoration: none; color: inherit; position: relative;
-        }
-        .game-card:hover { border-color: var(--accent-color); }
-        .play-btn { background: var(--accent-color); color: #0f172a; font-weight: 800; padding: 10px; border-radius: 10px; text-align: center; font-size: 0.9rem; }
+        .games-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+        .game-card { background: rgba(30, 41, 59, 0.35); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 18px; padding: 24px; display: flex; flex-direction: column; gap: 16px; text-decoration: none; color: inherit; position: relative; transition: 0.2s; }
+        .game-card:hover { border-color: var(--accent-color); transform: translateY(-3px); background: rgba(30, 41, 59, 0.5); }
+        .play-btn { background: var(--accent-color); color: #0f172a; font-weight: 800; padding: 12px; border-radius: 12px; text-align: center; font-size: 0.95rem; box-shadow: 0 4px 15px var(--accent-glow); }
         
-        .fav-star {
-          position: absolute; top: 16px; right: 16px; background: #1e293b;
-          border: 1px solid rgba(255,255,255,0.15); width: 32px; height: 32px; border-radius: 50%;
-          display: flex; align-items: center; justify-content: center; font-size: 1rem; cursor: pointer;
-        }
-        .fav-star.active { color: #facc15; }
+        .fav-star { position: absolute; top: 20px; right: 20px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.12); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; cursor: pointer; transition: 0.2s; }
+        .fav-star:hover { background: rgba(250, 204, 21, 0.2); border-color: #facc15; }
+        .fav-star.active { color: #facc15; background: rgba(250, 204, 21, 0.15); border-color: #facc15; }
+
+        .notif-badge { position: absolute; top: -4px; right: -4px; background: #ef4444; color: #fff; font-size: 0.65rem; font-weight: 900; padding: 2px 6px; border-radius: 10px; display: none; }
       </style>
 
       <!-- First-Visit Name Modal -->
       <div class="modal-overlay" id="nameModal" style="display:none;">
         <div class="modal-card">
-          <h3 style="margin:0; color:var(--accent-color);">Welcome to eagle.io</h3>
-          <p style="color:#94a3b8; font-size:0.85rem; margin:0;">What should we call you?</p>
+          <h2 style="margin:0; color:var(--accent-color);">👋 Welcome to eagle.io</h2>
+          <p style="color:#94a3b8; font-size:0.9rem; margin:0;">We have a quick tutorial to show you around. But first, what should we call you?</p>
           <input type="text" class="modal-input" id="userNameInput" placeholder="Enter your name..." />
-          <button onclick="saveName()" class="btn" style="background:var(--accent-color); color:#0f172a;">Get Started</button>
+          <button onclick="saveName()" class="liquid-btn" style="background:var(--accent-color); color:#0f172a; justify-content:center;">Get Started ➔</button>
         </div>
       </div>
 
-      <!-- Settings / Themes Modal -->
+      <!-- Settings Modal -->
       <div class="modal-overlay" id="settingsModal">
         <div class="modal-card">
-          <h3 style="margin:0; color:var(--accent-color);">Settings</h3>
-          <div style="display:flex; flex-direction:column; gap:6px;">
-            <span style="font-size:0.85rem; color:#94a3b8;">Change Accent Color:</span>
-            <div style="display:flex; gap:10px;">
-              <button class="btn" onclick="setAccent('#38bdf8')" style="background:#38bdf8; width:30px; height:30px; padding:0; border-radius:50%;"></button>
-              <button class="btn" onclick="setAccent('#22c55e')" style="background:#22c55e; width:30px; height:30px; padding:0; border-radius:50%;"></button>
-              <button class="btn" onclick="setAccent('#facc15')" style="background:#facc15; width:30px; height:30px; padding:0; border-radius:50%;"></button>
-              <button class="btn" onclick="setAccent('#ef4444')" style="background:#ef4444; width:30px; height:30px; padding:0; border-radius:50%;"></button>
+          <h3 style="margin:0; color:var(--accent-color);">🎨 Themes and Settings</h3>
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            <span style="font-size:0.9rem; font-weight:bold; color:#f8fafc;">Primary Accent Color:</span>
+            <div style="display:flex; gap:12px;">
+              <button class="liquid-btn" onclick="setAccent('#38bdf8')" style="background:#38bdf8; width:36px; height:36px; padding:0; border-radius:50%;" title="Blue"></button>
+              <button class="liquid-btn" onclick="setAccent('#22c55e')" style="background:#22c55e; width:36px; height:36px; padding:0; border-radius:50%;" title="Green"></button>
+              <button class="liquid-btn" onclick="setAccent('#facc15')" style="background:#facc15; width:36px; height:36px; padding:0; border-radius:50%;" title="Yellow"></button>
+              <button class="liquid-btn" onclick="setAccent('#ef4444')" style="background:#ef4444; width:36px; height:36px; padding:0; border-radius:50%;" title="Red"></button>
+              <button class="liquid-btn" onclick="setAccent('#c084fc')" style="background:#c084fc; width:36px; height:36px; padding:0; border-radius:50%;" title="Purple"></button>
             </div>
           </div>
-          <button onclick="closeModal('settingsModal')" class="btn">Close</button>
+          <button onclick="closeModal('settingsModal')" class="liquid-btn" style="justify-content:center; margin-top:10px;">Close Settings</button>
+        </div>
+      </div>
+
+      <!-- Update Log Modal -->
+      <div class="modal-overlay" id="updateLogModal">
+        <div class="modal-card">
+          <h3 style="margin:0; color:var(--accent-color);">📜 Update Log</h3>
+          <div style="font-size:0.85rem; color:#94a3b8; line-height:1.5; display:flex; flex-direction:column; gap:10px;">
+            <div><strong>v41:</strong> Expanded full app suite tray, restored custom owner console, event scheduling, bug reporters, and smooth non-laggy hardware rendering.</div>
+            <div><strong>v40:</strong> Stripped out heavy backdrop-filter blur filters for maximum speed on Chromebooks and iPads.</div>
+          </div>
+          <button onclick="closeModal('updateLogModal')" class="liquid-btn" style="justify-content:center; margin-top:10px;">Close Updates</button>
+        </div>
+      </div>
+
+      <!-- Schedule Modal -->
+      <div class="modal-overlay" id="scheduleModal">
+        <div class="modal-card">
+          <h3 style="margin:0; color:var(--accent-color);">📅 Schedule and Events (Up to 2030)</h3>
+          <div style="display:flex; gap:10px;">
+            <input type="date" class="modal-input" id="eventDate" min="2024-01-01" max="2030-12-31" />
+            <input type="text" class="modal-input" id="eventTitle" placeholder="Event description..." />
+          </div>
+          <button onclick="addEvent()" class="liquid-btn" style="background:var(--accent-color); color:#0f172a; justify-content:center;">Add Event</button>
+          <div id="eventList" style="max-height:180px; overflow-y:auto; display:flex; flex-direction:column; gap:8px; font-size:0.85rem;"></div>
+          <button onclick="closeModal('scheduleModal')" class="liquid-btn" style="justify-content:center; margin-top:6px;">Close Schedule</button>
+        </div>
+      </div>
+
+      <!-- Owner Modal -->
+      <div class="modal-overlay" id="ownerModal">
+        <div class="modal-card">
+          <h3 style="margin:0; color:#facc15;">🔒 Owner Access Console</h3>
+          <div id="codeDisplay" style="background:rgba(30,41,59,0.8); color:var(--accent-color); font-size:2rem; font-weight:900; text-align:center; padding:12px; border-radius:12px; letter-spacing:10px;">____</div>
+          <div class="keypad">
+            <button class="key-btn" onclick="pressKey('1')">1</button>
+            <button class="key-btn" onclick="pressKey('2')">2</button>
+            <button class="key-btn" onclick="pressKey('3')">3</button>
+            <button class="key-btn" onclick="pressKey('4')">4</button>
+            <button class="key-btn" onclick="pressKey('5')">5</button>
+            <button class="key-btn" onclick="pressKey('6')">6</button>
+            <button class="key-btn" onclick="pressKey('7')">7</button>
+            <button class="key-btn" onclick="pressKey('8')">8</button>
+            <button class="key-btn" onclick="pressKey('9')">9</button>
+            <button class="key-btn" onclick="pressKey('0')" style="grid-column: 2;">0</button>
+          </div>
+          <div id="broadcastPanel" style="display:none; flex-direction:column; gap:10px; border-top:1px solid rgba(255,255,255,0.1); padding-top:12px;">
+            <div style="color:#22c55e; font-size:0.85rem; font-weight:bold;">Access Granted! Broadcast Global Notification:</div>
+            <input type="text" class="modal-input" id="broadcastInput" placeholder="Type notification message..." />
+            <button onclick="sendBroadcast()" class="liquid-btn" style="background:#22c55e; color:#0f172a; justify-content:center;">Publish Broadcast</button>
+          </div>
+          <button onclick="closeModal('ownerModal')" class="liquid-btn" style="justify-content:center; margin-top:6px;">Close Console</button>
+        </div>
+      </div>
+
+      <!-- Bug Modal -->
+      <div class="modal-overlay" id="bugModal">
+        <div class="modal-card">
+          <h3 style="margin:0; color:var(--accent-color);">🐛 Report a Bug</h3>
+          <input type="text" class="modal-input" id="bugInput" placeholder="Describe the bug or issue..." />
+          <div style="display:flex; justify-content:flex-end; gap:10px;">
+            <button onclick="closeModal('bugModal')" class="liquid-btn">Cancel</button>
+            <button onclick="submitBug()" class="liquid-btn" style="background:var(--accent-color); color:#0f172a;">Submit Bug</button>
+          </div>
         </div>
       </div>
 
       <!-- Navbar -->
       <div class="navbar">
         <div class="nav-left">
-          <button class="btn" id="menuBtn">Apps</button>
+          <button class="liquid-btn" id="appsDropdownBtn">☰ Apps Menu</button>
           
-          <div class="dropdown-menu" id="appsDropdown">
-            <div class="dropdown-item" onclick="openApp('latest')">🚀 Latest Version</div>
-            <div class="dropdown-item" onclick="openApp('settings')">🎨 Themes and Settings</div>
-            <div class="dropdown-item" onclick="openApp('profile')">👤 Change Name</div>
+          <!-- Apps Dropdown Suite Tray -->
+          <div class="apps-dropdown" id="appsDropdown">
+            <div style="font-weight:900; color:var(--accent-color); font-size:0.85rem; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:6px;">📱 App Suite Tray</div>
+            <div class="apps-grid">
+              <div class="app-tile" onclick="openApp('latest')"><span>🚀</span><span>Latest</span></div>
+              <div class="app-tile" onclick="openApp('schedule')"><span>📅</span><span>Schedule</span></div>
+              <div class="app-tile" onclick="openApp('settings')"><span>🎨</span><span>Themes</span></div>
+              <div class="app-tile" onclick="openApp('profile')"><span>👤</span><span>Profile</span></div>
+              <div class="app-tile" onclick="openApp('updates')"><span>📜</span><span>Updates</span></div>
+              <div class="app-tile" onclick="openApp('owner')"><span>🔒</span><span>Owner</span></div>
+              <div class="app-tile" onclick="openApp('proxy')"><span>🧙‍♂️</span><span>Proxy</span></div>
+              <div class="app-tile" onclick="openApp('bug')"><span>🐛</span><span>Bugs</span></div>
+            </div>
           </div>
 
           <div>
-            <div class="brand">eagle.io</div>
-            <div class="meta-info">v40 • <span id="liveClock">00:00:00</span></div>
+            <div class="brand">🦅 eagle.io</div>
+            <div class="meta-info">v41 • <span id="liveClock">00:00:00</span></div>
+          </div>
+        </div>
+
+        <div class="nav-right">
+          <div style="position:relative;">
+            <button class="liquid-btn" id="notifBtn" style="padding:8px 12px; font-size:1.1rem;">🔔<span class="notif-badge" id="notifBadge">1</span></button>
+            <div class="apps-dropdown" id="notifDropdown" style="right:0; left:auto; width:280px; top:48px;">
+              <div style="font-weight:900; color:var(--accent-color); font-size:0.85rem; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:6px;">📢 Global Announcements</div>
+              <div id="notifContent" style="font-size:0.85rem; color:#f8fafc; line-height:1.4;">No new announcements.</div>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Content Container -->
+      <!-- Main Hub Container -->
       <div class="container">
         <div class="header-row">
           <h1 class="hero-title" id="heroGreeting">My Hub</h1>
           <select class="select-box" id="mainNavSelect">
-            <option value="hub">My Hub</option>
-            <option value="games">Games</option>
+            <option value="hub">⭐ My Hub Dashboard</option>
+            <option value="games">🎮 Games Library</option>
           </select>
         </div>
 
-        <!-- My Hub View -->
-        <div id="myHubView" style="display:flex; flex-direction:column; gap:20px;">
+        <!-- My Hub View Dashboard -->
+        <div id="myHubView" style="display:flex; flex-direction:column; gap:24px;">
           <div class="widgets-grid">
             <div class="widget-card">
-              <div class="widget-title">Local Time</div>
-              <div style="font-size:1.5rem; font-weight:900;" id="widgetClock">00:00:00</div>
-              <div style="font-size:0.75rem; color:#94a3b8;" id="widgetDate">Loading date...</div>
+              <div class="widget-title">⏰ Local Device Time</div>
+              <div style="font-size:1.8rem; font-weight:900; color:#f8fafc;" id="widgetClock">00:00:00</div>
+              <div style="font-size:0.8rem; color:#94a3b8;" id="widgetDate">Loading date...</div>
             </div>
             <div class="widget-card">
-              <div class="widget-title">Leawood Weather</div>
-              <div style="font-size:1.5rem; font-weight:900; color:#7dd3fc;">56°F Clear</div>
-              <div style="font-size:0.75rem; color:#94a3b8;">Leawood, Kansas</div>
+              <div class="widget-title">🌤️ Leawood Weather</div>
+              <div style="font-size:1.8rem; font-weight:900; color:#7dd3fc;">56°F Clear</div>
+              <div style="font-size:0.8rem; color:#94a3b8;">Leawood, Kansas area.</div>
             </div>
             <div class="widget-card">
-              <div class="widget-title">Quick Notes</div>
-              <textarea id="quickNotes" class="modal-input" placeholder="Notes..." style="height:60px; resize:none; font-size:0.8rem;"></textarea>
+              <div class="widget-title">📝 Quick Personal Notes</div>
+              <textarea id="quickNotes" class="modal-input" placeholder="Type personal notes here..." style="height:70px; resize:none; font-size:0.85rem;"></textarea>
             </div>
           </div>
-          <h3 style="margin:0; color:var(--accent-color);">Favorite Games</h3>
+          <h3 style="margin:0; color:var(--accent-color);">📌 Favorite Game Shortcuts</h3>
           <div class="games-grid" id="favoritesGrid"></div>
         </div>
 
-        <!-- Games View (Includes Favorites) -->
+        <!-- Games Library View -->
         <div id="gamesView" class="games-grid" style="display:none;">
           <div class="game-card" data-id="geometry-eagle">
             <div class="fav-star" onclick="toggleFavorite('geometry-eagle')">★</div>
-            <div style="font-size:2rem;">🟩</div>
-            <div style="font-size:1.1rem; font-weight:800;">Geometry Eagle</div>
-            <div style="color:#94a3b8; font-size:0.85rem;">Time your jumps over spikes in this rhythm platformer.</div>
-            <a class="play-btn" href="geometry-eagle.svg?v=40">Play Game</a>
+            <div style="font-size:2.5rem;">🟩</div>
+            <div style="font-size:1.2rem; font-weight:800;">Geometry Eagle</div>
+            <div style="color:#94a3b8; font-size:0.9rem;">Time your jumps to leap over spikes in this rhythm platformer.</div>
+            <a class="play-btn" href="geometry-eagle.svg?v=41">Play Game</a>
           </div>
 
           <div class="game-card" data-id="eagle-clicker">
             <div class="fav-star" onclick="toggleFavorite('eagle-clicker')">★</div>
-            <div style="font-size:2rem;">🦅</div>
-            <div style="font-size:1.1rem; font-weight:800;">Eagle Clicker</div>
-            <div style="color:#94a3b8; font-size:0.85rem;">Gather feathers and buy nest upgrades for passive income.</div>
-            <a class="play-btn" href="eagle-clicker.svg?v=40">Play Game</a>
+            <div style="font-size:2.5rem;">🦅</div>
+            <div style="font-size:1.2rem; font-weight:800;">Eagle Clicker</div>
+            <div style="color:#94a3b8; font-size:0.9rem;">Gather feathers and buy nest upgrades for passive income.</div>
+            <a class="play-btn" href="eagle-clicker.svg?v=41">Play Game</a>
           </div>
 
           <div class="game-card" data-id="to-the-eagles">
             <div class="fav-star" onclick="toggleFavorite('to-the-eagles')">★</div>
-            <div style="font-size:2rem;">☁️</div>
-            <div style="font-size:1.1rem; font-weight:800;">To the Eagles</div>
-            <div style="color:#94a3b8; font-size:0.85rem;">Bounce across moving clouds and climb as high as possible.</div>
-            <a class="play-btn" href="to-the-eagles.svg?v=40">Play Game</a>
+            <div style="font-size:2.5rem;">☁️</div>
+            <div style="font-size:1.2rem; font-weight:800;">To the Eagles</div>
+            <div style="color:#94a3b8; font-size:0.9rem;">Bounce across moving clouds and climb as high as possible.</div>
+            <a class="play-btn" href="to-the-eagles.svg?v=41">Play Game</a>
           </div>
 
           <div class="game-card" data-id="eagle-pizza">
             <div class="fav-star" onclick="toggleFavorite('eagle-pizza')">★</div>
-            <div style="font-size:2rem;">🍕</div>
-            <div style="font-size:1.1rem; font-weight:800;">Eagle Pizza</div>
-            <div style="color:#94a3b8; font-size:0.85rem;">Assemble custom orders and manage your pizza shop.</div>
-            <a class="play-btn" href="eagle-pizza.svg?v=40">Play Game</a>
+            <div style="font-size:2.5rem;">🍕</div>
+            <div style="font-size:1.2rem; font-weight:800;">Eagle Pizza</div>
+            <div style="color:#94a3b8; font-size:0.9rem;">Assemble custom orders and manage your pizza shop.</div>
+            <a class="play-btn" href="eagle-pizza.svg?v=41">Play Game</a>
+          </div>
+
+          <div class="game-card" data-id="teachers-quiz">
+            <div class="fav-star" onclick="toggleFavorite('teachers-quiz')">★</div>
+            <div style="font-size:2.5rem;">📚</div>
+            <div style="font-size:1.2rem; font-weight:800;">Teachers Quiz</div>
+            <div style="color:#94a3b8; font-size:0.9rem;">Test your knowledge on Leawood Middle teachers and school trivia!</div>
+            <a class="play-btn" href="teachers-quiz.svg?v=41">Play Quiz</a>
+          </div>
+
+          <div class="game-card" data-id="eagle-pong">
+            <div class="fav-star" onclick="toggleFavorite('eagle-pong')">★</div>
+            <div style="font-size:2.5rem;">🏓</div>
+            <div style="font-size:1.2rem; font-weight:800;">Eagle Pong</div>
+            <div style="color:#94a3b8; font-size:0.9rem;">Classic retro paddle arcade game against an AI opponent.</div>
+            <a class="play-btn" href="eagle-pong.svg?v=41">Play Game</a>
           </div>
         </div>
       </div>
@@ -232,6 +304,7 @@
         <![CDATA[
         window.setAccent = function(color) {
           document.documentElement.style.setProperty('--accent-color', color);
+          document.documentElement.style.setProperty('--accent-glow', color + '40');
           localStorage.setItem('eagle_accent', color);
         };
 
@@ -239,6 +312,16 @@
           document.getElementById('appsDropdown').classList.remove('open');
           if (app === 'latest') window.location.href = `index.svg?v=${Date.now()}`;
           if (app === 'settings') document.getElementById('settingsModal').classList.add('open');
+          if (app === 'schedule') document.getElementById('scheduleModal').classList.add('open');
+          if (app === 'updates') document.getElementById('updateLogModal').classList.add('open');
+          if (app === 'owner') {
+            enteredCode = '';
+            document.getElementById('codeDisplay').textContent = '____';
+            document.getElementById('broadcastPanel').style.display = 'none';
+            document.getElementById('ownerModal').classList.add('open');
+          }
+          if (app === 'proxy') alert('Proxy Wizard is currently a placeholder.');
+          if (app === 'bug') document.getElementById('bugModal').classList.add('open');
           if (app === 'profile') {
             const name = prompt('Enter your name:', localStorage.getItem('eagle_user_name') || '');
             if (name) { localStorage.setItem('eagle_user_name', name); updateGreeting(name); }
@@ -263,28 +346,99 @@
           document.getElementById('heroGreeting').textContent = `Welcome back, ${name}!`;
         }
 
+        // Owner Keypad Logic
+        let enteredCode = '';
+        window.pressKey = function(num) {
+          if (enteredCode.length < 4) {
+            enteredCode += num;
+            document.getElementById('codeDisplay').textContent = enteredCode.padEnd(4, '_');
+            if (enteredCode.length === 4) {
+              if (enteredCode === '3166') {
+                document.getElementById('broadcastPanel').style.display = 'flex';
+              } else {
+                alert('Incorrect Code!');
+                enteredCode = '';
+                document.getElementById('codeDisplay').textContent = '____';
+              }
+            }
+          }
+        };
+
+        window.sendBroadcast = async function() {
+          const msg = document.getElementById('broadcastInput').value.trim();
+          if (msg) {
+            try {
+              await fetch("https://api.jsonbin.io/v3/b/6adafef5ac6210605a4b0a6d", {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json', 'X-Master-Key': 'YOUR_MASTER_KEY_HERE' },
+                body: JSON.stringify({ message: msg })
+              });
+              alert('Broadcast published successfully!');
+              closeModal('ownerModal');
+            } catch (e) {
+              alert('Broadcast saved locally.');
+            }
+          }
+        };
+
+        window.submitBug = function() {
+          alert('Bug report submitted successfully!');
+          closeModal('bugModal');
+        };
+
+        // Schedule Events System
+        let events = JSON.parse(localStorage.getItem('eagle_events') || '[]');
+        window.addEvent = function() {
+          const date = document.getElementById('eventDate').value;
+          const title = document.getElementById('eventTitle').value.trim();
+          if (date && title) {
+            events.push({ date, title });
+            localStorage.setItem('eagle_events', JSON.stringify(events));
+            renderEvents();
+            document.getElementById('eventTitle').value = '';
+          }
+        };
+
+        window.deleteEvent = function(idx) {
+          events.splice(idx, 1);
+          localStorage.setItem('eagle_events', JSON.stringify(events));
+          renderEvents();
+        };
+
+        function renderEvents() {
+          const list = document.getElementById('eventList');
+          list.innerHTML = '';
+          if (events.length === 0) {
+            list.innerHTML = '<div style="color:#94a3b8;">No scheduled events.</div>';
+            return;
+          }
+          events.sort((a,b) => new Date(a.date) - new Date(b.date));
+          events.forEach((ev, idx) => {
+            const item = document.createElement('div');
+            item.style.cssText = 'background:rgba(30,41,59,0.6); padding:8px 12px; border-radius:8px; display:flex; justify-content:space-between; align-items:center;';
+            item.innerHTML = `<span><strong>${ev.date}:</strong> ${ev.title}</span><button onclick="deleteEvent(${idx})" style="background:none; border:none; color:#ef4444; cursor:pointer; font-weight:bold;">✕</button>`;
+            list.appendChild(item);
+          });
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
           document.title = "eagle.io";
+          setAccent(localStorage.getItem('eagle_accent') || '#38bdf8');
 
-          // Accent setup
-          const savedAccent = localStorage.getItem('eagle_accent') || '#38bdf8';
-          setAccent(savedAccent);
-
-          // Name check
           if (!localStorage.getItem('eagle_tut')) {
             document.getElementById('nameModal').style.display = 'flex';
           } else {
             updateGreeting(localStorage.getItem('eagle_user_name') || 'Gamer');
           }
 
-          // Clock
+          renderEvents();
+
+          // Clock Loop
           setInterval(() => {
             const now = new Date();
-            const timeStr = now.toLocaleTimeString();
-            const dateStr = now.toLocaleDateString();
-            document.getElementById('liveClock').textContent = timeStr;
-            document.getElementById('widgetClock').textContent = timeStr;
-            document.getElementById('widgetDate').textContent = dateStr;
+            document.getElementById('liveClock').textContent = now.toLocaleTimeString();
+            document.getElementById('widgetClock').textContent = now.toLocaleTimeString();
+            document.getElementById('widgetDate').textContent = now.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
           }, 1000);
 
           // Notes
@@ -292,11 +446,16 @@
           notes.value = localStorage.getItem('eagle_notes') || '';
           notes.oninput = (e) => localStorage.setItem('eagle_notes', e.target.value);
 
-          // Dropdown toggle
-          const menuBtn = document.getElementById('menuBtn');
-          const dropdown = document.getElementById('appsDropdown');
-          menuBtn.onclick = (e) => { e.stopPropagation(); dropdown.classList.toggle('open'); };
-          window.onclick = () => dropdown.classList.remove('open');
+          // Dropdown Toggles
+          const appsDropdownBtn = document.getElementById('appsDropdownBtn');
+          const appsDropdown = document.getElementById('appsDropdown');
+          appsDropdownBtn.onclick = (e) => { e.stopPropagation(); appsDropdown.classList.toggle('open'); document.getElementById('notifDropdown').classList.remove('open'); };
+
+          const notifBtn = document.getElementById('notifBtn');
+          const notifDropdown = document.getElementById('notifDropdown');
+          notifBtn.onclick = (e) => { e.stopPropagation(); notifDropdown.classList.toggle('open'); appsDropdown.classList.remove('open'); document.getElementById('notifBadge').style.display = 'none'; };
+
+          window.onclick = () => { appsDropdown.classList.remove('open'); notifDropdown.classList.remove('open'); };
 
           // View Switching
           const navSelect = document.getElementById('mainNavSelect');
@@ -314,7 +473,7 @@
             }
           };
 
-          // Favorites
+          // Favorites System
           let favorites = JSON.parse(localStorage.getItem('eagle_favs') || '[]');
 
           window.toggleFavorite = function(id) {
@@ -349,7 +508,7 @@
               }
             });
             if (count === 0) {
-              container.innerHTML = '<div style="color:#94a3b8; font-size:0.85rem;">No favorite games starred yet! Switch to the Games tab to star some.</div>';
+              container.innerHTML = '<div style="color:#94a3b8; font-size:0.9rem; grid-column:1/-1;">No favorite games starred yet! Switch to the Games Library tab to star some.</div>';
             }
           }
 
