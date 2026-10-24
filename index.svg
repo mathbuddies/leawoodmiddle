@@ -121,7 +121,7 @@
         .play-btn { background: #38bdf8; color: #0f172a; font-weight: 800; padding: 12px; border-radius: 12px; text-align: center; }
       </style>
 
-      <div class="top-banner" id="globalBanner">🦅 EAGLE ARCADE v24 🦅</div>
+      <div class="top-banner" id="globalBanner">🦅 EAGLE ARCADE v25 🦅</div>
 
       <!-- Slide-out Drawer -->
       <div class="drawer-overlay" id="drawerOverlay"></div>
@@ -184,7 +184,7 @@
           <button class="liquid-btn" id="menuBtn">☰</button>
           <div>
             <div class="brand">🦅 LMS GAMING HUB</div>
-            <div class="meta-info"><span>v24</span> • <span id="liveClock">00:00:00</span></div>
+            <div class="meta-info"><span>v25</span> • <span id="liveClock">00:00:00</span></div>
           </div>
         </div>
         <div class="nav-right-group">
@@ -197,39 +197,52 @@
         <h1 class="hero-title">EAGLE ARCADE</h1>
 
         <div class="games-grid">
-          <a class="game-card" href="geometry-eagle.svg?v=24">
+          <!-- Game 1: Geometry Eagle -->
+          <a class="game-card" href="geometry-eagle.svg?v=25">
             <div style="font-size:2.5rem;">🟩</div>
             <div style="font-size:1.3rem; font-weight:800;">Geometry Eagle</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Time your jumps to leap over spikes in this rhythm-based platformer.</div>
             <div class="play-btn">Play Game</div>
           </a>
 
-          <a class="game-card" href="eagle-clicker.svg?v=24">
+          <!-- Game 2: Eagle Clicker -->
+          <a class="game-card" href="eagle-clicker.svg?v=25">
             <div style="font-size:2.5rem;">🦅</div>
             <div style="font-size:1.3rem; font-weight:800;">Eagle Clicker</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Click to gather feathers and buy nest upgrades for passive income.</div>
             <div class="play-btn">Play Game</div>
           </a>
 
-          <a class="game-card" href="to-the-eagles.svg?v=24">
+          <!-- Game 3: To the Eagles -->
+          <a class="game-card" href="to-the-eagles.svg?v=25">
             <div style="font-size:2.5rem;">☁️</div>
             <div style="font-size:1.3rem; font-weight:800;">To the Eagles</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Bounce across moving clouds and climb as high as you can.</div>
             <div class="play-btn">Play Game</div>
           </a>
 
-          <a class="game-card" href="eagle-pizza.svg?v=24">
+          <!-- Game 4: Eagle Pizza -->
+          <a class="game-card" href="eagle-pizza.svg?v=25">
             <div style="font-size:2.5rem;">🍕</div>
             <div style="font-size:1.3rem; font-weight:800;">Eagle Pizza</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Assemble custom orders, bake pizzas, and manage your pizzeria shop.</div>
             <div class="play-btn">Play Game</div>
           </a>
 
-          <a class="game-card" href="teachers-quiz.svg?v=24">
+          <!-- Game 5: Teachers Quiz -->
+          <a class="game-card" href="teachers-quiz.svg?v=25">
             <div style="font-size:2.5rem;">📚</div>
             <div style="font-size:1.3rem; font-weight:800;">Teachers Quiz</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Test your knowledge on Leawood Middle teachers and school trivia!</div>
             <div class="play-btn">Play Quiz</div>
+          </a>
+
+          <!-- Game 6: Eagle Pong (NEW) -->
+          <a class="game-card" href="eagle-pong.svg?v=25">
+            <div style="font-size:2.5rem;">🏓</div>
+            <div style="font-size:1.3rem; font-weight:800;">Eagle Pong</div>
+            <div style="color:#94a3b8; font-size:0.95rem;">Classic retro paddle arcade game against an AI opponent.</div>
+            <div class="play-btn">Play Game</div>
           </a>
         </div>
       </div>
