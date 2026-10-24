@@ -122,8 +122,8 @@
         <div class="modal-card">
           <h3 style="margin:0; color:var(--accent-color);">Update Log</h3>
           <div style="font-size:0.85rem; color:#94a3b8; line-height:1.5; display:flex; flex-direction:column; gap:10px;">
-            <div><strong>v44:</strong> Restored Eagle Stack Tower and Eagle Blocks, and added a back-to-top button on all pages.</div>
-            <div><strong>v43:</strong> Sanitized all URL attributes and fully validated CDATA blocks.</div>
+            <div><strong>v45:</strong> Fixed game container display bindings so all 8 games render instantly and reliably.</div>
+            <div><strong>v44:</strong> Restored Eagle Stack Tower and Eagle Blocks, and added back-to-top buttons.</div>
           </div>
           <button onclick="closeModal('updateLogModal')" class="liquid-btn" style="justify-content:center; margin-top:10px;">Close Updates</button>
         </div>
@@ -203,7 +203,7 @@
 
           <div>
             <div class="brand">eagle.io</div>
-            <div class="meta-info">v44 • <span id="liveClock">00:00:00</span></div>
+            <div class="meta-info">v45 • <span id="liveClock">00:00:00</span></div>
           </div>
         </div>
 
@@ -476,7 +476,6 @@
 
           window.onclick = function() { appsDropdown.classList.remove('open'); notifDropdown.classList.remove('open'); };
 
-          // Scroll to Top action
           const scrollTopBtn = document.getElementById('scrollTopBtn');
           const appRoot = document.getElementById('appRoot');
           scrollTopBtn.onclick = function() {
