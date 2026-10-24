@@ -23,11 +23,13 @@
           object-fit: cover; pointer-events: none; z-index: -1; opacity: 0.35; display: none;
         }
 
-        /* Navbar */
+        /* Navbar - Liquid Glass */
         .navbar {
           width: 100%;
           padding: 16px 32px;
-          background: rgba(15, 23, 42, 0.85);
+          background: rgba(15, 23, 42, 0.65);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
           border-bottom: 1px solid rgba(255, 255, 255, 0.08);
           display: flex;
           justify-content: space-between;
@@ -44,8 +46,9 @@
         }
 
         .liquid-btn {
-          background: rgba(30, 41, 59, 0.6);
-          border: 1px solid rgba(255, 255, 255, 0.1);
+          background: rgba(30, 41, 59, 0.45);
+          backdrop-filter: blur(8px);
+          border: 1px solid rgba(255, 255, 255, 0.12);
           color: #f8fafc;
           padding: 8px 14px;
           border-radius: 12px;
@@ -54,8 +57,9 @@
           align-items: center;
           justify-content: center;
           font-weight: bold;
+          transition: 0.2s;
         }
-        .liquid-btn:hover { background: rgba(56, 189, 248, 0.2); border-color: #38bdf8; }
+        .liquid-btn:hover { background: rgba(56, 189, 248, 0.25); border-color: #38bdf8; }
 
         .brand { font-weight: 900; font-size: 1.3rem; color: #38bdf8; display: flex; align-items: center; gap: 8px; }
         .meta-info { font-size: 0.75rem; color: #94a3b8; font-family: monospace; display: flex; gap: 10px; }
@@ -63,8 +67,9 @@
         /* Notifications Dropdown */
         .notif-wrapper { position: relative; }
         .notif-btn {
-          background: rgba(30, 41, 59, 0.6);
-          border: 1px solid rgba(255, 255, 255, 0.1);
+          background: rgba(30, 41, 59, 0.45);
+          backdrop-filter: blur(8px);
+          border: 1px solid rgba(255, 255, 255, 0.12);
           color: #f8fafc;
           padding: 8px 12px;
           border-radius: 12px;
@@ -79,83 +84,104 @@
         }
         .notif-dropdown {
           position: absolute; top: 45px; right: 0; width: 300px;
-          background: #1e293b; border: 1px solid rgba(255, 255, 255, 0.1);
+          background: rgba(30, 41, 59, 0.85);
+          backdrop-filter: blur(16px);
+          border: 1px solid rgba(255, 255, 255, 0.12);
           border-radius: 16px; padding: 16px; display: none; flex-direction: column; gap: 12px;
           box-shadow: 0 10px 25px rgba(0,0,0,0.5); z-index: 50;
         }
         .notif-dropdown.open { display: flex; }
 
-        /* Slide Drawer */
+        /* Slide Drawer (Apps Panel) */
         .drawer-overlay {
           position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-          background: rgba(0, 0, 0, 0.6); z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.2s;
+          background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px); z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.2s;
         }
         .drawer-overlay.open { opacity: 1; pointer-events: auto; }
 
         .drawer {
           position: fixed; top: 0; left: -320px; width: 320px; height: 100vh;
-          background: #0f172a; border-right: 1px solid rgba(255, 255, 255, 0.1);
+          background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(20px);
+          border-right: 1px solid rgba(255, 255, 255, 0.1);
           z-index: 101; display: flex; flex-direction: column; transition: left 0.2s; padding: 24px; gap: 16px; overflow-y: auto;
         }
         .drawer.open { left: 0; }
 
         .drawer-item {
-          background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(255, 255, 255, 0.08);
+          background: rgba(30, 41, 59, 0.45); border: 1px solid rgba(255, 255, 255, 0.08);
           color: #f8fafc; padding: 12px 16px; border-radius: 12px; font-weight: 700;
           text-decoration: none; display: flex; justify-content: space-between; align-items: center; cursor: pointer;
+          transition: 0.2s;
         }
-        .drawer-item:hover { background: rgba(56, 189, 248, 0.2); }
+        .drawer-item:hover { background: rgba(56, 189, 248, 0.25); border-color: #38bdf8; }
 
         .settings-section {
-          background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(255, 255, 255, 0.08);
+          background: rgba(30, 41, 59, 0.3); border: 1px solid rgba(255, 255, 255, 0.08);
           border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 10px; font-size: 0.85rem;
         }
 
         .color-presets { display: flex; gap: 8px; }
         .color-dot { width: 26px; height: 26px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.2); cursor: pointer; }
 
-        /* Modals */
+        /* Modals - Liquid Glass */
         .modal-overlay {
           position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-          background: rgba(0, 0, 0, 0.7); z-index: 200; display: none; align-items: center; justify-content: center;
+          background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(8px); z-index: 200; display: none; align-items: center; justify-content: center;
         }
         .modal-overlay.open { display: flex; }
 
         .modal-card {
-          background: #1e293b; border: 1px solid rgba(255, 255, 255, 0.1);
+          background: rgba(30, 41, 59, 0.8); backdrop-filter: blur(20px);
+          border: 1px solid rgba(255, 255, 255, 0.15);
           border-radius: 20px; padding: 24px; width: 90%; max-width: 440px; display: flex; flex-direction: column; gap: 16px; max-height: 90vh; overflow-y: auto;
+          box-shadow: 0 15px 35px rgba(0,0,0,0.5);
         }
 
         .modal-input {
-          width: 100%; background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.1);
+          width: 100%; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1);
           color: #f8fafc; padding: 12px; border-radius: 10px; outline: none;
         }
 
         .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-        .key-btn { background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.1); color: #f8fafc; padding: 14px; border-radius: 10px; font-size: 1.2rem; font-weight: 800; cursor: pointer; }
+        .key-btn { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); color: #f8fafc; padding: 14px; border-radius: 10px; font-size: 1.2rem; font-weight: 800; cursor: pointer; }
         .key-btn:hover { background: #38bdf8; color: #0f172a; }
 
+        /* Hub Layout */
         .hub-container { max-width: 1200px; width: 100%; margin: 0 auto; padding: 40px 30px; display: flex; flex-direction: column; gap: 30px; }
         
         .hub-header-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
-        .hero-title { font-size: 3rem; font-weight: 900; margin: 0; color: #38bdf8; }
+        .hero-title { font-size: 3rem; font-weight: 900; margin: 0; color: #38bdf8; text-shadow: 0 2px 10px rgba(56,189,248,0.3); }
         
         .filter-select {
-          background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(255, 255, 255, 0.1);
-          color: #f8fafc; padding: 10px 16px; border-radius: 12px; font-weight: bold; outline: none; cursor: pointer;
+          background: rgba(30, 41, 59, 0.45); backdrop-filter: blur(8px);
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          color: #f8fafc; padding: 10px 18px; border-radius: 14px; font-weight: bold; outline: none; cursor: pointer;
+          transition: 0.2s;
         }
+        .filter-select:hover { border-color: #38bdf8; }
 
+        /* Widgets Section (My Hub View) */
+        .widgets-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; margin-bottom: 10px; }
+        .widget-card {
+          background: rgba(30, 41, 59, 0.35); backdrop-filter: blur(10px);
+          border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 18px; padding: 20px;
+          display: flex; flex-direction: column; gap: 10px;
+        }
+        .widget-title { font-size: 0.9rem; font-weight: 800; color: #38bdf8; display: flex; align-items: center; gap: 8px; }
+
+        /* Games Grid */
         .games-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
         .game-card {
-          background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(255, 255, 255, 0.08);
+          background: rgba(30, 41, 59, 0.35); backdrop-filter: blur(12px);
+          border: 1px solid rgba(255, 255, 255, 0.08);
           border-radius: 18px; padding: 24px; display: flex; flex-direction: column; gap: 16px; text-decoration: none; color: inherit; transition: 0.2s; position: relative;
         }
-        .game-card:hover { border-color: #38bdf8; transform: translateY(-4px); }
+        .game-card:hover { border-color: #38bdf8; transform: translateY(-4px); background: rgba(30, 41, 59, 0.5); }
         .play-btn { background: #38bdf8; color: #0f172a; font-weight: 800; padding: 12px; border-radius: 12px; text-align: center; }
         
         .fav-star {
-          position: absolute; top: 20px; right: 20px; background: rgba(15, 23, 42, 0.6);
-          border: 1px solid rgba(255,255,255,0.1); width: 36px; height: 36px; border-radius: 50%;
+          position: absolute; top: 20px; right: 20px; background: rgba(15, 23, 42, 0.5);
+          backdrop-filter: blur(6px); border: 1px solid rgba(255,255,255,0.1); width: 36px; height: 36px; border-radius: 50%;
           display: flex; align-items: center; justify-content: center; font-size: 1.1rem; cursor: pointer; transition: 0.2s;
         }
         .fav-star:hover { background: rgba(250, 204, 21, 0.2); border-color: #facc15; }
@@ -167,7 +193,7 @@
         }
 
         .scroll-top-btn {
-          background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(255, 255, 255, 0.15);
+          background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(255, 255, 255, 0.15);
           color: #38bdf8; width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
           cursor: pointer; font-size: 1.1rem; transition: 0.2s;
         }
@@ -180,17 +206,17 @@
       <!-- Custom Background Video -->
       <video id="bgVideo" autoplay="" muted="" loop="" playsinline=""></video>
 
-      <!-- Slide-out Drawer -->
+      <!-- Slide-out Drawer (Apps Suite) -->
       <div class="drawer-overlay" id="drawerOverlay"></div>
       <div class="drawer" id="drawer">
         <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:12px;">
-          <div style="font-weight:900; color:#38bdf8;">⚙️ SETTINGS &amp; MENU</div>
+          <div style="font-weight:900; color:#38bdf8;">📱 APPS &amp; SETTINGS</div>
           <button id="closeDrawer" style="background:none; border:none; color:#94a3b8; font-size:1.4rem; cursor:pointer;">✕</button>
         </div>
         
         <div style="display:flex; flex-direction:column; gap:12px;">
           <button class="drawer-item" onclick="goToLatestVersion()" style="background:#0284c7; color:#fff; border:none; font-size:0.9rem;"><span>Go to Latest Version</span> <span>🚀</span></button>
-          <div class="drawer-item" id="openScheduleBtn"><span>Open Schedule</span> <span>📅</span></div>
+          <div class="drawer-item" id="openScheduleBtn"><span>Schedule &amp; Events</span> <span>📅</span></div>
           <div class="drawer-item" id="openUpdateLogBtn"><span>Update Log</span> <span>📜</span></div>
           <div class="drawer-item" id="ownerMenuBtn"><span>Owners Only</span> <span>🔒</span></div>
           <div class="drawer-item" id="proxyWizardBtn"><span>Proxy Wizard</span> <span>🧙‍♂️</span></div>
@@ -199,10 +225,10 @@
           <div class="settings-section">
             <div style="font-weight: bold; color: #38bdf8;">🎨 Background Theme</div>
             <div class="color-presets">
-              <div class="color-dot" style="background: #facc15;" title="Shiny Gold" onclick="setBgColor('#1c1917', '#facc15')"></div>
-              <div class="color-dot" style="background: #38bdf8;" title="Baby Blue" onclick="setBgColor('#0c203b', '#38bdf8')"></div>
-              <div class="color-dot" style="background: #f8fafc;" title="Very White" onclick="setBgColor('#e2e8f0', '#0f172a')"></div>
-              <div class="color-dot" style="background: #070a12;" title="Dark Default" onclick="setBgColor('#070a12', '#f8fafc')"></div>
+              <div class="color-dot" style="background: #facc15;" title="Shiny Gold" onclick="setBgColor('#1c1917')"></div>
+              <div class="color-dot" style="background: #38bdf8;" title="Baby Blue" onclick="setBgColor('#0c203b')"></div>
+              <div class="color-dot" style="background: #f8fafc;" title="Very White" onclick="setBgColor('#e2e8f0')"></div>
+              <div class="color-dot" style="background: #070a12;" title="Dark Default" onclick="setBgColor('#070a12')"></div>
             </div>
             <div style="display:flex; flex-direction:column; gap:6px; margin-top:6px;">
               <span style="font-size:0.75rem; color:#94a3b8;">Upload Video Background (MP4):</span>
@@ -229,11 +255,10 @@
         <div class="modal-card">
           <h3 style="margin:0; color:#38bdf8;">📜 UPDATE LOG</h3>
           <div style="font-size:0.85rem; color:#94a3b8; line-height:1.5; display:flex; flex-direction:column; gap:10px; max-height:300px; overflow-y:auto;" id="updateLogContent">
-            <div><strong style="color:#f8fafc;">v31:</strong> Added Eagle Blocks puzzle game, moved "Go to Latest Version" button to menu, bug fixes and layout optimization.</div>
-            <div><strong style="color:#f8fafc;">v30:</strong> Added custom video background uploader with local storage persistence, intro welcome overlay animation, and update log history.</div>
-            <div><strong style="color:#f8fafc;">v28-v29:</strong> Integrated notification bell dropdown for JSONBin live announcements, Kansas central time clock, and Eagle Stack Tower game.</div>
-            <div><strong style="color:#f8fafc;">v26-v27:</strong> Added favorites filtering system, escape key toggle setting, custom RGB/hex background color picker, and smooth scroll-to-top feature.</div>
-            <div><strong style="color:#f8fafc;">v1-v25:</strong> Initial arcade hub creation, single-file SVG foreignObject architecture, individual game integrations (Pong, Geometry Eagle, Pizza, Clicker, etc.).</div>
+            <div><strong style="color:#f8fafc;">v32:</strong> Introduced Liquid Glass UI aesthetic, My Hub widget dashboard view, Games library view, and Apps menu drawer integration.</div>
+            <div><strong style="color:#f8fafc;">v31:</strong> Added Eagle Blocks puzzle game and relocated "Go to Latest Version" into menu.</div>
+            <div><strong style="color:#f8fafc;">v30:</strong> Added custom video background uploader with local storage persistence and intro welcome overlay.</div>
+            <div><strong style="color:#f8fafc;">v28-v29:</strong> Integrated notification bell dropdown for JSONBin announcements, Kansas central time clock, and Eagle Stack Tower.</div>
           </div>
           <button id="closeUpdateLog" style="background:rgba(51, 65, 85, 0.6); color:#fff; border:none; padding:8px; border-radius:10px; font-weight:bold; cursor:pointer;">Close</button>
         </div>
@@ -300,10 +325,10 @@
       <!-- Top Nav -->
       <div class="navbar" id="navTop">
         <div class="nav-left-group">
-          <button class="liquid-btn" id="menuBtn">☰</button>
+          <button class="liquid-btn" id="menuBtn">☰ Apps</button>
           <div>
             <div class="brand">🦅 eagle.io</div>
-            <div class="meta-info"><span>v31</span> • <span id="liveClock">00:00:00 CT</span></div>
+            <div class="meta-info"><span>v32</span> • <span id="liveClock">00:00:00 CT</span></div>
           </div>
         </div>
         <div class="nav-right-group">
@@ -320,13 +345,36 @@
       <!-- Hub Content -->
       <div class="hub-container">
         <div class="hub-header-row">
-          <h1 class="hero-title">EAGLE ARCADE</h1>
-          <select class="filter-select" id="gameFilter">
-            <option value="all">🎮 All Games</option>
-            <option value="favorites">⭐ Favorite Games</option>
+          <h1 class="hero-title">eagle.io games</h1>
+          <select class="filter-select" id="mainNavSelect">
+            <option value="hub">⭐ My Hub</option>
+            <option value="games">🎮 Games</option>
+            <option value="favorites">❤️ Favorites Only</option>
           </select>
         </div>
 
+        <!-- My Hub Widgets Dashboard (Hidden by default unless selected) -->
+        <div id="myHubView" style="display:none; flex-direction:column; gap:24px;">
+          <div class="widgets-grid">
+            <div class="widget-card">
+              <div class="widget-title">⏰ Live Kansas Time</div>
+              <div style="font-size:1.5rem; font-weight:900; color:#f8fafc;" id="widgetClock">00:00:00 CT</div>
+              <div style="font-size:0.8rem; color:#94a3b8;">Central Time Zone active.</div>
+            </div>
+            <div class="widget-card">
+              <div class="widget-title">🌤️ Weather Conditions</div>
+              <div style="font-size:1.5rem; font-weight:900; color:#7dd3fc;">56°F Clear</div>
+              <div style="font-size:0.8rem; color:#94a3b8;">Leawood, Kansas area.</div>
+            </div>
+            <div class="widget-card">
+              <div class="widget-title">📝 Quick Notes</div>
+              <textarea id="quickNotes" class="modal-input" placeholder="Type personal notes here..." style="height:70px; resize:none; font-size:0.85rem;"></textarea>
+            </div>
+          </div>
+          <h3 style="margin:0; color:#38bdf8;">📌 Favorite Game Shortcuts</h3>
+        </div>
+
+        <!-- Games Grid -->
         <div class="games-grid" id="gamesGrid">
           
           <!-- Game 1: Geometry Eagle -->
@@ -335,7 +383,7 @@
             <div style="font-size:2.5rem;">🟩</div>
             <div style="font-size:1.3rem; font-weight:800;">Geometry Eagle</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Time your jumps to leap over spikes in this rhythm-based platformer.</div>
-            <a class="play-btn" href="geometry-eagle.svg?v=31">Play Game</a>
+            <a class="play-btn" href="geometry-eagle.svg?v=32">Play Game</a>
           </div>
 
           <!-- Game 2: Eagle Clicker -->
@@ -344,7 +392,7 @@
             <div style="font-size:2.5rem;">🦅</div>
             <div style="font-size:1.3rem; font-weight:800;">Eagle Clicker</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Click to gather feathers and buy nest upgrades for passive income.</div>
-            <a class="play-btn" href="eagle-clicker.svg?v=31">Play Game</a>
+            <a class="play-btn" href="eagle-clicker.svg?v=32">Play Game</a>
           </div>
 
           <!-- Game 3: To the Eagles -->
@@ -353,7 +401,7 @@
             <div style="font-size:2.5rem;">☁️</div>
             <div style="font-size:1.3rem; font-weight:800;">To the Eagles</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Bounce across moving clouds and climb as high as you can.</div>
-            <a class="play-btn" href="to-the-eagles.svg?v=31">Play Game</a>
+            <a class="play-btn" href="to-the-eagles.svg?v=32">Play Game</a>
           </div>
 
           <!-- Game 4: Eagle Pizza -->
@@ -362,7 +410,7 @@
             <div style="font-size:2.5rem;">🍕</div>
             <div style="font-size:1.3rem; font-weight:800;">Eagle Pizza</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Assemble custom orders, bake pizzas, and manage your pizzeria shop.</div>
-            <a class="play-btn" href="eagle-pizza.svg?v=31">Play Game</a>
+            <a class="play-btn" href="eagle-pizza.svg?v=32">Play Game</a>
           </div>
 
           <!-- Game 5: Teachers Quiz -->
@@ -371,7 +419,7 @@
             <div style="font-size:2.5rem;">📚</div>
             <div style="font-size:1.3rem; font-weight:800;">Teachers Quiz</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Test your knowledge on Leawood Middle teachers and school trivia!</div>
-            <a class="play-btn" href="teachers-quiz.svg?v=31">Play Quiz</a>
+            <a class="play-btn" href="teachers-quiz.svg?v=32">Play Quiz</a>
           </div>
 
           <!-- Game 6: Eagle Pong -->
@@ -380,7 +428,7 @@
             <div style="font-size:2.5rem;">🏓</div>
             <div style="font-size:1.3rem; font-weight:800;">Eagle Pong</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Classic retro paddle arcade game against an AI opponent.</div>
-            <a class="play-btn" href="eagle-pong.svg?v=31">Play Game</a>
+            <a class="play-btn" href="eagle-pong.svg?v=32">Play Game</a>
           </div>
 
           <!-- Game 7: Eagle Stack Tower -->
@@ -389,16 +437,16 @@
             <div style="font-size:2.5rem;">🧱</div>
             <div style="font-size:1.3rem; font-weight:800;">Eagle Stack Tower</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Precision-time your drops to stack blocks and reach the sky!</div>
-            <a class="play-btn" href="eagle-stack.svg?v=31">Play Game</a>
+            <a class="play-btn" href="eagle-stack.svg?v=32">Play Game</a>
           </div>
 
-          <!-- Game 8: Eagle Blocks (NEW) -->
+          <!-- Game 8: Eagle Blocks -->
           <div class="game-card" data-id="eagle-blocks">
             <div class="fav-star" onclick="toggleFavorite('eagle-blocks')">★</div>
             <div style="font-size:2.5rem;">🟨</div>
             <div style="font-size:1.3rem; font-weight:800;">Eagle Blocks</div>
             <div style="color:#94a3b8; font-size:0.95rem;">Clear full rows and columns with yellow, white, and gold blocks.</div>
-            <a class="play-btn" href="eagle-blocks.svg?v=31">Play Game</a>
+            <a class="play-btn" href="eagle-blocks.svg?v=32">Play Game</a>
           </div>
 
         </div>
@@ -412,7 +460,6 @@
 
       <script type="text/javascript">
         <![CDATA[
-        // Automatic Cache-Bypass Redirect Handler
         window.goToLatestVersion = function() {
           const freshTimestamp = Date.now();
           window.location.href = `index.svg?v=${freshTimestamp}`;
@@ -423,12 +470,23 @@
 
           // Kansas / Central Time Zone Clock
           const clockEl = document.getElementById('liveClock');
+          const widgetClock = document.getElementById('widgetClock');
           setInterval(() => {
-            clockEl.textContent = new Date().toLocaleTimeString('en-US', {
+            const timeStr = new Date().toLocaleTimeString('en-US', {
               timeZone: 'America/Chicago',
               hour: '2-digit', minute: '2-digit', second: '2-digit'
             }) + " CT";
+            clockEl.textContent = timeStr;
+            if (widgetClock) widgetClock.textContent = timeStr;
           }, 1000);
+
+          // Quick Notes Persistence
+          const quickNotes = document.getElementById('quickNotes');
+          const savedNotes = localStorage.getItem('eagle_notes');
+          if (savedNotes) quickNotes.value = savedNotes;
+          quickNotes.oninput = (e) => {
+            localStorage.setItem('eagle_notes', e.target.value);
+          };
 
           // Notifications Logic
           const notifBtn = document.getElementById('notifBtn');
@@ -586,8 +644,38 @@
             }
           });
 
-          // Favorites System
+          // Favorites System & Main Navigation View Modes
           let favorites = JSON.parse(localStorage.getItem('eagle_favorites') || '[]');
+          const myHubView = document.getElementById('myHubView');
+          const gamesGrid = document.getElementById('gamesGrid');
+          const mainNavSelect = document.getElementById('mainNavSelect');
+
+          function updateViewMode() {
+            const mode = mainNavSelect.value;
+            if (mode === 'hub') {
+              myHubView.style.display = 'flex';
+              // Show only favorite cards in My Hub
+              document.querySelectorAll('.game-card').forEach(card => {
+                const id = card.getAttribute('data-id');
+                if (favorites.includes(id)) card.style.display = 'flex';
+                else card.style.display = 'none';
+              });
+            } else if (mode === 'games') {
+              myHubView.style.display = 'none';
+              document.querySelectorAll('.game-card').forEach(card => {
+                card.style.display = 'flex';
+              });
+            } else if (mode === 'favorites') {
+              myHubView.style.display = 'none';
+              document.querySelectorAll('.game-card').forEach(card => {
+                const id = card.getAttribute('data-id');
+                if (favorites.includes(id)) card.style.display = 'flex';
+                else card.style.display = 'none';
+              });
+            }
+          }
+
+          mainNavSelect.onchange = updateViewMode;
 
           function updateFavUI() {
             document.querySelectorAll('.game-card').forEach(card => {
@@ -599,7 +687,7 @@
                 star.classList.remove('active'); star.textContent = '☆';
               }
             });
-            filterGames();
+            updateViewMode();
           }
 
           window.toggleFavorite = function(id) {
@@ -609,20 +697,9 @@
             updateFavUI();
           };
 
-          const gameFilter = document.getElementById('gameFilter');
-          gameFilter.onchange = filterGames;
-
-          function filterGames() {
-            const filterVal = gameFilter.value;
-            document.querySelectorAll('.game-card').forEach(card => {
-              const id = card.getAttribute('data-id');
-              if (filterVal === 'favorites' && !favorites.includes(id)) card.style.display = 'none';
-              else card.style.display = 'flex';
-            });
-          }
           updateFavUI();
 
-          // Drawer Controls
+          // Drawer Controls (Apps Menu)
           const menuBtn = document.getElementById('menuBtn');
           const drawer = document.getElementById('drawer');
           const drawerOverlay = document.getElementById('drawerOverlay');
