@@ -88,11 +88,11 @@
 
         .notif-badge { position: absolute; top: -4px; right: -4px; background: #ef4444; color: #fff; font-size: 0.65rem; font-weight: 900; padding: 2px 6px; border-radius: 10px; display: flex; }
 
-        #labelingOverlay {
+        #cloakingOverlay {
           position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; z-index: 9999;
           display: none; align-items: center; justify-content: center; overflow: hidden;
         }
-        #labelingOverlay img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        #cloakingOverlay img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
         .navbar-pfp {
           width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent-color); cursor: pointer; background: #1e293b;
@@ -105,9 +105,9 @@
         ]]>
       </style>
 
-      <!-- Fullscreen Labeling App Active Layer -->
-      <div id="labelingOverlay">
-        <img id="labelingDisplayImg" src="" alt="Fullscreen Label" />
+      <!-- Cloaking App Active Layer -->
+      <div id="cloakingOverlay">
+        <img id="cloakingDisplayImg" src="" alt="Cloaking Display" />
       </div>
 
       <!-- First-Visit Name Modal -->
@@ -126,12 +126,15 @@
           <h3 style="margin:0; color:var(--accent-color);">Themes and Background</h3>
           <div style="display:flex; flex-direction:column; gap:10px;">
             <span style="font-size:0.9rem; font-weight:bold; color:#f8fafc;">Primary Accent Color:</span>
-            <div style="display:flex; gap:12px;">
+            <div style="display:flex; gap:12px; flex-wrap:wrap;">
               <button class="liquid-btn" onclick="setAccent('#38bdf8')" style="background:#38bdf8; width:36px; height:36px; padding:0; border-radius:50%;" title="Blue"></button>
               <button class="liquid-btn" onclick="setAccent('#22c55e')" style="background:#22c55e; width:36px; height:36px; padding:0; border-radius:50%;" title="Green"></button>
               <button class="liquid-btn" onclick="setAccent('#facc15')" style="background:#facc15; width:36px; height:36px; padding:0; border-radius:50%;" title="Yellow"></button>
               <button class="liquid-btn" onclick="setAccent('#ef4444')" style="background:#ef4444; width:36px; height:36px; padding:0; border-radius:50%;" title="Red"></button>
               <button class="liquid-btn" onclick="setAccent('#c084fc')" style="background:#c084fc; width:36px; height:36px; padding:0; border-radius:50%;" title="Purple"></button>
+              <button class="liquid-btn" onclick="setAccent('#fb923c')" style="background:#fb923c; width:36px; height:36px; padding:0; border-radius:50%;" title="Orange"></button>
+              <button class="liquid-btn" onclick="setAccent('#ec4899')" style="background:#ec4899; width:36px; height:36px; padding:0; border-radius:50%;" title="Pink"></button>
+              <button class="liquid-btn" onclick="setAccent('#14b8a6')" style="background:#14b8a6; width:36px; height:36px; padding:0; border-radius:50%;" title="Teal"></button>
             </div>
           </div>
           <div style="display:flex; flex-direction:column; gap:10px; margin-top:10px;">
@@ -163,10 +166,6 @@
       <div class="modal-overlay" id="versionModal">
         <div class="modal-card">
           <h3 style="margin:0; color:var(--accent-color);">Version Utility</h3>
-          <div style="display:flex; flex-direction:column; gap:10px;">
-            <button onclick="openAboutBlankSession()" class="liquid-btn" style="justify-content:center; background:#c084fc; color:#0f172a; font-weight:bold;">Launch about:blank Session</button>
-          </div>
-          <hr style="border:none; border-top:1px solid rgba(255,255,255,0.1); margin:10px 0;" />
           <div id="versionKeypadSection">
             <p style="font-size:0.85rem; color:#94a3b8; margin:0;">Enter developer PIN for advanced links:</p>
             <div id="versionCodeDisplay" style="background:rgba(30,41,59,0.8); color:var(--accent-color); font-size:2rem; font-weight:900; text-align:center; padding:12px; border-radius:12px; letter-spacing:10px;">____</div>
@@ -202,6 +201,7 @@
               <option value="credits">Credits</option>
               <option value="updates">Update Logs</option>
               <option value="notes">Creator's Notes</option>
+              <option value="pics">Pics (Coming Soon)</option>
             </select>
             <div id="creditsContentBox" class="credits-content-box"></div>
           </div>
@@ -222,20 +222,48 @@
         </div>
       </div>
 
-      <!-- Labeling App Modal -->
-      <div class="modal-overlay" id="labelingModal">
+      <!-- Cloaking App Modal -->
+      <div class="modal-overlay" id="cloakingModal">
         <div class="modal-card">
-          <h3 style="margin:0; color:var(--accent-color);">Labeling App Setup</h3>
-          <p style="font-size:0.85rem; color:#94a3b8; margin:0;">Select a photo to display in full-screen whenever you look away or leave this tab.</p>
-          <div style="display:flex; flex-direction:column; gap:10px;">
-            <input type="file" id="labelingUploadInput" accept="image/*" class="modal-input" style="padding:8px;" />
+          <h3 style="margin:0; color:var(--accent-color);">Cloaking App Setup</h3>
+          <p style="font-size:0.85rem; color:#94a3b8; margin:0;">Customize tab title, launch about:blank sessions, or set a full-screen stealth image.</p>
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            <span style="font-size:0.85rem; color:#94a3b8;">Custom Tab Title:</span>
+            <input type="text" class="modal-input" id="tabTitleInput" placeholder="Enter custom title..." />
+            <button onclick="saveTabTitle()" class="liquid-btn" style="background:var(--accent-color); color:#0f172a; justify-content:center;">Apply Tab Title</button>
+            <button onclick="openAboutBlankSession()" class="liquid-btn" style="justify-content:center; background:#c084fc; color:#0f172a; font-weight:bold;">Launch about:blank Session</button>
+            <hr style="border:none; border-top:1px solid rgba(255,255,255,0.1); margin:4px 0;" />
+            <span style="font-size:0.85rem; color:#94a3b8;">Stealth Background Photo:</span>
+            <input type="file" id="cloakingUploadInput" accept="image/*" class="modal-input" style="padding:8px;" />
             <div style="display:flex; gap:10px;">
-              <button onclick="toggleLabelingEnabled(true)" class="liquid-btn" style="flex:1; justify-content:center; background:#22c55e; color:#0f172a;">Enable App</button>
-              <button onclick="toggleLabelingEnabled(false)" class="liquid-btn" style="flex:1; justify-content:center; background:#ef4444; color:#fff;">Disable App</button>
+              <button onclick="toggleCloakingEnabled(true)" class="liquid-btn" style="flex:1; justify-content:center; background:#22c55e; color:#0f172a;">Enable Stealth</button>
+              <button onclick="toggleCloakingEnabled(false)" class="liquid-btn" style="flex:1; justify-content:center; background:#ef4444; color:#fff;">Disable Stealth</button>
             </div>
-            <div id="labelingStatus" style="font-size:0.8rem; font-weight:bold; color:#facc15; text-align:center;">Status: Disabled</div>
+            <div id="cloakingStatus" style="font-size:0.8rem; font-weight:bold; color:#facc15; text-align:center;">Status: Disabled</div>
           </div>
-          <button onclick="closeModal('labelingModal')" class="liquid-btn" style="justify-content:center; margin-top:10px;">Close App</button>
+          <button onclick="closeModal('cloakingModal')" class="liquid-btn" style="justify-content:center; margin-top:10px;">Close App</button>
+        </div>
+      </div>
+
+      <!-- Notes App Modal -->
+      <div class="modal-overlay" id="notesModal">
+        <div class="modal-card">
+          <h3 style="margin:0; color:var(--accent-color);">Notes Manager</h3>
+          <p style="font-size:0.85rem; color:#94a3b8; margin:0;">Edit your personal notes below. Changes reflect instantly on your hub dashboard widget.</p>
+          <textarea id="appNotesInput" class="modal-input" placeholder="Type notes here..." style="height:140px; resize:none; font-size:0.9rem;"></textarea>
+          <button onclick="saveAppNotes()" class="liquid-btn" style="background:var(--accent-color); color:#0f172a; justify-content:center;">Save Notes</button>
+          <button onclick="closeModal('notesModal')" class="liquid-btn" style="justify-content:center;">Close Notes</button>
+        </div>
+      </div>
+
+      <!-- Tools App Modal (Coming Soon) -->
+      <div class="modal-overlay" id="toolsModal">
+        <div class="modal-card">
+          <h3 style="margin:0; color:var(--accent-color);">Tools</h3>
+          <p style="font-size:0.9rem; color:#cbd5e1; line-height:1.5; margin:0;">
+            Exciting utility tools are currently under development and coming soon in a future update!
+          </p>
+          <button onclick="closeModal('toolsModal')" class="liquid-btn" style="justify-content:center; margin-top:10px;">Close</button>
         </div>
       </div>
 
@@ -301,7 +329,9 @@
             <div class="apps-grid">
               <div class="app-tile" onclick="openApp('schedule')"><span>📅</span><span>Schedule</span></div>
               <div class="app-tile" onclick="openApp('weather')"><span>⛅</span><span>Weather</span></div>
-              <div class="app-tile" onclick="openApp('labeling')"><span>🖼️</span><span>Labeling</span></div>
+              <div class="app-tile" onclick="openApp('cloaking')"><span>🕵️</span><span>Cloaking</span></div>
+              <div class="app-tile" onclick="openApp('notes')"><span>📝</span><span>Notes</span></div>
+              <div class="app-tile" onclick="openApp('tools')"><span>🛠️</span><span>Tools</span></div>
               <div class="app-tile" onclick="openApp('version')"><span>🔗</span><span>Version</span></div>
               <div class="app-tile" onclick="openApp('settings')"><span>🎨</span><span>Themes</span></div>
               <div class="app-tile" onclick="openApp('profile')"><span>👤</span><span>Profile</span></div>
@@ -313,7 +343,7 @@
 
           <div>
             <div class="brand">eagle.io</div>
-            <div class="meta-info">v0.5.6.1 <span class="early-badge">Early Access</span> • <span id="liveClock">00:00:00</span></div>
+            <div class="meta-info">v0.6.1.0 <span class="early-badge">Early Access 2</span> • <span id="liveClock">00:00:00</span></div>
           </div>
         </div>
 
@@ -324,7 +354,7 @@
               <button class="liquid-btn" id="notifBtn" style="padding:8px 12px; font-size:1.1rem;">🔔<span class="notif-badge" id="notifBadge">1</span></button>
               <div class="apps-dropdown" id="notifDropdown" style="right:0; left:auto; width:280px; top:48px;">
                 <div style="font-weight:900; color:var(--accent-color); font-size:0.85rem; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:6px;">Global Announcements</div>
-                <div id="notifContent" style="font-size:0.85rem; color:#f8fafc; line-height:1.4; margin-top:6px;">Welcome to release v0.5.6.1! Cleaned up navigation suite. 🚀</div>
+                <div id="notifContent" style="font-size:0.85rem; color:#f8fafc; line-height:1.4; margin-top:6px;">V0.6 IS HERE!!!</div>
               </div>
             </div>
           </div>
@@ -337,7 +367,7 @@
           <h1 class="hero-title" id="heroGreeting">My Hub</h1>
           <select class="select-box" id="mainNavSelect">
             <option value="hub">My Hub Dashboard</option>
-            <option value="games">Games Library</option>
+            <option value="games">G4m3s Library</option>
           </select>
         </div>
 
@@ -354,12 +384,12 @@
               <div style="font-size:1.8rem; font-weight:900; color:#7dd3fc;" id="widgetWeatherTemp">56°F Clear</div>
               <div style="font-size:0.8rem; color:#94a3b8;" id="widgetWeatherLocation">ZIP: 66209 (Leawood, KS)</div>
             </div>
-            <div class="widget-card">
-              <div class="widget-title">Quick Personal Notes</div>
-              <textarea id="quickNotes" class="modal-input" placeholder="Type personal notes here..." style="height:70px; resize:none; font-size:0.85rem;"></textarea>
+            <div class="widget-card" style="cursor:pointer;" onclick="openApp('notes')">
+              <div class="widget-title">Quick Personal Notes 📝</div>
+              <div id="widgetNotesDisplay" style="font-size:0.85rem; color:#cbd5e1; white-space:pre-wrap; max-height:70px; overflow:hidden;">Click to open Notes app...</div>
             </div>
           </div>
-          <h3 style="margin:0; color:var(--accent-color);">Favorite Game Shortcuts</h3>
+          <h3 style="margin:0; color:var(--accent-color);">Favorite G4m3 Shortcuts</h3>
           <div class="games-grid" id="favoritesGrid"></div>
         </div>
 
@@ -371,7 +401,7 @@
             <div style="font-size:2.5rem;">✈️</div>
             <div style="font-size:1.2rem; font-weight:800;">Eagle Airlines</div>
             <div style="color:#94a3b8; font-size:0.9rem;">Manage your airline empire, buy jets, unlock U.S. hubs, and dispatch flights!</div>
-            <a class="play-btn" href="eagle-airlines.svg">Play Game</a>
+            <a class="play-btn" href="eagle-airlines.svg">Play G4m3</a>
           </div>
 
           <div class="game-card" data-id="pro-flashcards">
@@ -387,7 +417,7 @@
             <div style="font-size:2.5rem;">🏐</div>
             <div style="font-size:1.2rem; font-weight:800;">Eagles PE Suite</div>
             <div style="color:#94a3b8; font-size:0.9rem;">Play Dodgeball Dash arcade action or test your skills in the PE Quiz Challenge!</div>
-            <a class="play-btn" href="eagles-pe.svg">Play PE Arena</a>
+            <a class="play-btn" href="eagles-pe.svg">Play G4m3</a>
           </div>
 
           <div class="game-card" data-id="geometry-eagle">
@@ -395,7 +425,7 @@
             <div style="font-size:2.5rem;">🟩</div>
             <div style="font-size:1.2rem; font-weight:800;">Geometry Eagle</div>
             <div style="color:#94a3b8; font-size:0.9rem;">Time your jumps to leap over spikes in this rhythm platformer.</div>
-            <a class="play-btn" href="geometry-eagle.svg">Play Game</a>
+            <a class="play-btn" href="geometry-eagle.svg">Play G4m3</a>
           </div>
 
           <div class="game-card" data-id="eagle-clicker">
@@ -403,7 +433,7 @@
             <div style="font-size:2.5rem;">🦅</div>
             <div style="font-size:1.2rem; font-weight:800;">Eagle Clicker</div>
             <div style="color:#94a3b8; font-size:0.9rem;">Gather feathers and buy nest upgrades for passive income.</div>
-            <a class="play-btn" href="eagle-clicker.svg">Play Game</a>
+            <a class="play-btn" href="eagle-clicker.svg">Play G4m3</a>
           </div>
 
           <div class="game-card" data-id="to-the-eagles">
@@ -411,7 +441,7 @@
             <div style="font-size:2.5rem;">☁️</div>
             <div style="font-size:1.2rem; font-weight:800;">To the Eagles</div>
             <div style="color:#94a3b8; font-size:0.9rem;">Bounce across moving clouds and climb as high as possible.</div>
-            <a class="play-btn" href="to-the-eagles.svg">Play Game</a>
+            <a class="play-btn" href="to-the-eagles.svg">Play G4m3</a>
           </div>
 
           <div class="game-card" data-id="eagle-pizza">
@@ -419,7 +449,7 @@
             <div style="font-size:2.5rem;">🍕</div>
             <div style="font-size:1.2rem; font-weight:800;">Eagle Pizza</div>
             <div style="color:#94a3b8; font-size:0.9rem;">Assemble custom orders and manage your pizza shop.</div>
-            <a class="play-btn" href="eagle-pizza.svg">Play Game</a>
+            <a class="play-btn" href="eagle-pizza.svg">Play G4m3</a>
           </div>
 
           <div class="game-card" data-id="teachers-quiz">
@@ -435,7 +465,7 @@
             <div style="font-size:2.5rem;">🏓</div>
             <div style="font-size:1.2rem; font-weight:800;">Eagle Pong</div>
             <div style="color:#94a3b8; font-size:0.9rem;">Classic retro paddle arcade game against an AI opponent.</div>
-            <a class="play-btn" href="eagle-pong.svg">Play Game</a>
+            <a class="play-btn" href="eagle-pong.svg">Play G4m3</a>
           </div>
 
           <div class="game-card" data-id="eagle-stack">
@@ -443,7 +473,7 @@
             <div style="font-size:2.5rem;">🧱</div>
             <div style="font-size:1.2rem; font-weight:800;">Eagle Stack Tower</div>
             <div style="color:#94a3b8; font-size:0.9rem;">Precision-time your drops to stack blocks and reach the sky!</div>
-            <a class="play-btn" href="eagle-stack.svg">Play Game</a>
+            <a class="play-btn" href="eagle-stack.svg">Play G4m3</a>
           </div>
 
           <div class="game-card" data-id="eagle-blocks">
@@ -451,7 +481,7 @@
             <div style="font-size:2.5rem;">🟨</div>
             <div style="font-size:1.2rem; font-weight:800;">Eagle Blocks</div>
             <div style="color:#94a3b8; font-size:0.9rem;">Clear full rows and columns with yellow, white, and gold blocks.</div>
-            <a class="play-btn" href="eagle-blocks.svg">Play Game</a>
+            <a class="play-btn" href="eagle-blocks.svg">Play G4m3</a>
           </div>
 
           <div class="game-card" data-id="flappy-eagle">
@@ -459,7 +489,7 @@
             <div style="font-size:2.5rem;">🦅</div>
             <div style="font-size:1.2rem; font-weight:800;">Flappy Eagle</div>
             <div style="color:#94a3b8; font-size:0.9rem;">Auto-moves forward! Press spacebar or click to jump and dodge narrow pathways.</div>
-            <a class="play-btn" href="flappy-eagle.svg">Play Game</a>
+            <a class="play-btn" href="flappy-eagle.svg">Play G4m3</a>
           </div>
 
           <div class="game-card" data-id="feather-catcher">
@@ -467,7 +497,7 @@
             <div style="font-size:2.5rem;">🪶</div>
             <div style="font-size:1.2rem; font-weight:800;">Feather Catcher</div>
             <div style="color:#94a3b8; font-size:0.9rem;">Catch falling golden feathers and dodge heavy rocks to beat your high score!</div>
-            <a class="play-btn" href="feather-catcher.svg">Play Game</a>
+            <a class="play-btn" href="feather-catcher.svg">Play G4m3</a>
           </div>
 
           <div class="game-card" data-id="eagle-jump">
@@ -475,7 +505,7 @@
             <div style="font-size:2.5rem;">☁️</div>
             <div style="font-size:1.2rem; font-weight:800;">Eagle Jump</div>
             <div style="color:#94a3b8; font-size:0.9rem;">Bounce higher and higher across moving cloud platforms!</div>
-            <a class="play-btn" href="eagle-jump.svg">Play Game</a>
+            <a class="play-btn" href="eagle-jump.svg">Play G4m3</a>
           </div>
 
           <div class="game-card" data-id="eagle-hopper">
@@ -483,7 +513,7 @@
             <div style="font-size:2.5rem;">🛣️</div>
             <div style="font-size:1.2rem; font-weight:800;">Eagle Hopper</div>
             <div style="color:#94a3b8; font-size:0.9rem;">Hop forward across busy roads and roaring rivers safely!</div>
-            <a class="play-btn" href="eagle-hopper.svg">Play Game</a>
+            <a class="play-btn" href="eagle-hopper.svg">Play G4m3</a>
           </div>
         </div>
 
@@ -513,8 +543,9 @@
 
         const creditsData = {
           credits: "Made by Scott 😛 went through a lot of stress to make this…",
-          updates: "v0.5.6.1: Removed purge link modal and Latest app tile.\nv0.5.6: Added Eagle Airlines tycoon game with fleet and U.S. route management!\nv0.5.5.3: Bumped version and updated CDN handling status notes.\nv0.5.5.1: Added hilarious note about waiting out CDN rate limits.\nv0.5.5.0: Integrated Pro Flashcards modular tile with 3D card flips and local storage deck management.",
-          notes: "Hey, it’s me, it’s Scott 🙃\n\nI went through a lot to make this…\n\n‘EVIL 3ECUR1Y!! U WILL NOT PREVAIL!!’ \n-Saige…\n\nNext update probably like 5 days after the end of Oct.. more code more glitchy\n\nAre you, are you? Coming to the tree? \n*Hes worried and mad but he’s still vibing \n\nOUT OF EARLY ACCESS BY THE NEW YEAR!!! (Hopefully)\n\nHAPPY HALLOWEEN HAHAH 👻 \n\nLeave a review of my website here: https://forms.gle/bhVjPyKyCd5iKfcj7 \n\nHop hop hop…\n\nAre you proud of me…?\n\nWOWWW ITS FINALLY THE BEGINING OF THE WEEK\n\nYou guys taking my retro bowl website still these days… even though it’s not mine\n\nAndy standee be tripping 🥀\n\nBuc-ee’s is coming to KC near the speedway and legends outlets, opens late 2027 (we think)\n\nWhere. Is. My. Dr. P. #costco\n\n‘ok then ima eat my last smint’\n-Nora\nMe: WE GOT MORE COMINGGGGG\n\n“I might’ve sprayed to much peppermint and now that’s all I smell…’\n-Grace \n\n‘Beckman’s voice is so deep…’\n-??? \nMe in my head: MY MICS NOT EVEN ONNN\n\nILL FIND MY WAYS!!!!!!!\n\nI’m so good 😊\n\nTHIS IS THE END\n\n‘Whos tes’ \nMe: Not anyone I know… plus who would name their kid tes?\n\nNot me waiting\nthrottled: true,\nthrottlingReset: 165"
+          updates: "v0.6.1.0: Added Notes and Cloaking apps, Tools coming soon, updated creator notes with paragraph spacing, and fixed notification sync bugs.",
+          notes: "The GitHub repo stress be like…\n\nLet’s get this show on the road…🎪",
+          pics: "Pics dropdown coming soon! Stay tuned for awesome gallery photos."
         };
 
         function updateCreditsContent() {
@@ -526,10 +557,16 @@
           document.getElementById('appsDropdown').classList.remove('open');
           if (app === 'settings') document.getElementById('settingsModal').classList.add('open');
           if (app === 'weather') document.getElementById('weatherModal').classList.add('open');
-          if (app === 'labeling') {
-            updateLabelingStatusUI();
-            document.getElementById('labelingModal').classList.add('open');
+          if (app === 'cloaking') {
+            updateCloakingStatusUI();
+            document.getElementById('tabTitleInput').value = localStorage.getItem('eagle_tab_title') || document.title;
+            document.getElementById('cloakingModal').classList.add('open');
           }
+          if (app === 'notes') {
+            document.getElementById('appNotesInput').value = localStorage.getItem('eagle_notes') || '';
+            document.getElementById('notesModal').classList.add('open');
+          }
+          if (app === 'tools') document.getElementById('toolsModal').classList.add('open');
           if (app === 'version') {
             versionEnteredCode = '';
             document.getElementById('versionCodeDisplay').textContent = '____';
@@ -612,7 +649,7 @@
           if (win) {
             const doc = win.document;
             doc.open();
-            doc.write('<!DOCTYPE html><html><head><title>eagle.io</title><style>body,html{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:#070a12;}iframe{width:100%;height:100%;border:none;}</style></head><body><iframe src="' + window.location.href + '"></iframe></body></html>');
+            doc.write('<!DOCTYPE html><html><head><title>' + (localStorage.getItem('eagle_tab_title') || 'eagle.io') + '</title><style>body,html{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:#070a12;}iframe{width:100%;height:100%;border:none;}</style></head><body><iframe src="' + window.location.href + '"></iframe></body></html>');
             doc.close();
           }
         };
@@ -640,17 +677,33 @@
           }
         };
 
-        window.toggleLabelingEnabled = function(enabled) {
-          localStorage.setItem('eagle_labeling_enabled', enabled ? 'true' : 'false');
-          updateLabelingStatusUI();
+        window.saveTabTitle = function() {
+          const val = document.getElementById('tabTitleInput').value.trim();
+          if (val) {
+            document.title = val;
+            localStorage.setItem('eagle_tab_title', val);
+            alert('Tab title updated successfully!');
+          }
         };
 
-        function updateLabelingStatusUI() {
-          const enabled = localStorage.getItem('eagle_labeling_enabled') === 'true';
-          const statusEl = document.getElementById('labelingStatus');
+        window.toggleCloakingEnabled = function(enabled) {
+          localStorage.setItem('eagle_cloaking_enabled', enabled ? 'true' : 'false');
+          updateCloakingStatusUI();
+        };
+
+        function updateCloakingStatusUI() {
+          const enabled = localStorage.getItem('eagle_cloaking_enabled') === 'true';
+          const statusEl = document.getElementById('cloakingStatus');
           statusEl.textContent = 'Status: ' + (enabled ? 'Enabled (Active)' : 'Disabled');
           statusEl.style.color = enabled ? '#22c55e' : '#facc15';
         }
+
+        window.saveAppNotes = function() {
+          const val = document.getElementById('appNotesInput').value;
+          localStorage.setItem('eagle_notes', val);
+          document.getElementById('widgetNotesDisplay').textContent = val || 'Click to open Notes app...';
+          closeModal('notesModal');
+        };
 
         let enteredCode = '';
         window.pressKey = function(num) {
@@ -683,6 +736,7 @@
               alert('Broadcast published locally.');
             }
             document.getElementById('notifContent').textContent = msg;
+            localStorage.setItem('eagle_announcement', msg);
             closeModal('ownerModal');
           }
         };
@@ -727,10 +781,28 @@
         }
 
         window.addEventListener('DOMContentLoaded', function() {
-          document.title = 'eagle.io';
+          const savedTitle = localStorage.getItem('eagle_tab_title') || 'eagle.io';
+          document.title = savedTitle;
           setAccent(localStorage.getItem('eagle_accent') || '#38bdf8');
 
           document.getElementById('creditsSelect').onchange = updateCreditsContent;
+
+          // Fetch JSONBin announcement for persistent notifications
+          fetch('https://api.jsonbin.io/v3/b/6adafef5ac6210605a4b0a6d/latest', { headers: { 'X-Master-Key': '' } })
+            .then(res => res.json())
+            .then(data => {
+              if (data && data.record && data.record.message) {
+                const remoteMsg = data.record.message;
+                document.getElementById('notifContent').textContent = remoteMsg;
+                localStorage.setItem('eagle_announcement', remoteMsg);
+              }
+            })
+            .catch(() => {
+              const localAnnounce = localStorage.getItem('eagle_announcement');
+              if (localAnnounce) {
+                document.getElementById('notifContent').textContent = localAnnounce;
+              }
+            });
 
           const savedBg = localStorage.getItem('eagle_bg');
           if (savedBg) {
@@ -776,29 +848,29 @@
             }
           };
 
-          const labelingInput = document.getElementById('labelingUploadInput');
-          const savedLabelImg = localStorage.getItem('eagle_label_img');
-          if (savedLabelImg) {
-            document.getElementById('labelingDisplayImg').src = savedLabelImg;
+          const cloakingInput = document.getElementById('cloakingUploadInput');
+          const savedCloakImg = localStorage.getItem('eagle_cloak_img');
+          if (savedCloakImg) {
+            document.getElementById('cloakingDisplayImg').src = savedCloakImg;
           }
 
-          labelingInput.onchange = function(e) {
+          cloakingInput.onchange = function(e) {
             const file = e.target.files[0];
             if (file) {
               const reader = new FileReader();
               reader.onload = function(evt) {
                 const dataUrl = evt.target.result;
-                localStorage.setItem('eagle_label_img', dataUrl);
-                document.getElementById('labelingDisplayImg').src = dataUrl;
-                alert('Labeling image saved successfully!');
+                localStorage.setItem('eagle_cloak_img', dataUrl);
+                document.getElementById('cloakingDisplayImg').src = dataUrl;
+                alert('Stealth image saved successfully!');
               };
               reader.readAsDataURL(file);
             }
           };
 
           document.addEventListener('visibilitychange', function() {
-            const enabled = localStorage.getItem('eagle_labeling_enabled') === 'true';
-            const overlay = document.getElementById('labelingOverlay');
+            const enabled = localStorage.getItem('eagle_cloaking_enabled') === 'true';
+            const overlay = document.getElementById('cloakingOverlay');
             if (enabled && document.hidden) {
               overlay.style.display = 'flex';
             } else {
@@ -809,6 +881,9 @@
           const savedZip = localStorage.getItem('eagle_weather_zip') || '66209';
           document.getElementById('widgetWeatherLocation').textContent = 'ZIP: ' + savedZip;
           document.getElementById('weatherZipInput').value = savedZip;
+
+          const savedNotes = localStorage.getItem('eagle_notes') || '';
+          document.getElementById('widgetNotesDisplay').textContent = savedNotes || 'Click to open Notes app...';
 
           if (!localStorage.getItem('eagle_tut')) {
             document.getElementById('nameModal').style.display = 'flex';
@@ -829,10 +904,6 @@
             document.getElementById('widgetClock').textContent = now.toLocaleTimeString();
             document.getElementById('widgetDate').textContent = now.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
           }, 1000);
-
-          const notes = document.getElementById('quickNotes');
-          notes.value = localStorage.getItem('eagle_notes') || '';
-          notes.oninput = function(e) { localStorage.setItem('eagle_notes', e.target.value); };
 
           const appsDropdownBtn = document.getElementById('appsDropdownBtn');
           const appsDropdown = document.getElementById('appsDropdown');
@@ -911,7 +982,7 @@
               }
             });
             if (count === 0) {
-              container.innerHTML = '<div style="color:#94a3b8; font-size:0.9rem; grid-column:1/-1;">No favorite games starred yet! Switch to the Games Library tab to star some.</div>';
+              container.innerHTML = '<div style="color:#94a3b8; font-size:0.9rem; grid-column:1/-1;">No favorite g4m3 shortcuts starred yet! Switch to the G4m3s Library tab to star some.</div>';
             }
           }
 
