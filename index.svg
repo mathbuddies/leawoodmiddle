@@ -26,7 +26,8 @@
         .liquid-btn:hover { background: var(--accent-color); color: #0f172a; border-color: var(--accent-color); }
 
         .brand { font-weight: 900; font-size: 1.3rem; color: var(--accent-color); letter-spacing: -0.5px; }
-        .meta-info { font-size: 0.75rem; color: #94a3b8; font-family: monospace; }
+        .meta-info { font-size: 0.75rem; color: #94a3b8; font-family: monospace; display: flex; gap: 6px; align-items: center; }
+        .early-badge { background: rgba(56, 189, 248, 0.15); border: 1px solid var(--accent-color); color: var(--accent-color); font-size: 0.65rem; padding: 1px 6px; border-radius: 6px; font-weight: 800; }
 
         .apps-dropdown {
           position: absolute; top: 52px; left: 0; width: 360px; background: rgba(15, 23, 42, 0.95);
@@ -85,7 +86,7 @@
         .scroll-top-btn { background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(255, 255, 255, 0.15); color: var(--accent-color); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1rem; transition: 0.2s; }
         .scroll-top-btn:hover { background: var(--accent-color); color: #0f172a; }
 
-        .notif-badge { position: absolute; top: -4px; right: -4px; background: #ef4444; color: #fff; font-size: 0.65rem; font-weight: 900; padding: 2px 6px; border-radius: 10px; display: none; }
+        .notif-badge { position: absolute; top: -4px; right: -4px; background: #ef4444; color: #fff; font-size: 0.65rem; font-weight: 900; padding: 2px 6px; border-radius: 10px; display: flex; }
 
         /* Fullscreen Labeling App Overlay */
         #labelingOverlay {
@@ -111,11 +112,21 @@
         </div>
       </div>
 
-      <!-- Settings / Background Modal -->
+      <!-- Settings / Theme & Background Modal -->
       <div class="modal-overlay" id="settingsModal">
         <div class="modal-card">
-          <h3 style="margin:0; color:var(--accent-color);">Background Settings</h3>
+          <h3 style="margin:0; color:var(--accent-color);">Themes and Background</h3>
           <div style="display:flex; flex-direction:column; gap:10px;">
+            <span style="font-size:0.9rem; font-weight:bold; color:#f8fafc;">Primary Accent Color:</span>
+            <div style="display:flex; gap:12px;">
+              <button class="liquid-btn" onclick="setAccent('#38bdf8')" style="background:#38bdf8; width:36px; height:36px; padding:0; border-radius:50%;" title="Blue"></button>
+              <button class="liquid-btn" onclick="setAccent('#22c55e')" style="background:#22c55e; width:36px; height:36px; padding:0; border-radius:50%;" title="Green"></button>
+              <button class="liquid-btn" onclick="setAccent('#facc15')" style="background:#facc15; width:36px; height:36px; padding:0; border-radius:50%;" title="Yellow"></button>
+              <button class="liquid-btn" onclick="setAccent('#ef4444')" style="background:#ef4444; width:36px; height:36px; padding:0; border-radius:50%;" title="Red"></button>
+              <button class="liquid-btn" onclick="setAccent('#c084fc')" style="background:#c084fc; width:36px; height:36px; padding:0; border-radius:50%;" title="Purple"></button>
+            </div>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:10px; margin-top:10px;">
             <span style="font-size:0.9rem; font-weight:bold; color:#f8fafc;">Custom Background Image:</span>
             <input type="file" id="bgUploadInput" accept="image/*" class="modal-input" style="padding:8px;" />
             <button onclick="clearBackground()" class="liquid-btn" style="justify-content:center; background:rgba(239,68,68,0.2); color:#ef4444; border-color:rgba(239,68,68,0.4);">Reset Background</button>
@@ -159,9 +170,9 @@
         <div class="modal-card">
           <h3 style="margin:0; color:var(--accent-color);">Update Log</h3>
           <div style="font-size:0.85rem; color:#94a3b8; line-height:1.5; display:flex; flex-direction:column; gap:10px;">
-            <div><strong>v49:</strong> Added Labeling App (fullscreen distraction blocker when leaving tab), Weather App customization, and refined settings.</div>
-            <div><strong>v48:</strong> Brought back custom background image uploader and updated release logs.</div>
-            <div><strong>v47:</strong> Added game tiles for Feather Catcher, Eagle Jump, and Eagle Hopper with automatic latest-version link routing.</div>
+            <div><strong>v0.5.0.1:</strong> Added back accent color theme buttons, early release announcements, masked owner PIN entry, and fixed JSONBin bugs.</div>
+            <div><strong>v49:</strong> Added Labeling App (fullscreen blocker when leaving tab) and Weather App customization.</div>
+            <div><strong>v48:</strong> Brought back custom background image uploader.</div>
           </div>
           <button onclick="closeModal('updateLogModal')" class="liquid-btn" style="justify-content:center; margin-top:10px;">Close Updates</button>
         </div>
@@ -232,7 +243,7 @@
               <div class="app-tile" onclick="openApp('schedule')"><span>📅</span><span>Schedule</span></div>
               <div class="app-tile" onclick="openApp('weather')"><span>⛅</span><span>Weather</span></div>
               <div class="app-tile" onclick="openApp('labeling')"><span>🖼️</span><span>Labeling</span></div>
-              <div class="app-tile" onclick="openApp('settings')"><span>🎨</span><span>Background</span></div>
+              <div class="app-tile" onclick="openApp('settings')"><span>🎨</span><span>Themes</span></div>
               <div class="app-tile" onclick="openApp('profile')"><span>👤</span><span>Profile</span></div>
               <div class="app-tile" onclick="openApp('updates')"><span>📜</span><span>Updates</span></div>
               <div class="app-tile" onclick="openApp('owner')"><span>🔒</span><span>Owner</span></div>
@@ -242,7 +253,7 @@
 
           <div>
             <div class="brand">eagle.io</div>
-            <div class="meta-info">v49 • <span id="liveClock">00:00:00</span></div>
+            <div class="meta-info">v0.5.0.1 <span class="early-badge">Early Access</span> • <span id="liveClock">00:00:00</span></div>
           </div>
         </div>
 
@@ -251,7 +262,7 @@
             <button class="liquid-btn" id="notifBtn" style="padding:8px 12px; font-size:1.1rem;">🔔<span class="notif-badge" id="notifBadge">1</span></button>
             <div class="apps-dropdown" id="notifDropdown" style="right:0; left:auto; width:280px; top:48px;">
               <div style="font-weight:900; color:var(--accent-color); font-size:0.85rem; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:6px;">Global Announcements</div>
-              <div id="notifContent" style="font-size:0.85rem; color:#f8fafc; line-height:1.4;">No new announcements.</div>
+              <div id="notifContent" style="font-size:0.85rem; color:#f8fafc; line-height:1.4; margin-top:6px;">Welcome to early release!</div>
             </div>
           </div>
         </div>
@@ -397,6 +408,12 @@
 
       <script type="text/javascript">
         <![CDATA[
+        window.setAccent = function(color) {
+          document.documentElement.style.setProperty('--accent-color', color);
+          document.documentElement.style.setProperty('--accent-glow', color + '40');
+          localStorage.setItem('eagle_accent', color);
+        };
+
         window.clearBackground = function() {
           localStorage.removeItem('eagle_bg');
           document.getElementById('appRoot').style.backgroundImage = 'none';
@@ -472,7 +489,8 @@
         window.pressKey = function(num) {
           if (enteredCode.length < 4) {
             enteredCode += num;
-            document.getElementById('codeDisplay').textContent = enteredCode.padEnd(4, '_');
+            // Mask PIN code with bullet characters
+            document.getElementById('codeDisplay').textContent = '•'.repeat(enteredCode.length).padEnd(4, '_');
             if (enteredCode.length === 4) {
               if (enteredCode === '3166') {
                 document.getElementById('broadcastPanel').style.display = 'flex';
@@ -491,7 +509,7 @@
             try {
               await fetch('https://api.jsonbin.io/v3/b/6adafef5ac6210605a4b0a6d', {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json', 'X-Master-Key': 'YOUR_MASTER_KEY_HERE' },
+                headers: { 'Content-Type': 'application/json', 'X-Master-Key': '$2a$10$placeholderKey' },
                 body: JSON.stringify({ message: msg })
               });
               alert('Broadcast published successfully!');
@@ -543,6 +561,7 @@
 
         window.addEventListener('DOMContentLoaded', function() {
           document.title = 'eagle.io';
+          setAccent(localStorage.getItem('eagle_accent') || '#38bdf8');
 
           // Background setup
           const savedBg = localStorage.getItem('eagle_bg');
