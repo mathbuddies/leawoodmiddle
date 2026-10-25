@@ -52,7 +52,7 @@
         .modal-overlay.open { display: flex; }
         .modal-card {
           background: rgba(15, 23, 42, 0.96); border: 1px solid rgba(255, 255, 255, 0.2);
-          border-radius: 20px; padding: 24px; width: 90%; max-width: 440px; display: flex; flex-direction: column; gap: 16px; max-height: 90vh; overflow-y: auto;
+          border-radius: 20px; padding: 24px; width: 90%; max-width: 460px; display: flex; flex-direction: column; gap: 16px; max-height: 90vh; overflow-y: auto;
           box-shadow: 0 15px 35px rgba(0,0,0,0.6);
         }
         .modal-input {
@@ -98,6 +98,11 @@
         /* Navbar Profile Avatar */
         .navbar-pfp {
           width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent-color); cursor: pointer; background: #1e293b;
+        }
+
+        .credits-content-box {
+          background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 12px; padding: 14px; font-size: 0.85rem; color: #cbd5e1; line-height: 1.6; max-height: 240px; overflow-y: auto; white-space: pre-wrap;
         }
         ]]>
       </style>
@@ -158,7 +163,7 @@
       <!-- Version App Modal -->
       <div class="modal-overlay" id="versionModal">
         <div class="modal-card">
-          <h3 style="margin:0; color:var(--accent-color);">Version &amp; Link Utility</h3>
+          <h3 style="margin:0; color:var(--accent-color);">Version Utility</h3>
           <div id="versionKeypadSection">
             <p style="font-size:0.85rem; color:#94a3b8; margin:0;">Enter access code:</p>
             <div id="versionCodeDisplay" style="background:rgba(30,41,59,0.8); color:var(--accent-color); font-size:2rem; font-weight:900; text-align:center; padding:12px; border-radius:12px; letter-spacing:10px;">____</div>
@@ -179,9 +184,26 @@
             <button onclick="switchLink('statically')" class="liquid-btn" style="justify-content:center;">Switch to Statically link</button>
             <button onclick="switchLink('jsdelivr')" class="liquid-btn" style="justify-content:center; background:var(--accent-color); color:#0f172a;">Switch to jsDelivr link (recommended)</button>
             <button onclick="switchLink('github')" class="liquid-btn" style="justify-content:center;">Switch to GitHub link</button>
+            <button onclick="openAboutBlankSession()" class="liquid-btn" style="justify-content:center; background:#c084fc; color:#0f172a;">Open about:blank URL</button>
             <button id="editorLinkBtn" onclick="switchLink('editor')" class="liquid-btn" style="justify-content:center; background:#22c55e; color:#0f172a; display:none;">Open Editor Link</button>
           </div>
           <button onclick="closeModal('versionModal')" class="liquid-btn" style="justify-content:center; margin-top:10px;">Close App</button>
+        </div>
+      </div>
+
+      <!-- New Unified Credits App Modal -->
+      <div class="modal-overlay" id="creditsModal">
+        <div class="modal-card">
+          <h3 style="margin:0; color:var(--accent-color);">Credits and Information</h3>
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            <select class="select-box" id="creditsSelect" style="width:100%;">
+              <option value="credits">Credits</option>
+              <option value="updates">Update Logs</option>
+              <option value="notes">Creator's Notes</option>
+            </select>
+            <div id="creditsContentBox" class="credits-content-box"></div>
+          </div>
+          <button onclick="closeModal('creditsModal')" class="liquid-btn" style="justify-content:center; margin-top:6px;">Close Credits</button>
         </div>
       </div>
 
@@ -212,19 +234,6 @@
             <div id="labelingStatus" style="font-size:0.8rem; font-weight:bold; color:#facc15; text-align:center;">Status: Disabled</div>
           </div>
           <button onclick="closeModal('labelingModal')" class="liquid-btn" style="justify-content:center; margin-top:10px;">Close App</button>
-        </div>
-      </div>
-
-      <!-- Update Log Modal -->
-      <div class="modal-overlay" id="updateLogModal">
-        <div class="modal-card">
-          <h3 style="margin:0; color:var(--accent-color);">Update Log</h3>
-          <div style="font-size:0.85rem; color:#94a3b8; line-height:1.5; display:flex; flex-direction:column; gap:10px;">
-            <div><strong>v0.5.1.0:</strong> Removed unnecessary ampersands, added profile picture upload with top-right navbar avatar, and added the secure Version app.</div>
-            <div><strong>v0.5.0.2:</strong> Chromebook performance optimizations and ZIP code weather lookup (default 66209).</div>
-            <div><strong>v0.5.0.1:</strong> Added accent color theme buttons and early release announcements.</div>
-          </div>
-          <button onclick="closeModal('updateLogModal')" class="liquid-btn" style="justify-content:center; margin-top:10px;">Close Updates</button>
         </div>
       </div>
 
@@ -296,7 +305,7 @@
               <div class="app-tile" onclick="openApp('version')"><span>🔗</span><span>Version</span></div>
               <div class="app-tile" onclick="openApp('settings')"><span>🎨</span><span>Themes</span></div>
               <div class="app-tile" onclick="openApp('profile')"><span>👤</span><span>Profile</span></div>
-              <div class="app-tile" onclick="openApp('updates')"><span>📜</span><span>Updates</span></div>
+              <div class="app-tile" onclick="openApp('credits')"><span>📜</span><span>Credits</span></div>
               <div class="app-tile" onclick="openApp('owner')"><span>🔒</span><span>Owner</span></div>
               <div class="app-tile" onclick="openApp('bug')"><span>🐛</span><span>Bugs</span></div>
             </div>
@@ -304,7 +313,7 @@
 
           <div>
             <div class="brand">eagle.io</div>
-            <div class="meta-info">v0.5.1.0 <span class="early-badge">Early Access</span> • <span id="liveClock">00:00:00</span></div>
+            <div class="meta-info">v0.5.2.0 <span class="early-badge">Early Access</span> • <span id="liveClock">00:00:00</span></div>
           </div>
         </div>
 
@@ -475,6 +484,17 @@
           document.getElementById('appRoot').style.backgroundColor = '#070a12';
         };
 
+        const creditsData = {
+          credits: "Made by Scott 😛 went through a lot of stress to make this…",
+          updates: "v0.5.2.0: Added unified Credits App, about:blank session launcher for all version codes, and removed standalone updates app.\nv0.5.1.0: Removed unnecessary ampersands, added profile picture upload with top-right navbar avatar, and added secure Version app.\nv0.5.0.2: Chromebook performance optimizations and ZIP code weather lookup (default 66209).\nv0.5.0.1: Added accent color theme buttons, early release announcements, masked owner PIN entry, and fixed JSONBin bugs.\nv49: Added Labeling App (fullscreen distraction blocker when leaving tab) and Weather App customization.\nv48: Brought back custom background image uploader.",
+          notes: "Hey, it’s me, it’s Scott 🙃\n\nI went through a lot to make this…\n\n‘EVIL 3ECUR1Y!! U WILL NOT PREVAIL!!’ \n-Saige…\n\nNext update probably like 5 days after the end of Oct.. more code more glitchy\n\nAre you, are you? Coming to the tree? \n*Hes worried and mad but he’s still vibing \n\nOUT OF EARLY ACCESS BY THE NEW YEAR!!! (Hopefully)\n\nHAPPY HALLOWEEN HAHAH 👻 \n\nLeave a review of my website here: https://forms.gle/bhVjPyKyCd5iKfcj7 \n\nHop hop hop…\n\nAre you proud of me…?\n\nWOWWW ITS FINALLY THE BEGINING OF THE WEEK\n\nYou guys taking my retro bowl website still these days… even though it’s not mine\n\nAndy standee be tripping 🥀\n\nBuc-ee’s is coming to KC near the speedway and legends outlets, opens late 2027 (we think)\n\nWhere. Is. My. Dr. P. #costco\n\n‘ok then ima eat my last smint’\n-Nora\nMe: WE GOT MORE COMINGGGGG\n\n“I might’ve sprayed to much peppermint and now that’s all I smell…’\n-Grace \n\n‘Beckman’s voice is so deep…’\n-??? \nMe in my head: MY MICS NOT EVEN ONNN\n\nILL FIND MY WAYS!!!!!!!\n\nI’m so good 😊\n\nTHIS IS THE END\n\n‘Whos tes’ \nMe: Not anyone I know… plus who would name their kid tes?”"
+        };
+
+        function updateCreditsContent() {
+          const val = document.getElementById('creditsSelect').value;
+          document.getElementById('creditsContentBox').textContent = creditsData[val] || '';
+        }
+
         window.openApp = function(app) {
           document.getElementById('appsDropdown').classList.remove('open');
           if (app === 'latest') window.location.href = 'index.svg?' + Date.now();
@@ -491,12 +511,16 @@
             document.getElementById('versionButtonsPanel').style.display = 'none';
             document.getElementById('versionModal').classList.add('open');
           }
+          if (app === 'credits') {
+            document.getElementById('creditsSelect').value = 'credits';
+            updateCreditsContent();
+            document.getElementById('creditsModal').classList.add('open');
+          }
           if (app === 'profile') {
             document.getElementById('profileNameInput').value = localStorage.getItem('eagle_user_name') || '';
             document.getElementById('profileModal').classList.add('open');
           }
           if (app === 'schedule') document.getElementById('scheduleModal').classList.add('open');
-          if (app === 'updates') document.getElementById('updateLogModal').classList.add('open');
           if (app === 'owner') {
             enteredCode = '';
             document.getElementById('codeDisplay').textContent = '____';
@@ -558,8 +582,17 @@
           }
         };
 
+        window.openAboutBlankSession = function() {
+          const win = window.open('about:blank', '_blank');
+          if (win) {
+            const doc = win.document;
+            doc.open();
+            doc.write('<!DOCTYPE html><html><head><title>eagle.io</title><style>body,html{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:#070a12;}iframe{width:100%;height:100%;border:none;}</style></head><body><iframe src="' + window.location.href + '"></iframe></body></html>');
+            doc.close();
+          }
+        };
+
         window.switchLink = function(type) {
-          const basePath = 'https://mathbuddies.github.io/leawoodmiddle/index.svg';
           if (type === 'statically') {
             window.location.href = 'https://cdn.statically.io/gh/mathbuddies/leawoodmiddle@main/index.svg?v=' + Date.now();
           } else if (type === 'jsdelivr') {
@@ -672,6 +705,8 @@
         window.addEventListener('DOMContentLoaded', function() {
           document.title = 'eagle.io';
           setAccent(localStorage.getItem('eagle_accent') || '#38bdf8');
+
+          document.getElementById('creditsSelect').onchange = updateCreditsContent;
 
           // Background setup
           const savedBg = localStorage.getItem('eagle_bg');
