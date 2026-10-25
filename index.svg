@@ -326,7 +326,7 @@
 
           <div>
             <div class="brand">eagle.io</div>
-            <div class="meta-info">v0.5.5 <span class="early-badge">Early Access</span> • <span id="liveClock">00:00:00</span></div>
+            <div class="meta-info">v0.5.5.1 <span class="early-badge">Early Access</span> • <span id="liveClock">00:00:00</span></div>
           </div>
         </div>
 
@@ -337,7 +337,7 @@
               <button class="liquid-btn" id="notifBtn" style="padding:8px 12px; font-size:1.1rem;">🔔<span class="notif-badge" id="notifBadge">1</span></button>
               <div class="apps-dropdown" id="notifDropdown" style="right:0; left:auto; width:280px; top:48px;">
                 <div style="font-weight:900; color:var(--accent-color); font-size:0.85rem; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:6px;">Global Announcements</div>
-                <div id="notifContent" style="font-size:0.85rem; color:#f8fafc; line-height:1.4; margin-top:6px;">Welcome to release v0.5.5!</div>
+                <div id="notifContent" style="font-size:0.85rem; color:#f8fafc; line-height:1.4; margin-top:6px;">Welcome to release v0.5.5.1!</div>
               </div>
             </div>
           </div>
@@ -518,8 +518,8 @@
 
         const creditsData = {
           credits: "Made by Scott 😛 went through a lot of stress to make this…",
-          updates: "v0.5.5: Integrated Pro Flashcards modular tile with 3D card flips and local storage deck management.\nv0.5.4.1: Bug fixes for event bubbling, favorite star binding, JSONBin announcement fallback, and cache purge links.\nv0.5.4.0: Added Eagles PE arcade & quiz game suite, updated Latest app with cache purge instruction modal, fixed JSONBin announcements, and added dynamic background teaser in themes.\nv0.5.3.0: Fixed notifications window toggle bug, added auto-redirect to jsDelivr from statically, un-gated about:blank launcher, and added Eagles PE coming soon tile.\nv0.5.2.1: Full code rewrite for instant cache bypass, updated Credits App, about:blank session launcher for all version codes, and cache optimization.",
-          notes: "Hey, it’s me, it’s Scott 🙃\n\nI went through a lot to make this…\n\n‘EVIL 3ECUR1Y!! U WILL NOT PREVAIL!!’ \n-Saige…\n\nNext update probably like 5 days after the end of Oct.. more code more glitchy\n\nAre you, are you? Coming to the tree? \n*Hes worried and mad but he’s still vibing \n\nOUT OF EARLY ACCESS BY THE NEW YEAR!!! (Hopefully)\n\nHAPPY HALLOWEEN HAHAH 👻 \n\nLeave a review of my website here: https://forms.gle/bhVjPyKyCd5iKfcj7 \n\nHop hop hop…\n\nAre you proud of me…?\n\nWOWWW ITS FINALLY THE BEGINING OF THE WEEK\n\nYou guys taking my retro bowl website still these days… even though it’s not mine\n\nAndy standee be tripping 🥀\n\nBuc-ee’s is coming to KC near the speedway and legends outlets, opens late 2027 (we think)\n\nWhere. Is. My. Dr. P. #costco\n\n‘ok then ima eat my last smint’\n-Nora\nMe: WE GOT MORE COMINGGGGG\n\n“I might’ve sprayed to much peppermint and now that’s all I smell…’\n-Grace \n\n‘Beckman’s voice is so deep…’\n-??? \nMe in my head: MY MICS NOT EVEN ONNN\n\nILL FIND MY WAYS!!!!!!!\n\nI’m so good 😊\n\nTHIS IS THE END\n\n‘Whos tes’ \nMe: Not anyone I know… plus who would name their kid tes?”"
+          updates: "v0.5.5.1: Added hilarious note about waiting out CDN rate limits.\nv0.5.5.0: Integrated Pro Flashcards modular tile with 3D card flips and local storage deck management.\nv0.5.4.1: Bug fixes for event bubbling, favorite star binding, JSONBin announcement fallback, and cache purge links.",
+          notes: "Hey, it’s me, it’s Scott 🙃\n\nI went through a lot to make this…\n\n‘EVIL 3ECUR1Y!! U WILL NOT PREVAIL!!’ \n-Saige…\n\nNext update probably like 5 days after the end of Oct.. more code more glitchy\n\nAre you, are you? Coming to the tree? \n*Hes worried and mad but he’s still vibing \n\nOUT OF EARLY ACCESS BY THE NEW YEAR!!! (Hopefully)\n\nHAPPY HALLOWEEN HAHAH 👻 \n\nLeave a review of my website here: https://forms.gle/bhVjPyKyCd5iKfcj7 \n\nHop hop hop…\n\nAre you proud of me…?\n\nWOWWW ITS FINALLY THE BEGINING OF THE WEEK\n\nYou guys taking my retro bowl website still these days… even though it’s not mine\n\nAndy standee be tripping 🥀\n\nBuc-ee’s is coming to KC near the speedway and legends outlets, opens late 2027 (we think)\n\nWhere. Is. My. Dr. P. #costco\n\n‘ok then ima eat my last smint’\n-Nora\nMe: WE GOT MORE COMINGGGGG\n\n“I might’ve sprayed to much peppermint and now that’s all I smell…’\n-Grace \n\n‘Beckman’s voice is so deep…’\n-??? \nMe in my head: MY MICS NOT EVEN ONNN\n\nILL FIND MY WAYS!!!!!!!\n\nI’m so good 😊\n\nTHIS IS THE END\n\n‘Whos tes’ \nMe: Not anyone I know… plus who would name their kid tes?\n\nNot me waiting\nthrottled: true,\nthrottlingReset: 165"
         };
 
         function updateCreditsContent() {
