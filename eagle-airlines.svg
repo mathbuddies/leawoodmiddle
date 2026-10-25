@@ -1,0 +1,405 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+  <foreignObject width="100%" height="100%">
+    <div xmlns="http://www.w3.org/1999/xhtml" id="appRoot" style="width: 100vw; height: 100vh; margin: 0; padding: 0; background: #070a12; font-family: system-ui, -apple-system, sans-serif; color: #f8fafc; display: flex; flex-direction: column; overflow-x: hidden; overflow-y: auto; user-select: none;">
+      
+      <style type="text/css">
+        <![CDATA[
+        * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+        :root { 
+          --accent-color: #38bdf8; 
+          --accent-glow: rgba(56, 189, 248, 0.25); 
+        }
+
+        .navbar {
+          width: 100%; padding: 16px 28px; background: rgba(15, 23, 42, 0.92);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+          display: flex; justify-content: space-between; align-items: center;
+          position: sticky; top: 0; z-index: 100; backdrop-filter: blur(8px);
+        }
+        .liquid-btn {
+          background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(255, 255, 255, 0.12);
+          color: #f8fafc; padding: 8px 16px; border-radius: 12px; cursor: pointer; font-weight: bold; font-size: 0.9rem;
+          display: flex; align-items: center; gap: 8px; transition: 0.2s; text-decoration: none;
+        }
+        .liquid-btn:hover { background: var(--accent-color); color: #0f172a; border-color: var(--accent-color); }
+        .brand { font-weight: 900; font-size: 1.3rem; color: var(--accent-color); letter-spacing: -0.5px; }
+
+        .container { max-width: 1200px; width: 100%; margin: 0 auto; padding: 30px 24px; display: flex; flex-direction: column; gap: 24px; }
+        
+        .stats-bar {
+          display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;
+        }
+        .stat-card {
+          background: rgba(30, 41, 59, 0.45); backdrop-filter: blur(8px);
+          border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 18px;
+          display: flex; flex-direction: column; gap: 6px; box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+        .stat-label { font-size: 0.8rem; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        .stat-value { font-size: 1.6rem; font-weight: 900; color: var(--accent-color); }
+
+        .tabs-row { display: flex; gap: 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 12px; }
+        .tab-btn { background: none; border: none; color: #94a3b8; font-size: 1rem; font-weight: 800; cursor: pointer; padding: 8px 16px; border-radius: 10px; transition: 0.2s; }
+        .tab-btn:hover { color: #f8fafc; background: rgba(30, 41, 59, 0.4); }
+        .tab-btn.active { color: #0f172a; background: var(--accent-color); }
+
+        .section-panel { display: none; flex-direction: column; gap: 20px; }
+        .section-panel.active { display: flex; }
+
+        .grid-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .card-item {
+          background: rgba(30, 41, 59, 0.45); backdrop-filter: blur(8px);
+          border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 18px; padding: 22px;
+          display: flex; flex-direction: column; gap: 14px; box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+          position: relative; transition: 0.2s;
+        }
+        .card-item:hover { border-color: var(--accent-color); transform: translateY(-2px); }
+        .card-title { font-size: 1.1rem; font-weight: 900; color: #f8fafc; display: flex; align-items: center; gap: 8px; }
+        .card-desc { font-size: 0.85rem; color: #94a3b8; line-height: 1.4; }
+
+        .progress-container { width: 100%; background: rgba(15, 23, 42, 0.8); border-radius: 8px; height: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08); }
+        .progress-bar { height: 100%; background: var(--accent-color); width: 0%; transition: width 0.3s linear; }
+
+        .toast {
+          position: fixed; bottom: 24px; right: 24px; background: rgba(15, 23, 42, 0.95);
+          border: 1px solid var(--accent-color); border-radius: 12px; padding: 14px 20px;
+          box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 1000; font-weight: 800; font-size: 0.9rem;
+          display: none; animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        ]]>
+      </style>
+
+      <!-- Navbar -->
+      <div class="navbar">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <a class="liquid-btn" href="index.svg">← Back to Hub</a>
+          <div class="brand">✈️ Eagle Airlines Tycoon</div>
+        </div>
+        <div style="font-size: 0.85rem; color: #94a3b8; font-weight: bold;" id="saveStatus">Auto-saved</div>
+      </div>
+
+      <!-- Main Container -->
+      <div class="container">
+        
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+          <div class="stat-card">
+            <div class="stat-label">Treasury Cash</div>
+            <div class="stat-value" id="statCash">$15,000</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Airline Rating</div>
+            <div class="stat-value" id="statRep">⭐ 1.0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Active Fleet</div>
+            <div class="stat-value" id="statFleet">1 Jet</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Airports Unlocked</div>
+            <div class="stat-value" id="statAirports">3 Hubs</div>
+          </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="tabs-row">
+          <button class="tab-btn active" onclick="switchTab('flights')">Flight Operations</button>
+          <button class="tab-btn" onclick="switchTab('fleet')">Fleet &amp; Aircraft</button>
+          <button class="tab-btn" onclick="switchTab('destinations')">Destinations &amp; Hubs</button>
+        </div>
+
+        <!-- Tab 1: Flights Operations -->
+        <div id="tab-flights" class="section-panel active">
+          <h3 style="margin:0; color:var(--accent-color);">Active Flight Dispatches</h3>
+          <div id="activeFlightsContainer" class="grid-cards">
+            <!-- Populated dynamically -->
+          </div>
+
+          <h3 style="margin-top:10px; color:var(--accent-color);">Dispatch New Flight</h3>
+          <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center; background:rgba(30,41,59,0.45); padding:18px; border-radius:18px; border:1px solid rgba(255,255,255,0.08);">
+            <div style="flex:1; min-width:200px;">
+              <label style="font-size:0.8rem; font-weight:bold; color:#94a3b8; display:block; margin-bottom:6px;">Select Aircraft:</label>
+              <select id="dispatchPlane" style="width:100%; background:rgba(15,23,42,0.8); border:1px solid rgba(255,255,255,0.15); color:#f8fafc; padding:10px; border-radius:10px; font-weight:bold;"></select>
+            </div>
+            <div style="flex:1; min-width:200px;">
+              <label style="font-size:0.8rem; font-weight:bold; color:#94a3b8; display:block; margin-bottom:6px;">Select Destination Route:</label>
+              <select id="dispatchRoute" style="width:100%; background:rgba(15,23,42,0.8); border:1px solid rgba(255,255,255,0.15); color:#f8fafc; padding:10px; border-radius:10px; font-weight:bold;"></select>
+            </div>
+            <div style="display:flex; align-items:flex-end;">
+              <button onclick="dispatchFlight()" class="liquid-btn" style="background:var(--accent-color); color:#0f172a; height:42px; margin-top:22px;">Launch Flight 🚀</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 2: Fleet -->
+        <div id="tab-fleet" class="section-panel">
+          <h3 style="margin:0; color:var(--accent-color);">Aircraft Marketplace &amp; Hangar</h3>
+          <div id="fleetContainer" class="grid-cards">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+
+        <!-- Tab 3: Destinations -->
+        <div id="tab-destinations" class="section-panel">
+          <h3 style="margin:0; color:var(--accent-color);">U.S. Destination Hubs</h3>
+          <div id="destinationsContainer" class="grid-cards">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Toast Notification -->
+      <div id="toast" class="toast">Notification message</div>
+
+      <script type="text/javascript">
+        <![CDATA[
+        // Game State & Persistence
+        let gameData = JSON.parse(localStorage.getItem('eagle_airlines_save') || JSON.stringify({
+          cash: 18000,
+          reputation: 1.2,
+          planes: [ { id: 'p1', name: 'Eagle Feather Prop-1', speed: 1, capacity: 30, count: 1 } ],
+          unlockedDestinations: ['mci', 'ord', 'dfw'],
+          activeFlights: []
+        }));
+
+        // Catalog of Planes
+        const planeCatalog = [
+          { id: 'p1', name: 'Eagle Feather Prop-1', speed: 1, capacity: 30, cost: 0, desc: 'Reliable regional turboprop for short hopper flights.' },
+          { id: 'p2', name: 'Skytalon Regional Jet', speed: 1.5, capacity: 85, cost: 35000, desc: 'Faster regional jet connecting mid-size U.S. metros.' },
+          { id: 'p3', name: 'American Condor 737', speed: 2.2, capacity: 180, cost: 120000, desc: 'Workhorse narrow-body airliner for high-traffic cross-country routes.' },
+          { id: 'p4', name: 'Eagle Star Jumbo 747', speed: 3.5, capacity: 420, cost: 450000, desc: 'Massive wide-body flag-carrier for maximum ticket revenue.' },
+          { id: 'p5', name: 'Apex Supersonic Concorde', speed: 6.0, capacity: 120, cost: 1500000, desc: 'Blazing fast luxury supersonic cruiser.' }
+        ];
+
+        // Catalog of U.S. Destinations
+        const destinationCatalog = [
+          { id: 'mci', name: 'Kansas City (MCI)', baseRevenue: 2200, flightTime: 12, cost: 0 },
+          { id: 'ord', name: 'Chicago (ORD)', baseRevenue: 3500, flightTime: 18, cost: 0 },
+          { id: 'dfw', name: 'Dallas (DFW)', baseRevenue: 4100, flightTime: 22, cost: 0 },
+          { id: 'lax', name: 'Los Angeles (LAX)', baseRevenue: 9500, flightTime: 45, cost: 75000 },
+          { id: 'jfk', name: 'New York (JFK)', baseRevenue: 11000, flightTime: 50, cost: 120000 },
+          { id: 'mia', name: 'Miami (MIA)', baseRevenue: 8800, flightTime: 40, cost: 95000 },
+          { id: 'sea', name: 'Seattle (SEA)', baseRevenue: 10200, flightTime: 48, cost: 140000 }
+        ];
+
+        function saveGame() {
+          localStorage.setItem('eagle_airlines_save', JSON.stringify(gameData));
+          updateUI();
+        }
+
+        function showToast(msg) {
+          const t = document.getElementById('toast');
+          t.textContent = msg;
+          t.style.display = 'block';
+          setTimeout(() => { t.style.display = 'none'; }, 2500);
+        }
+
+        function switchTab(tabId) {
+          document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+          document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+          event.currentTarget.classList.add('active');
+          document.getElementById('tab-' + tabId).classList.add('active');
+        }
+
+        function updateUI() {
+          document.getElementById('statCash').textContent = '$' + Math.floor(gameData.cash).toLocaleString();
+          document.getElementById('statRep').textContent = '⭐ ' + gameData.reputation.toFixed(1);
+          
+          let totalPlanes = 0;
+          gameData.planes.forEach(p => totalPlanes += p.count);
+          document.getElementById('statFleet5'] || totalPlanes + ' Jets';
+          document.getElementById('statFleet').textContent = totalPlanes + ' Aircraft';
+          document.getElementById('statAirports').textContent = gameData.unlockedDestinations.length + ' Hubs';
+
+          renderFlightsTab();
+          renderFleetTab();
+          renderDestinationsTab();
+        }
+
+        // Flight Operations Logic
+        function renderFlightsTab() {
+          const activeContainer = document.getElementById('activeFlightsContainer');
+          activeContainer.innerHTML = '';
+
+          if (gameData.activeFlights.length === 0) {
+            activeContainer.innerHTML = '<div style="color:#94a3b8; font-size:0.9rem; grid-column:1/-1;">No flights currently airborne. Dispatch a plane below!</div>';
+          } else {
+            gameData.activeFlights.forEach((flight, idx) => {
+              const destObj = destinationCatalog.find(d => d.id === flight.destId);
+              const planeObj = planeCatalog.find(p => p.id === flight.planeId);
+              const pct = Math.min(100, Math.floor((flight.elapsed / flight.totalTime) * 100));
+
+              const card = document.createElement('div');
+              card.className = 'card-item';
+              card.innerHTML = `
+                <div class="card-title">✈️ ${planeObj.name} → ${destObj.name}</div>
+                <div class="card-desc">Estimated Payout: $${flight.reward.toLocaleString()}</div>
+                <div style="display:flex; justify-content:space-between; font-size:0.8rem; color:#94a3b8;">
+                  <span>Flight Progress</span>
+                  <span>${pct}%</span>
+                </div>
+                <div class="progress-container"><div class="progress-bar" style="width:${pct}%;"></div></div>
+              `;
+              activeContainer.appendChild(card);
+            });
+          }
+
+          // Populate selects
+          const planeSelect = document.getElementById('dispatchPlane');
+          planeSelect.innerHTML = '';
+          gameData.planes.forEach(p => {
+            const opt = document.createElement('option');
+            opt.value = p.id;
+            opt.textContent = p.name + ' (Capacity: ' + p.capacity + ')';
+            planeSelect.appendChild(opt);
+          });
+
+          const routeSelect = document.getElementById('dispatchRoute');
+          routeSelect.innerHTML = '';
+          gameData.unlockedDestinations.forEach(destId => {
+            const d = destinationCatalog.find(item => item.id === destId);
+            const opt = document.createElement('option');
+            opt.value = d.id;
+            opt.textContent = d.name + ' (Rev: $' + d.baseRevenue + ')';
+            routeSelect.appendChild(opt);
+          });
+        }
+
+        function dispatchFlight() {
+          const planeId = document.getElementById('dispatchPlane').value;
+          const destId = document.getElementById('dispatchRoute').value;
+          if (!planeId || !destId) return;
+
+          const planeObj = planeCatalog.find(p => p.id === planeId);
+          const destObj = destinationCatalog.find(d => d.id === destId);
+
+          const totalTime = Math.max(5, Math.floor(destObj.flightTime / planeObj.speed));
+          const reward = Math.floor(destObj.baseRevenue * (planeObj.capacity / 25) * gameData.reputation);
+
+          gameData.activeFlights.push({
+            planeId: planeId,
+            destId: destId,
+            totalTime: totalTime,
+            elapsed: 0,
+            reward: reward
+          });
+
+          showToast('Flight dispatched to ' + destObj.name + '!');
+          saveGame();
+        }
+
+        // Fleet Tab
+        function renderFleetTab() {
+          const container = document.getElementById('fleetContainer');
+          container.innerHTML = '';
+
+          planeCatalog.forEach(plane => {
+            const userPlane = gameData.planes.find(p => p.id === plane.id);
+            const count = userPlane ? userPlane.count : 0;
+
+            const card = document.createElement('div');
+            card.className = 'card-item';
+            card.innerHTML = `
+              <div class="card-title">🛩️ ${plane.name}</div>
+              <div class="card-desc">${plane.desc}</div>
+              <div style="font-size:0.85rem; color:var(--accent-color); font-weight:bold;">
+                Owned: ${count} | Speed: ${plane.speed}x | Capacity: ${plane.capacity} pax
+              </div>
+              <button onclick="buyPlane('${plane.id}')" class="liquid-btn" style="background:var(--accent-color); color:#0f172a; justify-content:center; margin-top:auto;">
+                ${plane.cost === 0 ? 'Starter Aircraft' : 'Purchase ($' + plane.cost.toLocaleString() + ')'}
+              </button>
+            `;
+            container.appendChild(card);
+          });
+        }
+
+        function buyPlane(id) {
+          const plane = planeCatalog.find(p => p.id === id);
+          if (gameData.cash < plane.cost) {
+            showToast('Not enough cash in treasury!');
+            return;
+          }
+          gameData.cash -= plane.cost;
+          let userPlane = gameData.planes.find(p => p.id === id);
+          if (userPlane) {
+            userPlane.count++;
+          } else {
+            gameData.planes.push({ id: plane.id, name: plane.name, speed: plane.speed, capacity: plane.capacity, count: 1 });
+          }
+          showToast('Successfully acquired ' + plane.name + '!');
+          saveGame();
+        }
+
+        // Destinations Tab
+        function renderDestinationsTab() {
+          const container = document.getElementById('destinationsContainer');
+          container.innerHTML = '';
+
+          destinationCatalog.forEach(dest => {
+            const unlocked = gameData.unlockedDestinations.includes(dest.id);
+
+            const card = document.createElement('div');
+            card.className = 'card-item';
+            card.innerHTML = `
+              <div class="card-title">📍 ${dest.name}</div>
+              <div class="card-desc">Flight Revenue Potential: <strong>$${dest.baseRevenue.toLocaleString()}</strong></div>
+              <div style="font-size:0.85rem; color:#94a3b8;">Flight Duration: ~${dest.flightTime}s</div>
+              <button onclick="unlockDestination('${dest.id}')" class="liquid-btn" style="justify-content:center; margin-top:auto; ${unlocked ? 'background:rgba(34,197,94,0.2); color:#22c55e; border-color:rgba(34,197,94,0.4);' : 'background:var(--accent-color); color:#0f172a;'}">
+                ${unlocked ? 'Hub Unlocked ✓' : 'Unlock Hub ($' + dest.cost.toLocaleString() + ')'}
+              </button>
+            `;
+            container.appendChild(card);
+          });
+        }
+
+        function unlockDestination(id) {
+          if (gameData.unlockedDestinations.includes(id)) return;
+          const dest = destinationCatalog.find(d => d.id === id);
+          if (gameData.cash < dest.cost) {
+            showToast('Not enough cash to unlock this destination!');
+            return;
+          }
+          gameData.cash -= dest.cost;
+          gameData.unlockedDestinations.push(id);
+          gameData.reputation = parseFloat((gameData.reputation + 0.3).toFixed(1));
+          showToast('New destination unlocked: ' + dest.name + '!');
+          saveGame();
+        }
+
+        // Game Loop (Updates every 1 second)
+        setInterval(() => {
+          if (gameData.activeFlights.length > 0) {
+            gameData.activeFlights.forEach(flight => {
+              flight.elapsed++;
+            });
+
+            // Check completed flights
+            let completedEarnings = 0;
+            gameData.activeFlights = gameData.activeFlights.filter(flight => {
+              if (flight.elapsed >= flight.totalTime) {
+                completedEarnings += flight.reward;
+                return false;
+              }
+              return true;
+            });
+
+            if (completedEarnings > 0) {
+              gameData.cash += completedEarnings;
+              showToast('✈️ Flight landed successfully! Earned +$' + completedEarnings.toLocaleString());
+              saveGame();
+            } else {
+              updateUI();
+            }
+          }
+        }, 1000);
+
+        window.addEventListener('DOMContentLoaded', () => {
+          updateUI();
+        });
+        ]]>
+      </script>
+
+    </div>
+  </foreignObject>
+</svg>
