@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
   <foreignObject width="100%" height="100%">
-    <div xmlns="http://www.w3.org/1999/xhtml" id="peRoot" style="width: 100vw; height: 100vh; margin: 0; padding: 0; background: #0f172a; font-family: system-ui, -apple-system, sans-serif; color: #f8fafc; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; user-select: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" id="peRoot" style="width: 100vw; height: 100vh; margin: 0; padding: 0; background: #0f172a; font-family: system-ui, -apple-system, sans-serif; color: #f8fafc; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; user-select: none; position: relative;">
       
       <style type="text/css">
         <![CDATA[
@@ -28,23 +28,41 @@
 
         #gameCanvas {
           background: #1e293b; border: 3px solid rgba(255, 255, 255, 0.15);
-          border-radius: 16px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); cursor: crosshair;
+          border-radius: 16px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); cursor: crosshair; display: none;
         }
+
+        /* Quiz Container */
+        #quizContainer {
+          width: 90%; max-width: 600px; background: rgba(30, 41, 59, 0.95);
+          border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 20px; padding: 28px;
+          display: none; flex-direction: column; gap: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); backdrop-filter: blur(10px);
+        }
+        .quiz-option-btn {
+          background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.12);
+          color: #f8fafc; padding: 14px 18px; border-radius: 12px; font-size: 1rem; font-weight: 700;
+          cursor: pointer; text-align: left; transition: 0.2s;
+        }
+        .quiz-option-btn:hover { background: #38bdf8; color: #0f172a; }
 
         .overlay-screen {
           position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;
-          background: rgba(15, 23, 42, 0.88); backdrop-filter: blur(8px);
-          display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; z-index: 20;
+          background: rgba(15, 23, 42, 0.92); backdrop-filter: blur(8px);
+          display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; z-index: 20;
         }
+
+        .mode-cards-grid { display: flex; gap: 20px; max-width: 700px; width: 90%; }
+        .mode-card {
+          flex: 1; background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(255, 255, 255, 0.12);
+          border-radius: 18px; padding: 24px; display: flex; flex-direction: column; align-items: center; gap: 12px;
+          text-align: center; cursor: pointer; transition: 0.2s;
+        }
+        .mode-card:hover { border-color: #38bdf8; transform: translateY(-4px); background: rgba(30, 41, 59, 0.9); }
 
         .action-btn {
-          background: #38bdf8; color: #0f172a; font-weight: 900; font-size: 1.1rem;
-          padding: 14px 28px; border-radius: 14px; border: none; cursor: pointer; transition: 0.2s;
+          background: #38bdf8; color: #0f172a; font-weight: 900; font-size: 1rem;
+          padding: 12px 24px; border-radius: 12px; border: none; cursor: pointer; transition: 0.2s;
         }
         .action-btn:hover { transform: scale(1.05); background: #7dd3fc; }
-
-        .controls-hint { font-size: 0.85rem; color: #94a3b8; display: flex; gap: 14px; margin-top: 6px; }
-        .key-tag { background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 6px; font-family: monospace; color: #f8fafc; }
         ]]>
       </style>
 
@@ -53,27 +71,49 @@
         <a class="back-btn" id="backToHubBtn" href="https://cdn.jsdelivr.net/gh/mathbuddies/leawoodmiddle@main/index.svg">
           ⬅ Back to Hub
         </a>
-        <div class="game-title">🏐 Eagles PE: Dodgeball Dash</div>
+        <div class="game-title">🏐 Eagles PE Suite</div>
         <div class="score-board">
           <div>Score: <span id="scoreVal" style="color:#38bdf8;">0</span></div>
           <div>High: <span id="highScoreVal" style="color:#facc15;">0</span></div>
         </div>
       </div>
 
-      <!-- Main Game Canvas -->
+      <!-- Main Game Canvas for Dodgeball Dash -->
       <canvas id="gameCanvas" width="800" height="500"></canvas>
 
-      <!-- Start / Game Over Overlay -->
+      <!-- Quiz Mode Container -->
+      <div id="quizContainer">
+        <div style="font-size:0.85rem; color:#38bdf8; font-weight:800; text-transform:uppercase; letter-spacing:1px;" id="quizProgress">Question 1 of 5</div>
+        <div style="font-size:1.3rem; font-weight:800; color:#f8fafc;" id="quizQuestionText">Question text goes here...</div>
+        <div id="quizOptions" style="display:flex; flex-direction:column; gap:12px;"></div>
+      </div>
+
+      <!-- Main Menu / Overlay Screen -->
       <div class="overlay-screen" id="gameOverlay">
         <div style="font-size:3.5rem;">🏐</div>
-        <h1 style="margin:0; font-size:2.4rem; color:#38bdf8;" id="overlayTitle">Eagles PE Dodgeball Dash</h1>
-        <p style="color:#94a3b8; margin:0; text-align:center; max-width:400px;" id="overlayDesc">
-          Dodge the flying red dodgeballs! Collect whistles for extra points and golden sneakers for speed boosts.
+        <h1 style="margin:0; font-size:2.4rem; color:#38bdf8;" id="overlayTitle">Eagles PE Arena</h1>
+        <p style="color:#94a3b8; margin:0; text-align:center; max-width:440px;" id="overlayDesc">
+          Select a mode to play: Dodge flying dodgeballs in the arcade, or test your physical education knowledge in the Gym Quiz!
         </p>
-        <button class="action-btn" id="startBtn" onclick="startGame()">Start Game</button>
-        <div class="controls-hint">
-          <span>Move: <span class="key-tag">A</span> <span class="key-tag">D</span> / <span class="key-tag">←</span> <span class="key-tag">→</span> or <span class="key-tag">Mouse</span></span>
+
+        <!-- Mode Selection Cards -->
+        <div class="mode-cards-grid" id="modeSelector">
+          <div class="mode-card" onclick="startDodgeballMode()">
+            <div style="font-size:3rem;">🏃‍♂️</div>
+            <div style="font-size:1.2rem; font-weight:800; color:#38bdf8;">Dodgeball Dash</div>
+            <div style="font-size:0.85rem; color:#94a3b8;">Dodge flying dodgeballs, collect whistle bonus points &amp; speed sneakers!</div>
+            <button class="action-btn" style="margin-top:auto;">Play Dash</button>
+          </div>
+
+          <div class="mode-card" onclick="startQuizMode()">
+            <div style="font-size:3rem;">📋</div>
+            <div style="font-size:1.2rem; font-weight:800; color:#facc15;">PE Quiz Challenge</div>
+            <div style="font-size:0.85rem; color:#94a3b8;">Answer fitness, sports rules, and school gym trivia questions!</div>
+            <button class="action-btn" style="background:#facc15; margin-top:auto;">Start Quiz</button>
+          </div>
         </div>
+
+        <button class="action-btn" id="menuBtn" onclick="showMenu()" style="display:none; background:rgba(255,255,255,0.15); color:#fff;">Main Menu</button>
       </div>
 
       <script type="text/javascript">
@@ -81,6 +121,7 @@
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
         const overlay = document.getElementById('gameOverlay');
+        const quizContainer = document.getElementById('quizContainer');
         const scoreVal = document.getElementById('scoreVal');
         const highScoreVal = document.getElementById('highScoreVal');
 
@@ -88,11 +129,13 @@
         document.getElementById('backToHubBtn').href = 'https://cdn.jsdelivr.net/gh/mathbuddies/leawoodmiddle@main/index.svg?v=' + Date.now();
 
         let isPlaying = false;
+        let currentMode = '';
         let score = 0;
         let highScore = parseInt(localStorage.getItem('eagle_pe_high') || '0');
         highScoreVal.textContent = highScore;
 
-        let player = { x: 400, y: 440, radius: 18, speed: 7, dx: 0 };
+        // --- DODGEBALL GAME VARIABLES ---
+        let player = { x: 400, y: 440, radius: 18, speed: 7 };
         let dodgeballs = [];
         let items = [];
         let frameCount = 0;
@@ -102,12 +145,25 @@
         window.addEventListener('keyup', (e) => { keys[e.key] = false; });
         
         canvas.addEventListener('mousemove', (e) => {
-          if (!isPlaying) return;
+          if (!isPlaying || currentMode !== 'dodgeball') return;
           const rect = canvas.getBoundingClientRect();
           player.x = e.clientX - rect.left;
         });
 
-        function startGame() {
+        function showMenu() {
+          isPlaying = false;
+          canvas.style.display = 'none';
+          quizContainer.style.display = 'none';
+          overlay.style.display = 'flex';
+          document.getElementById('modeSelector').style.display = 'flex';
+          document.getElementById('menuBtn').style.display = 'none';
+          document.getElementById('overlayTitle').textContent = 'Eagles PE Arena';
+          document.getElementById('overlayDesc').textContent = 'Select a mode to play: Dodge flying dodgeballs in the arcade, or test your physical education knowledge in the Gym Quiz!';
+        }
+
+        // --- DODGEBALL MODE ---
+        function startDodgeballMode() {
+          currentMode = 'dodgeball';
           isPlaying = true;
           score = 0;
           scoreVal.textContent = '0';
@@ -115,6 +171,8 @@
           items = [];
           player.x = canvas.width / 2;
           overlay.style.display = 'none';
+          quizContainer.style.display = 'none';
+          canvas.style.display = 'block';
           requestAnimationFrame(gameLoop);
         }
 
@@ -140,7 +198,7 @@
         }
 
         function gameLoop() {
-          if (!isPlaying) return;
+          if (!isPlaying || currentMode !== 'dodgeball') return;
           frameCount++;
 
           ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -158,10 +216,9 @@
           if (keys['ArrowLeft'] || keys['a'] || keys['A']) player.x -= player.speed;
           if (keys['ArrowRight'] || keys['d'] || keys['D']) player.x += player.speed;
 
-          // Keep player inside canvas boundary
           player.x = Math.max(player.radius, Math.min(canvas.width - player.radius, player.x));
 
-          // Draw Player (Eagle Student)
+          // Draw Player
           ctx.fillStyle = '#38bdf8';
           ctx.beginPath();
           ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2);
@@ -170,15 +227,11 @@
           ctx.lineWidth = 2;
           ctx.stroke();
 
-          // Spawn obstacles & items
-          if (frameCount % Math.max(20, 60 - Math.floor(score / 50)) === 0) {
-            spawnDodgeball();
-          }
-          if (frameCount % 180 === 0) {
-            spawnItem();
-          }
+          // Spawning
+          if (frameCount % Math.max(20, 60 - Math.floor(score / 50)) === 0) spawnDodgeball();
+          if (frameCount % 180 === 0) spawnItem();
 
-          // Update & Draw Dodgeballs
+          // Update Dodgeballs
           for (let i = dodgeballs.length - 1; i >= 0; i--) {
             let b = dodgeballs[i];
             b.y += b.speedY;
@@ -192,10 +245,9 @@
             ctx.lineWidth = 2;
             ctx.stroke();
 
-            // Collision check with player
             let dist = Math.hypot(player.x - b.x, player.y - b.y);
             if (dist < player.radius + b.radius) {
-              gameOver();
+              gameOverDodgeball();
               return;
             }
 
@@ -206,7 +258,7 @@
             }
           }
 
-          // Update & Draw Collectible Items
+          // Update Collectibles
           for (let i = items.length - 1; i >= 0; i--) {
             let item = items[i];
             item.y += item.speed;
@@ -216,22 +268,19 @@
 
             let dist = Math.hypot(player.x - item.x, player.y - item.y);
             if (dist < player.radius + 15) {
-              if (item.type === 'whistle') score += 50;
-              if (item.type === 'sneaker') score += 100;
+              score += item.type === 'whistle' ? 50 : 100;
               scoreVal.textContent = score;
               items.splice(i, 1);
               continue;
             }
 
-            if (item.y > canvas.height + 20) {
-              items.splice(i, 1);
-            }
+            if (item.y > canvas.height + 20) items.splice(i, 1);
           }
 
           requestAnimationFrame(gameLoop);
         }
 
-        function gameOver() {
+        function gameOverDodgeball() {
           isPlaying = false;
           if (score > highScore) {
             highScore = score;
@@ -240,7 +289,74 @@
           }
           document.getElementById('overlayTitle').textContent = 'Game Over!';
           document.getElementById('overlayDesc').innerHTML = 'You got hit by a dodgeball!<br/>Final Score: <strong style="color:#38bdf8;">' + score + '</strong>';
-          document.getElementById('startBtn').textContent = 'Play Again';
+          document.getElementById('modeSelector').style.display = 'none';
+          document.getElementById('menuBtn').style.display = 'block';
+          overlay.style.display = 'flex';
+        }
+
+        // --- QUIZ MODE ---
+        const quizQuestions = [
+          { q: "How many players are on the court per team in standard basketball?", options: ["5 Players", "6 Players", "11 Players", "4 Players"], answer: 0 },
+          { q: "In dodgeball, what happens when a opponent catches a ball you threw in the air?", options: ["Nothing", "You are OUT & one of their teammates returns", "You get 2 points", "They drop the ball"], answer: 1 },
+          { q: "What is the recommended amount of daily physical activity for students?", options: ["15 Minutes", "30 Minutes", "60 Minutes or more", "2 Hours"], answer: 2 },
+          { q: "In soccer, which player is allowed to use their hands inside the penalty box?", options: ["Striker", "Midfielder", "Goalkeeper", "Defender"], answer: 2 },
+          { q: "What exercise primarily targets your abdominal muscles?", options: ["Push-ups", "Crunches / Sit-ups", "Squats", "Jumping Jacks"], answer: 1 }
+        ];
+        let currentQuizIndex = 0;
+
+        function startQuizMode() {
+          currentMode = 'quiz';
+          score = 0;
+          currentQuizIndex = 0;
+          scoreVal.textContent = '0';
+          canvas.style.display = 'none';
+          overlay.style.display = 'none';
+          quizContainer.style.display = 'flex';
+          loadQuizQuestion();
+        }
+
+        function loadQuizQuestion() {
+          const q = quizQuestions[currentQuizIndex];
+          document.getElementById('quizProgress').textContent = `Question ${currentQuizIndex + 1} of ${quizQuestions.length}`;
+          document.getElementById('quizQuestionText').textContent = q.q;
+          
+          const optionsBox = document.getElementById('quizOptions');
+          optionsBox.innerHTML = '';
+          
+          q.options.forEach((opt, idx) => {
+            const btn = document.createElement('button');
+            btn.className = 'quiz-option-btn';
+            btn.textContent = opt;
+            btn.onclick = () => handleQuizAnswer(idx);
+            optionsBox.appendChild(btn);
+          });
+        }
+
+        function handleQuizAnswer(selectedIdx) {
+          const q = quizQuestions[currentQuizIndex];
+          if (selectedIdx === q.answer) {
+            score += 100;
+            scoreVal.textContent = score;
+          }
+          currentQuizIndex++;
+          if (currentQuizIndex < quizQuestions.length) {
+            loadQuizQuestion();
+          } else {
+            finishQuiz();
+          }
+        }
+
+        function finishQuiz() {
+          quizContainer.style.display = 'none';
+          if (score > highScore) {
+            highScore = score;
+            localStorage.setItem('eagle_pe_high', highScore);
+            highScoreVal.textContent = highScore;
+          }
+          document.getElementById('overlayTitle').textContent = 'Quiz Completed!';
+          document.getElementById('overlayDesc').innerHTML = `Great job! You scored <strong style="color:#facc15;">${score}</strong> / 500 points!`;
+          document.getElementById('modeSelector').style.display = 'none';
+          document.getElementById('menuBtn').style.display = 'block';
           overlay.style.display = 'flex';
         }
         ]]>
