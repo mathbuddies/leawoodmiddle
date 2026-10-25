@@ -1,0 +1,251 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+  <foreignObject width="100%" height="100%">
+    <div xmlns="http://www.w3.org/1999/xhtml" id="peRoot" style="width: 100vw; height: 100vh; margin: 0; padding: 0; background: #0f172a; font-family: system-ui, -apple-system, sans-serif; color: #f8fafc; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; user-select: none;">
+      
+      <style type="text/css">
+        <![CDATA[
+        * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+        
+        .pe-header {
+          position: absolute; top: 16px; left: 24px; right: 24px;
+          display: flex; justify-content: space-between; align-items: center; z-index: 10;
+        }
+
+        .back-btn {
+          background: rgba(30, 41, 59, 0.85); border: 1px solid rgba(255, 255, 255, 0.2);
+          color: #38bdf8; padding: 10px 18px; border-radius: 12px; font-weight: bold; font-size: 0.9rem;
+          cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 8px;
+          transition: 0.2s; backdrop-filter: blur(8px);
+        }
+        .back-btn:hover { background: #38bdf8; color: #0f172a; border-color: #38bdf8; }
+
+        .game-title { font-size: 1.4rem; font-weight: 900; color: #38bdf8; letter-spacing: -0.5px; }
+
+        .score-board {
+          display: flex; gap: 20px; font-size: 1.1rem; font-weight: 800; background: rgba(30, 41, 59, 0.6);
+          padding: 8px 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        #gameCanvas {
+          background: #1e293b; border: 3px solid rgba(255, 255, 255, 0.15);
+          border-radius: 16px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); cursor: crosshair;
+        }
+
+        .overlay-screen {
+          position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;
+          background: rgba(15, 23, 42, 0.88); backdrop-filter: blur(8px);
+          display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; z-index: 20;
+        }
+
+        .action-btn {
+          background: #38bdf8; color: #0f172a; font-weight: 900; font-size: 1.1rem;
+          padding: 14px 28px; border-radius: 14px; border: none; cursor: pointer; transition: 0.2s;
+        }
+        .action-btn:hover { transform: scale(1.05); background: #7dd3fc; }
+
+        .controls-hint { font-size: 0.85rem; color: #94a3b8; display: flex; gap: 14px; margin-top: 6px; }
+        .key-tag { background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 6px; font-family: monospace; color: #f8fafc; }
+        ]]>
+      </style>
+
+      <!-- Navigation Header -->
+      <div class="pe-header">
+        <a class="back-btn" id="backToHubBtn" href="https://cdn.jsdelivr.net/gh/mathbuddies/leawoodmiddle@main/index.svg">
+          ⬅ Back to Hub
+        </a>
+        <div class="game-title">🏐 Eagles PE: Dodgeball Dash</div>
+        <div class="score-board">
+          <div>Score: <span id="scoreVal" style="color:#38bdf8;">0</span></div>
+          <div>High: <span id="highScoreVal" style="color:#facc15;">0</span></div>
+        </div>
+      </div>
+
+      <!-- Main Game Canvas -->
+      <canvas id="gameCanvas" width="800" height="500"></canvas>
+
+      <!-- Start / Game Over Overlay -->
+      <div class="overlay-screen" id="gameOverlay">
+        <div style="font-size:3.5rem;">🏐</div>
+        <h1 style="margin:0; font-size:2.4rem; color:#38bdf8;" id="overlayTitle">Eagles PE Dodgeball Dash</h1>
+        <p style="color:#94a3b8; margin:0; text-align:center; max-width:400px;" id="overlayDesc">
+          Dodge the flying red dodgeballs! Collect whistles for extra points and golden sneakers for speed boosts.
+        </p>
+        <button class="action-btn" id="startBtn" onclick="startGame()">Start Game</button>
+        <div class="controls-hint">
+          <span>Move: <span class="key-tag">A</span> <span class="key-tag">D</span> / <span class="key-tag">←</span> <span class="key-tag">→</span> or <span class="key-tag">Mouse</span></span>
+        </div>
+      </div>
+
+      <script type="text/javascript">
+        <![CDATA[
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const overlay = document.getElementById('gameOverlay');
+        const scoreVal = document.getElementById('scoreVal');
+        const highScoreVal = document.getElementById('highScoreVal');
+
+        // Always ensure the Back button links back via jsDelivr with fresh cache bypass
+        document.getElementById('backToHubBtn').href = 'https://cdn.jsdelivr.net/gh/mathbuddies/leawoodmiddle@main/index.svg?v=' + Date.now();
+
+        let isPlaying = false;
+        let score = 0;
+        let highScore = parseInt(localStorage.getItem('eagle_pe_high') || '0');
+        highScoreVal.textContent = highScore;
+
+        let player = { x: 400, y: 440, radius: 18, speed: 7, dx: 0 };
+        let dodgeballs = [];
+        let items = [];
+        let frameCount = 0;
+        let keys = {};
+
+        window.addEventListener('keydown', (e) => { keys[e.key] = true; });
+        window.addEventListener('keyup', (e) => { keys[e.key] = false; });
+        
+        canvas.addEventListener('mousemove', (e) => {
+          if (!isPlaying) return;
+          const rect = canvas.getBoundingClientRect();
+          player.x = e.clientX - rect.left;
+        });
+
+        function startGame() {
+          isPlaying = true;
+          score = 0;
+          scoreVal.textContent = '0';
+          dodgeballs = [];
+          items = [];
+          player.x = canvas.width / 2;
+          overlay.style.display = 'none';
+          requestAnimationFrame(gameLoop);
+        }
+
+        function spawnDodgeball() {
+          const radius = 12 + Math.random() * 8;
+          dodgeballs.push({
+            x: Math.random() * (canvas.width - radius * 2) + radius,
+            y: -radius,
+            radius: radius,
+            speedY: 3 + Math.random() * 3 + (score / 150),
+            speedX: (Math.random() - 0.5) * 2
+          });
+        }
+
+        function spawnItem() {
+          const type = Math.random() > 0.3 ? 'whistle' : 'sneaker';
+          items.push({
+            x: Math.random() * (canvas.width - 30) + 15,
+            y: -20,
+            type: type,
+            speed: 2.5
+          });
+        }
+
+        function gameLoop() {
+          if (!isPlaying) return;
+          frameCount++;
+
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+          // Gym Court Markings
+          ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+          ctx.lineWidth = 4;
+          ctx.beginPath();
+          ctx.arc(canvas.width / 2, canvas.height / 2, 80, 0, Math.PI * 2);
+          ctx.moveTo(0, canvas.height / 2);
+          ctx.lineTo(canvas.width, canvas.height / 2);
+          ctx.stroke();
+
+          // Player movement keyboard handling
+          if (keys['ArrowLeft'] || keys['a'] || keys['A']) player.x -= player.speed;
+          if (keys['ArrowRight'] || keys['d'] || keys['D']) player.x += player.speed;
+
+          // Keep player inside canvas boundary
+          player.x = Math.max(player.radius, Math.min(canvas.width - player.radius, player.x));
+
+          // Draw Player (Eagle Student)
+          ctx.fillStyle = '#38bdf8';
+          ctx.beginPath();
+          ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = '#f8fafc';
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // Spawn obstacles & items
+          if (frameCount % Math.max(20, 60 - Math.floor(score / 50)) === 0) {
+            spawnDodgeball();
+          }
+          if (frameCount % 180 === 0) {
+            spawnItem();
+          }
+
+          // Update & Draw Dodgeballs
+          for (let i = dodgeballs.length - 1; i >= 0; i--) {
+            let b = dodgeballs[i];
+            b.y += b.speedY;
+            b.x += b.speedX;
+
+            ctx.fillStyle = '#ef4444';
+            ctx.beginPath();
+            ctx.arc(b.x, b.y, b.radius, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = '#991b1b';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Collision check with player
+            let dist = Math.hypot(player.x - b.x, player.y - b.y);
+            if (dist < player.radius + b.radius) {
+              gameOver();
+              return;
+            }
+
+            if (b.y > canvas.height + b.radius) {
+              dodgeballs.splice(i, 1);
+              score += 10;
+              scoreVal.textContent = score;
+            }
+          }
+
+          // Update & Draw Collectible Items
+          for (let i = items.length - 1; i >= 0; i--) {
+            let item = items[i];
+            item.y += item.speed;
+
+            ctx.font = '20px sans-serif';
+            ctx.fillText(item.type === 'whistle' ? '🦺' : '👟', item.x - 10, item.y);
+
+            let dist = Math.hypot(player.x - item.x, player.y - item.y);
+            if (dist < player.radius + 15) {
+              if (item.type === 'whistle') score += 50;
+              if (item.type === 'sneaker') score += 100;
+              scoreVal.textContent = score;
+              items.splice(i, 1);
+              continue;
+            }
+
+            if (item.y > canvas.height + 20) {
+              items.splice(i, 1);
+            }
+          }
+
+          requestAnimationFrame(gameLoop);
+        }
+
+        function gameOver() {
+          isPlaying = false;
+          if (score > highScore) {
+            highScore = score;
+            localStorage.setItem('eagle_pe_high', highScore);
+            highScoreVal.textContent = highScore;
+          }
+          document.getElementById('overlayTitle').textContent = 'Game Over!';
+          document.getElementById('overlayDesc').innerHTML = 'You got hit by a dodgeball!<br/>Final Score: <strong style="color:#38bdf8;">' + score + '</strong>';
+          document.getElementById('startBtn').textContent = 'Play Again';
+          overlay.style.display = 'flex';
+        }
+        ]]>
+      </script>
+
+    </div>
+  </foreignObject>
+</svg>
