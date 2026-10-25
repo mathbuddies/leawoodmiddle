@@ -343,7 +343,7 @@
 
           <div>
             <div class="brand">eagle.io</div>
-            <div class="meta-info">v0.6.1.1 <span class="early-badge">Early Access 2</span> • <span id="liveClock">00:00:00</span></div>
+            <div class="meta-info">v0.6.2.0 <span class="early-badge">Early Access 2</span> • <span id="liveClock">00:00:00</span></div>
           </div>
         </div>
 
@@ -452,14 +452,6 @@
             <a class="play-btn" href="eagle-pizza.svg">Play G4m3</a>
           </div>
 
-          <div class="game-card" data-id="teachers-quiz">
-            <div class="fav-star" onclick="toggleFavorite('teachers-quiz')">★</div>
-            <div style="font-size:2.5rem;">📚</div>
-            <div style="font-size:1.2rem; font-weight:800;">Teachers Quiz</div>
-            <div style="color:#94a3b8; font-size:0.9rem;">Test your knowledge on Leawood Middle teachers and school trivia!</div>
-            <a class="play-btn" href="teachers-quiz.svg">Play Quiz</a>
-          </div>
-
           <div class="game-card" data-id="eagle-pong">
             <div class="fav-star" onclick="toggleFavorite('eagle-pong')">★</div>
             <div style="font-size:2.5rem;">🏓</div>
@@ -543,8 +535,8 @@
 
         const creditsData = {
           credits: "Made by Scott 😛 went through a lot of stress to make this…",
-          updates: "v0.6.1.1: Minor performance fixes, full cloaking app migration, and expanded color themes.",
-          notes: "The GitHub repo stress be like…\n\nLet’s get this show on the road…🎪",
+          updates: "v0.6.2.0: Restored unified creator notes, removed Teachers Quiz, and added robust performance improvements.",
+          notes: "Hey, it’s me, it’s Scott 🙃\n\nI went through a lot to make this…\n\n‘EVIL 3ECUR1Y!! U WILL NOT PREVAIL!!’ \n-Saige…\n\nNext update probably like 5 days after the end of Oct.. more code more glitchy\n\nAre you, are you? Coming to the tree? \n*Hes worried and mad but he’s still vibing \n\nOUT OF EARLY ACCESS BY THE NEW YEAR!!! (Hopefully)\n\nHAPPY HALLOWEEN HAHAH 👻 \n\nLeave a review of my website here: https://forms.gle/bhVjPyKyCd5iKfcj7 \n\nHop hop hop…\n\nAre you proud of me…?\n\nWOWWW ITS FINALLY THE BEGINING OF THE WEEK\n\nYou guys taking my retro bowl website still these days… even though it’s not mine\n\nAndy standee be tripping 🥀\n\nBuc-ee’s is coming to KC near the speedway and legends outlets, opens late 2027 (we think)\n\nWhere. Is. My. Dr. P. #costco\n\n‘ok then ima eat my last smint’\n-Nora\nMe: WE GOT MORE COMINGGGGG\n\n“I might’ve sprayed to much peppermint and now that’s all I smell…’\n-Grace \n\n‘Beckman’s voice is so deep…’\n-??? \nMe in my head: MY MICS NOT EVEN ONNN\n\nILL FIND MY WAYS!!!!!!!\n\nI’m so good 😊\n\nTHIS IS THE END\n\n‘Whos tes’ \nMe: Not anyone I know… plus who would name their kid tes?\n\nNot me waiting\nthrottled: true,\nthrottlingReset: 165\n\nThe GitHub repo stress be like…\n\nLet’s get this show on the road…🎪",
           pics: "Pics dropdown coming soon! Stay tuned for awesome gallery photos."
         };
 
