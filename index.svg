@@ -1,927 +1,835 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
-  <foreignObject width="100%" height="100%">
-    <div xmlns="http://www.w3.org/1999/xhtml" id="appRoot" style="width: 100vw; height: 100vh; margin: 0; padding: 0; background: #070a12; font-family: system-ui, -apple-system, sans-serif; color: #f8fafc; display: flex; flex-direction: column; overflow-x: hidden; overflow-y: auto; user-select: none; position: relative; background-size: cover; background-position: center;">
-      
-      <style type="text/css">
-        <![CDATA[
-        * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
-        :root { 
-          --accent-color: #38bdf8; 
-          --accent-glow: rgba(56, 189, 248, 0.25); 
-        }
-
-        .navbar {
-          width: 100%; padding: 16px 28px; background: rgba(15, 23, 42, 0.92);
-          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-          display: flex; justify-content: space-between; align-items: center;
-          position: sticky; top: 0; z-index: 100; backdrop-filter: blur(8px);
-        }
-        .nav-left, .nav-right { display: flex; align-items: center; gap: 14px; position: relative; }
-        
-        .liquid-btn {
-          background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(255, 255, 255, 0.12);
-          color: #f8fafc; padding: 8px 16px; border-radius: 12px; cursor: pointer; font-weight: bold; font-size: 0.9rem;
-          display: flex; align-items: center; gap: 8px; transition: 0.2s; text-decoration: none;
-        }
-        .liquid-btn:hover { background: var(--accent-color); color: #0f172a; border-color: var(--accent-color); }
-
-        .brand { font-weight: 900; font-size: 1.3rem; color: var(--accent-color); letter-spacing: -0.5px; }
-        .meta-info { font-size: 0.75rem; color: #94a3b8; font-family: monospace; display: flex; gap: 6px; align-items: center; }
-        .early-badge { background: rgba(56, 189, 248, 0.15); border: 1px solid var(--accent-color); color: var(--accent-color); font-size: 0.65rem; padding: 1px 6px; border-radius: 6px; font-weight: 800; }
-
-        .apps-dropdown {
-          position: absolute; top: 52px; left: 0; width: 360px; background: rgba(15, 23, 42, 0.96);
-          border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 20px; padding: 18px;
-          display: none; flex-direction: column; gap: 14px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); z-index: 200; backdrop-filter: blur(12px);
-        }
-        .apps-dropdown.open { display: flex; }
-        
-        .apps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-        .app-tile {
-          background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(255, 255, 255, 0.08);
-          border-radius: 12px; padding: 12px 8px; display: flex; flex-direction: column; align-items: center; gap: 6px;
-          cursor: pointer; transition: 0.2s; text-align: center; color: #f8fafc; font-size: 0.75rem; font-weight: 700;
-        }
-        .app-tile:hover { background: var(--accent-color); color: #0f172a; transform: translateY(-2px); }
-        .app-tile span:first-child { font-size: 1.4rem; }
-
-        .modal-overlay {
-          position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-          background: rgba(0, 0, 0, 0.75); z-index: 300; display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px);
-        }
-        .modal-overlay.open { display: flex; }
-        .modal-card {
-          background: rgba(15, 23, 42, 0.96); border: 1px solid rgba(255, 255, 255, 0.2);
-          border-radius: 20px; padding: 24px; width: 90%; max-width: 460px; display: flex; flex-direction: column; gap: 16px; max-height: 90vh; overflow-y: auto;
-          box-shadow: 0 15px 35px rgba(0,0,0,0.6);
-        }
-        .modal-input {
-          width: 100%; background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(255, 255, 255, 0.12);
-          color: #f8fafc; padding: 12px; border-radius: 10px; outline: none; font-size: 0.9rem;
-        }
-
-        .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-        .key-btn { background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(255, 255, 255, 0.12); color: #f8fafc; padding: 14px; border-radius: 10px; font-size: 1.2rem; font-weight: 800; cursor: pointer; text-align: center; }
-        .key-btn:hover { background: var(--accent-color); color: #0f172a; }
-
-        .container { max-width: 1200px; width: 100%; margin: 0 auto; padding: 40px 24px; display: flex; flex-direction: column; gap: 30px; }
-        .header-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
-        .hero-title { font-size: 2.8rem; font-weight: 900; margin: 0; color: var(--accent-color); }
-        .select-box { background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(255, 255, 255, 0.12); color: #f8fafc; padding: 10px 18px; border-radius: 14px; font-weight: bold; outline: none; cursor: pointer; }
-
-        .widgets-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-        .widget-card { background: rgba(30, 41, 59, 0.45); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 18px; padding: 22px; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
-        .widget-title { font-size: 0.9rem; font-weight: 800; color: var(--accent-color); display: flex; align-items: center; gap: 8px; }
-
-        .games-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
-        .game-card { background: rgba(30, 41, 59, 0.45); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 18px; padding: 24px; display: flex; flex-direction: column; gap: 16px; text-decoration: none; color: inherit; position: relative; transition: 0.2s; }
-        .game-card:hover { border-color: var(--accent-color); transform: translateY(-3px); background: rgba(30, 41, 59, 0.65); }
-        .play-btn { background: var(--accent-color); color: #0f172a; font-weight: 800; padding: 12px; border-radius: 12px; text-align: center; font-size: 0.95rem; text-decoration: none; }
-        
-        .fav-star { position: absolute; top: 20px; right: 20px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.12); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; cursor: pointer; transition: 0.2s; }
-        .fav-star:hover { background: rgba(250, 204, 21, 0.2); border-color: #facc15; }
-        .fav-star.active { color: #facc15; background: rgba(250, 204, 21, 0.15); border-color: #facc15; }
-
-        .end-of-list { margin-top: 20px; padding: 20px; display: flex; align-items: center; justify-content: center; gap: 12px; color: #94a3b8; font-weight: 700; font-size: 0.90rem; border-top: 1px dashed rgba(255, 255, 255, 0.1); }
-        .scroll-top-btn { background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(255, 255, 255, 0.15); color: var(--accent-color); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1rem; transition: 0.2s; }
-        .scroll-top-btn:hover { background: var(--accent-color); color: #0f172a; }
-
-        .notif-badge { position: absolute; top: -4px; right: -4px; background: #ef4444; color: #fff; font-size: 0.65rem; font-weight: 900; padding: 2px 6px; border-radius: 10px; display: flex; }
-
-        #labelingOverlay {
-          position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; z-index: 9999;
-          display: none; align-items: center; justify-content: center; overflow: hidden;
-        }
-        #labelingOverlay img { max-width: 100%; max-height: 100%; object-fit: contain; }
-
-        .navbar-pfp {
-          width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent-color); cursor: pointer; background: #1e293b;
-        }
-
-        .credits-content-box {
-          background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 12px; padding: 14px; font-size: 0.85rem; color: #cbd5e1; line-height: 1.6; max-height: 240px; overflow-y: auto; white-space: pre-wrap;
-        }
-        ]]>
-      </style>
-
-      <!-- Fullscreen Labeling App Active Layer -->
-      <div id="labelingOverlay">
-        <img id="labelingDisplayImg" src="" alt="Fullscreen Label" />
-      </div>
-
-      <!-- First-Visit Name Modal -->
-      <div class="modal-overlay" id="nameModal" style="display:none;">
-        <div class="modal-card">
-          <h2 style="margin:0; color:var(--accent-color);">Welcome to eagle.io</h2>
-          <p style="color:#94a3b8; font-size:0.9rem; margin:0;">We have a quick tutorial to show you around. But first, what should we call you?</p>
-          <input type="text" class="modal-input" id="userNameInput" placeholder="Enter your name..." />
-          <button onclick="saveName()" class="liquid-btn" style="background:var(--accent-color); color:#0f172a; justify-content:center;">Get Started</button>
-        </div>
-      </div>
-
-      <!-- Latest App / Purge Notice Modal -->
-      <div class="modal-overlay" id="latestModal">
-        <div class="modal-card">
-          <h3 style="margin:0; color:var(--accent-color);">Update to Latest Version</h3>
-          <p style="font-size:0.9rem; color:#cbd5e1; line-height:1.5; margin:0;" id="latestModalText">
-            This is going to take you to a separate link. When you open it, you can simply close it right after and come back to this page and reload, and you will be updated to the latest version. Click the button below to open the link.
-          </p>
-          <a id="purgeLinkBtn" href="https://purge.jsdelivr.net/gh/mathbuddies/leawoodmiddle@main/index.svg" target="_blank" class="liquid-btn" style="background:var(--accent-color); color:#0f172a; justify-content:center; text-align:center;">Open Purge Link</a>
-          <button onclick="closeModal('latestModal')" class="liquid-btn" style="justify-content:center; margin-top:4px;">Close</button>
-        </div>
-      </div>
-
-      <!-- Settings / Theme & Background Modal -->
-      <div class="modal-overlay" id="settingsModal">
-        <div class="modal-card">
-          <h3 style="margin:0; color:var(--accent-color);">Themes and Background</h3>
-          <div style="display:flex; flex-direction:column; gap:10px;">
-            <span style="font-size:0.9rem; font-weight:bold; color:#f8fafc;">Primary Accent Color:</span>
-            <div style="display:flex; gap:12px;">
-              <button class="liquid-btn" onclick="setAccent('#38bdf8')" style="background:#38bdf8; width:36px; height:36px; padding:0; border-radius:50%;" title="Blue"></button>
-              <button class="liquid-btn" onclick="setAccent('#22c55e')" style="background:#22c55e; width:36px; height:36px; padding:0; border-radius:50%;" title="Green"></button>
-              <button class="liquid-btn" onclick="setAccent('#facc15')" style="background:#facc15; width:36px; height:36px; padding:0; border-radius:50%;" title="Yellow"></button>
-              <button class="liquid-btn" onclick="setAccent('#ef4444')" style="background:#ef4444; width:36px; height:36px; padding:0; border-radius:50%;" title="Red"></button>
-              <button class="liquid-btn" onclick="setAccent('#c084fc')" style="background:#c084fc; width:36px; height:36px; padding:0; border-radius:50%;" title="Purple"></button>
-            </div>
-          </div>
-          <div style="display:flex; flex-direction:column; gap:10px; margin-top:10px;">
-            <span style="font-size:0.9rem; font-weight:bold; color:#f8fafc;">Custom Background Image:</span>
-            <input type="file" id="bgUploadInput" accept="image/*" class="modal-input" style="padding:8px;" />
-            <div style="font-size:0.8rem; color:#38bdf8; font-weight:700; margin-top:2px;">Dynamic backgrounds coming soon!</div>
-            <button onclick="clearBackground()" class="liquid-btn" style="justify-content:center; background:rgba(239,68,68,0.2); color:#ef4444; border-color:rgba(239,68,68,0.4);">Reset Background</button>
-          </div>
-          <button onclick="closeModal('settingsModal')" class="liquid-btn" style="justify-content:center; margin-top:10px;">Close Settings</button>
-        </div>
-      </div>
-
-      <!-- Profile Modal -->
-      <div class="modal-overlay" id="profileModal">
-        <div class="modal-card">
-          <h3 style="margin:0; color:var(--accent-color);">Profile and Avatar</h3>
-          <div style="display:flex; flex-direction:column; gap:12px;">
-            <span style="font-size:0.85rem; color:#94a3b8;">Your Name:</span>
-            <input type="text" class="modal-input" id="profileNameInput" placeholder="Enter name..." />
-            <span style="font-size:0.85rem; color:#94a3b8;">Profile Picture (PFP):</span>
-            <input type="file" id="pfpUploadInput" accept="image/*" class="modal-input" style="padding:8px;" />
-            <button onclick="saveProfile()" class="liquid-btn" style="background:var(--accent-color); color:#0f172a; justify-content:center;">Save Profile</button>
-          </div>
-          <button onclick="closeModal('profileModal')" class="liquid-btn" style="justify-content:center; margin-top:10px;">Close Profile</button>
-        </div>
-      </div>
-
-      <!-- Version App Modal -->
-      <div class="modal-overlay" id="versionModal">
-        <div class="modal-card">
-          <h3 style="margin:0; color:var(--accent-color);">Version Utility</h3>
-          <div style="display:flex; flex-direction:column; gap:10px;">
-            <button onclick="openAboutBlankSession()" class="liquid-btn" style="justify-content:center; background:#c084fc; color:#0f172a; font-weight:bold;">Launch about:blank Session</button>
-          </div>
-          <hr style="border:none; border-top:1px solid rgba(255,255,255,0.1); margin:10px 0;" />
-          <div id="versionKeypadSection">
-            <p style="font-size:0.85rem; color:#94a3b8; margin:0;">Enter developer PIN for advanced links:</p>
-            <div id="versionCodeDisplay" style="background:rgba(30,41,59,0.8); color:var(--accent-color); font-size:2rem; font-weight:900; text-align:center; padding:12px; border-radius:12px; letter-spacing:10px;">____</div>
-            <div class="keypad" style="margin-top:10px;">
-              <button class="key-btn" onclick="pressVersionKey('1')">1</button>
-              <button class="key-btn" onclick="pressVersionKey('2')">2</button>
-              <button class="key-btn" onclick="pressVersionKey('3')">3</button>
-              <button class="key-btn" onclick="pressVersionKey('4')">4</button>
-              <button class="key-btn" onclick="pressVersionKey('5')">5</button>
-              <button class="key-btn" onclick="pressVersionKey('6')">6</button>
-              <button class="key-btn" onclick="pressVersionKey('7')">7</button>
-              <button class="key-btn" onclick="pressVersionKey('8')">8</button>
-              <button class="key-btn" onclick="pressVersionKey('9')">9</button>
-              <button class="key-btn" onclick="pressVersionKey('0')" style="grid-column: 2;">0</button>
-            </div>
-          </div>
-          <div id="versionButtonsPanel" style="display:none; flex-direction:column; gap:10px;">
-            <button onclick="switchLink('statically')" class="liquid-btn" style="justify-content:center;">Switch to Statically link</button>
-            <button onclick="switchLink('jsdelivr')" class="liquid-btn" style="justify-content:center; background:var(--accent-color); color:#0f172a;">Switch to jsDelivr link (recommended)</button>
-            <button onclick="switchLink('github')" class="liquid-btn" style="justify-content:center;">Switch to GitHub link</button>
-            <button id="editorLinkBtn" onclick="switchLink('editor')" class="liquid-btn" style="justify-content:center; background:#22c55e; color:#0f172a; display:none;">Open Editor Link</button>
-          </div>
-          <button onclick="closeModal('versionModal')" class="liquid-btn" style="justify-content:center; margin-top:10px;">Close App</button>
-        </div>
-      </div>
-
-      <!-- Unified Credits App Modal -->
-      <div class="modal-overlay" id="creditsModal">
-        <div class="modal-card">
-          <h3 style="margin:0; color:var(--accent-color);">Credits and Information</h3>
-          <div style="display:flex; flex-direction:column; gap:10px;">
-            <select class="select-box" id="creditsSelect" style="width:100%;">
-              <option value="credits">Credits</option>
-              <option value="updates">Update Logs</option>
-              <option value="notes">Creator's Notes</option>
-            </select>
-            <div id="creditsContentBox" class="credits-content-box"></div>
-          </div>
-          <button onclick="closeModal('creditsModal')" class="liquid-btn" style="justify-content:center; margin-top:6px;">Close Credits</button>
-        </div>
-      </div>
-
-      <!-- Weather App Modal -->
-      <div class="modal-overlay" id="weatherModal">
-        <div class="modal-card">
-          <h3 style="margin:0; color:var(--accent-color);">Weather Settings (ZIP Code)</h3>
-          <div style="display:flex; flex-direction:column; gap:10px;">
-            <span style="font-size:0.85rem; color:#94a3b8;">Enter ZIP Code (Default: 66209):</span>
-            <input type="text" class="modal-input" id="weatherZipInput" placeholder="66209" maxlength="5" />
-            <button onclick="saveWeatherZip()" class="liquid-btn" style="background:var(--accent-color); color:#0f172a; justify-content:center;">Update ZIP Code</button>
-          </div>
-          <button onclick="closeModal('weatherModal')" class="liquid-btn" style="justify-content:center; margin-top:10px;">Close Weather</button>
-        </div>
-      </div>
-
-      <!-- Labeling App Modal -->
-      <div class="modal-overlay" id="labelingModal">
-        <div class="modal-card">
-          <h3 style="margin:0; color:var(--accent-color);">Labeling App Setup</h3>
-          <p style="font-size:0.85rem; color:#94a3b8; margin:0;">Select a photo to display in full-screen whenever you look away or leave this tab.</p>
-          <div style="display:flex; flex-direction:column; gap:10px;">
-            <input type="file" id="labelingUploadInput" accept="image/*" class="modal-input" style="padding:8px;" />
-            <div style="display:flex; gap:10px;">
-              <button onclick="toggleLabelingEnabled(true)" class="liquid-btn" style="flex:1; justify-content:center; background:#22c55e; color:#0f172a;">Enable App</button>
-              <button onclick="toggleLabelingEnabled(false)" class="liquid-btn" style="flex:1; justify-content:center; background:#ef4444; color:#fff;">Disable App</button>
-            </div>
-            <div id="labelingStatus" style="font-size:0.8rem; font-weight:bold; color:#facc15; text-align:center;">Status: Disabled</div>
-          </div>
-          <button onclick="closeModal('labelingModal')" class="liquid-btn" style="justify-content:center; margin-top:10px;">Close App</button>
-        </div>
-      </div>
-
-      <!-- Schedule Modal -->
-      <div class="modal-overlay" id="scheduleModal">
-        <div class="modal-card">
-          <h3 style="margin:0; color:var(--accent-color);">Schedule and Events (Up to 2030)</h3>
-          <div style="display:flex; gap:10px;">
-            <input type="date" class="modal-input" id="eventDate" min="2024-01-01" max="2030-12-31" />
-            <input type="text" class="modal-input" id="eventTitle" placeholder="Event description..." />
-          </div>
-          <button onclick="addEvent()" class="liquid-btn" style="background:var(--accent-color); color:#0f172a; justify-content:center;">Add Event</button>
-          <div id="eventList" style="max-height:180px; overflow-y:auto; display:flex; flex-direction:column; gap:8px; font-size:0.85rem;"></div>
-          <button onclick="closeModal('scheduleModal')" class="liquid-btn" style="justify-content:center; margin-top:6px;">Close Schedule</button>
-        </div>
-      </div>
-
-      <!-- Owner Modal -->
-      <div class="modal-overlay" id="ownerModal">
-        <div class="modal-card">
-          <h3 style="margin:0; color:#facc15;">Owner Access Console</h3>
-          <div id="codeDisplay" style="background:rgba(30,41,59,0.8); color:var(--accent-color); font-size:2rem; font-weight:900; text-align:center; padding:12px; border-radius:12px; letter-spacing:10px;">____</div>
-          <div class="keypad">
-            <button class="key-btn" onclick="pressKey('1')">1</button>
-            <button class="key-btn" onclick="pressKey('2')">2</button>
-            <button class="key-btn" onclick="pressKey('3')">3</button>
-            <button class="key-btn" onclick="pressKey('4')">4</button>
-            <button class="key-btn" onclick="pressKey('5')">5</button>
-            <button class="key-btn" onclick="pressKey('6')">6</button>
-            <button class="key-btn" onclick="pressKey('7')">7</button>
-            <button class="key-btn" onclick="pressKey('8')">8</button>
-            <button class="key-btn" onclick="pressKey('9')">9</button>
-            <button class="key-btn" onclick="pressKey('0')" style="grid-column: 2;">0</button>
-          </div>
-          <div id="broadcastPanel" style="display:none; flex-direction:column; gap:10px; border-top:1px solid rgba(255,255,255,0.1); padding-top:12px;">
-            <div style="color:#22c55e; font-size:0.85rem; font-weight:bold;">Access Granted! Broadcast Global Notification:</div>
-            <input type="text" class="modal-input" id="broadcastInput" placeholder="Type notification message..." />
-            <button onclick="sendBroadcast()" class="liquid-btn" style="background:#22c55e; color:#0f172a; justify-content:center;">Publish Broadcast</button>
-          </div>
-          <button onclick="closeModal('ownerModal')" class="liquid-btn" style="justify-content:center; margin-top:6px;">Close Console</button>
-        </div>
-      </div>
-
-      <!-- Bug Modal -->
-      <div class="modal-overlay" id="bugModal">
-        <div class="modal-card">
-          <h3 style="margin:0; color:var(--accent-color);">Report a Bug</h3>
-          <input type="text" class="modal-input" id="bugInput" placeholder="Describe the bug or issue..." />
-          <div style="display:flex; justify-content:flex-end; gap:10px;">
-            <button onclick="closeModal('bugModal')" class="liquid-btn">Cancel</button>
-            <button onclick="submitBug()" class="liquid-btn" style="background:var(--accent-color); color:#0f172a;">Submit Bug</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Navbar -->
-      <div class="navbar">
-        <div class="nav-left">
-          <button class="liquid-btn" id="appsDropdownBtn">Apps Menu</button>
-          
-          <div class="apps-dropdown" id="appsDropdown">
-            <div style="font-weight:900; color:var(--accent-color); font-size:0.85rem; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:6px;">App Suite Tray</div>
-            <div class="apps-grid">
-              <div class="app-tile" onclick="openApp('latest')"><span>🚀</span><span>Latest</span></div>
-              <div class="app-tile" onclick="openApp('schedule')"><span>📅</span><span>Schedule</span></div>
-              <div class="app-tile" onclick="openApp('weather')"><span>⛅</span><span>Weather</span></div>
-              <div class="app-tile" onclick="openApp('labeling')"><span>🖼️</span><span>Labeling</span></div>
-              <div class="app-tile" onclick="openApp('version')"><span>🔗</span><span>Version</span></div>
-              <div class="app-tile" onclick="openApp('settings')"><span>🎨</span><span>Themes</span></div>
-              <div class="app-tile" onclick="openApp('profile')"><span>👤</span><span>Profile</span></div>
-              <div class="app-tile" onclick="openApp('credits')"><span>📜</span><span>Credits</span></div>
-              <div class="app-tile" onclick="openApp('owner')"><span>🔒</span><span>Owner</span></div>
-              <div class="app-tile" onclick="openApp('bug')"><span>🐛</span><span>Bugs</span></div>
-            </div>
-          </div>
-
-          <div>
-            <div class="brand">eagle.io</div>
-            <div class="meta-info">v0.5.4.1 <span class="early-badge">Early Access</span> • <span id="liveClock">00:00:00</span></div>
-          </div>
-        </div>
-
-        <div class="nav-right">
-          <div style="display:flex; align-items:center; gap:12px;">
-            <img id="navAvatar" src="" class="navbar-pfp" onclick="openApp('profile')" title="Open Profile" style="display:none;" />
-            <div style="position:relative;">
-              <button class="liquid-btn" id="notifBtn" style="padding:8px 12px; font-size:1.1rem;">🔔<span class="notif-badge" id="notifBadge">1</span></button>
-              <div class="apps-dropdown" id="notifDropdown" style="right:0; left:auto; width:280px; top:48px;">
-                <div style="font-weight:900; color:var(--accent-color); font-size:0.85rem; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:6px;">Global Announcements</div>
-                <div id="notifContent" style="font-size:0.85rem; color:#f8fafc; line-height:1.4; margin-top:6px;">Welcome to early release v0.5.4.1!</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Main Hub Container -->
-      <div class="container" id="topContainer">
-        <div class="header-row">
-          <h1 class="hero-title" id="heroGreeting">My Hub</h1>
-          <select class="select-box" id="mainNavSelect">
-            <option value="hub">My Hub Dashboard</option>
-            <option value="games">Games Library</option>
-          </select>
-        </div>
-
-        <!-- My Hub View Dashboard -->
-        <div id="myHubView" style="display:flex; flex-direction:column; gap:24px;">
-          <div class="widgets-grid">
-            <div class="widget-card">
-              <div class="widget-title">Local Device Time</div>
-              <div style="font-size:1.8rem; font-weight:900; color:#f8fafc;" id="widgetClock">00:00:00</div>
-              <div style="font-size:0.8rem; color:#94a3b8;" id="widgetDate">Loading date...</div>
-            </div>
-            <div class="widget-card">
-              <div class="widget-title">Weather Widget</div>
-              <div style="font-size:1.8rem; font-weight:900; color:#7dd3fc;" id="widgetWeatherTemp">56°F Clear</div>
-              <div style="font-size:0.8rem; color:#94a3b8;" id="widgetWeatherLocation">ZIP: 66209 (Leawood, KS)</div>
-            </div>
-            <div class="widget-card">
-              <div class="widget-title">Quick Personal Notes</div>
-              <textarea id="quickNotes" class="modal-input" placeholder="Type personal notes here..." style="height:70px; resize:none; font-size:0.85rem;"></textarea>
-            </div>
-          </div>
-          <h3 style="margin:0; color:var(--accent-color);">Favorite Game Shortcuts</h3>
-          <div class="games-grid" id="favoritesGrid"></div>
-        </div>
-
-        <!-- Games Library View -->
-        <div id="gamesView" class="games-grid" style="display:none;">
-          
-          <div class="game-card" data-id="eagles-pe">
-            <div class="fav-star" onclick="toggleFavorite('eagles-pe')">★</div>
-            <div style="font-size:2.5rem;">🏐</div>
-            <div style="font-size:1.2rem; font-weight:800;">Eagles PE Suite</div>
-            <div style="color:#94a3b8; font-size:0.9rem;">Play Dodgeball Dash arcade action or test your skills in the PE Quiz Challenge!</div>
-            <a class="play-btn" href="eagles-pe.svg">Play PE Arena</a>
-          </div>
-
-          <div class="game-card" data-id="geometry-eagle">
-            <div class="fav-star" onclick="toggleFavorite('geometry-eagle')">★</div>
-            <div style="font-size:2.5rem;">🟩</div>
-            <div style="font-size:1.2rem; font-weight:800;">Geometry Eagle</div>
-            <div style="color:#94a3b8; font-size:0.9rem;">Time your jumps to leap over spikes in this rhythm platformer.</div>
-            <a class="play-btn" href="geometry-eagle.svg">Play Game</a>
-          </div>
-
-          <div class="game-card" data-id="eagle-clicker">
-            <div class="fav-star" onclick="toggleFavorite('eagle-clicker')">★</div>
-            <div style="font-size:2.5rem;">🦅</div>
-            <div style="font-size:1.2rem; font-weight:800;">Eagle Clicker</div>
-            <div style="color:#94a3b8; font-size:0.9rem;">Gather feathers and buy nest upgrades for passive income.</div>
-            <a class="play-btn" href="eagle-clicker.svg">Play Game</a>
-          </div>
-
-          <div class="game-card" data-id="to-the-eagles">
-            <div class="fav-star" onclick="toggleFavorite('to-the-eagles')">★</div>
-            <div style="font-size:2.5rem;">☁️</div>
-            <div style="font-size:1.2rem; font-weight:800;">To the Eagles</div>
-            <div style="color:#94a3b8; font-size:0.9rem;">Bounce across moving clouds and climb as high as possible.</div>
-            <a class="play-btn" href="to-the-eagles.svg">Play Game</a>
-          </div>
-
-          <div class="game-card" data-id="eagle-pizza">
-            <div class="fav-star" onclick="toggleFavorite('eagle-pizza')">★</div>
-            <div style="font-size:2.5rem;">🍕</div>
-            <div style="font-size:1.2rem; font-weight:800;">Eagle Pizza</div>
-            <div style="color:#94a3b8; font-size:0.9rem;">Assemble custom orders and manage your pizza shop.</div>
-            <a class="play-btn" href="eagle-pizza.svg">Play Game</a>
-          </div>
-
-          <div class="game-card" data-id="teachers-quiz">
-            <div class="fav-star" onclick="toggleFavorite('teachers-quiz')">★</div>
-            <div style="font-size:2.5rem;">📚</div>
-            <div style="font-size:1.2rem; font-weight:800;">Teachers Quiz</div>
-            <div style="color:#94a3b8; font-size:0.9rem;">Test your knowledge on Leawood Middle teachers and school trivia!</div>
-            <a class="play-btn" href="teachers-quiz.svg">Play Quiz</a>
-          </div>
-
-          <div class="game-card" data-id="eagle-pong">
-            <div class="fav-star" onclick="toggleFavorite('eagle-pong')">★</div>
-            <div style="font-size:2.5rem;">🏓</div>
-            <div style="font-size:1.2rem; font-weight:800;">Eagle Pong</div>
-            <div style="color:#94a3b8; font-size:0.9rem;">Classic retro paddle arcade game against an AI opponent.</div>
-            <a class="play-btn" href="eagle-pong.svg">Play Game</a>
-          </div>
-
-          <div class="game-card" data-id="eagle-stack">
-            <div class="fav-star" onclick="toggleFavorite('eagle-stack')">★</div>
-            <div style="font-size:2.5rem;">🧱</div>
-            <div style="font-size:1.2rem; font-weight:800;">Eagle Stack Tower</div>
-            <div style="color:#94a3b8; font-size:0.9rem;">Precision-time your drops to stack blocks and reach the sky!</div>
-            <a class="play-btn" href="eagle-stack.svg">Play Game</a>
-          </div>
-
-          <div class="game-card" data-id="eagle-blocks">
-            <div class="fav-star" onclick="toggleFavorite('eagle-blocks')">★</div>
-            <div style="font-size:2.5rem;">🟨</div>
-            <div style="font-size:1.2rem; font-weight:800;">Eagle Blocks</div>
-            <div style="color:#94a3b8; font-size:0.9rem;">Clear full rows and columns with yellow, white, and gold blocks.</div>
-            <a class="play-btn" href="eagle-blocks.svg">Play Game</a>
-          </div>
-
-          <div class="game-card" data-id="flappy-eagle">
-            <div class="fav-star" onclick="toggleFavorite('flappy-eagle')">★</div>
-            <div style="font-size:2.5rem;">🦅</div>
-            <div style="font-size:1.2rem; font-weight:800;">Flappy Eagle</div>
-            <div style="color:#94a3b8; font-size:0.9rem;">Auto-moves forward! Press spacebar or click to jump and dodge narrow pathways.</div>
-            <a class="play-btn" href="flappy-eagle.svg">Play Game</a>
-          </div>
-
-          <div class="game-card" data-id="feather-catcher">
-            <div class="fav-star" onclick="toggleFavorite('feather-catcher')">★</div>
-            <div style="font-size:2.5rem;">🪶</div>
-            <div style="font-size:1.2rem; font-weight:800;">Feather Catcher</div>
-            <div style="color:#94a3b8; font-size:0.9rem;">Catch falling golden feathers and dodge heavy rocks to beat your high score!</div>
-            <a class="play-btn" href="feather-catcher.svg">Play Game</a>
-          </div>
-
-          <div class="game-card" data-id="eagle-jump">
-            <div class="fav-star" onclick="toggleFavorite('eagle-jump')">★</div>
-            <div style="font-size:2.5rem;">☁️</div>
-            <div style="font-size:1.2rem; font-weight:800;">Eagle Jump</div>
-            <div style="color:#94a3b8; font-size:0.9rem;">Bounce higher and higher across moving cloud platforms!</div>
-            <a class="play-btn" href="eagle-jump.svg">Play Game</a>
-          </div>
-
-          <div class="game-card" data-id="eagle-hopper">
-            <div class="fav-star" onclick="toggleFavorite('eagle-hopper')">★</div>
-            <div style="font-size:2.5rem;">🛣️</div>
-            <div style="font-size:1.2rem; font-weight:800;">Eagle Hopper</div>
-            <div style="color:#94a3b8; font-size:0.9rem;">Hop forward across busy roads and roaring rivers safely!</div>
-            <a class="play-btn" href="eagle-hopper.svg">Play Game</a>
-          </div>
-        </div>
-
-        <div class="end-of-list">
-          <span>End of list. Go back to top?</span>
-          <button class="scroll-top-btn" id="scrollTopBtn" title="Back to Top">⬆</button>
-        </div>
-      </div>
-
-      <script type="text/javascript">
-        <![CDATA[
-        if (window.location.hostname.includes('statically')) {
-          window.location.href = 'https://cdn.jsdelivr.net/gh/mathbuddies/leawoodmiddle@main/index.svg?v=' + Date.now();
-        }
-
-        window.setAccent = function(color) {
-          document.documentElement.style.setProperty('--accent-color', color);
-          document.documentElement.style.setProperty('--accent-glow', color + '40');
-          localStorage.setItem('eagle_accent', color);
-        };
-
-        window.clearBackground = function() {
-          localStorage.removeItem('eagle_bg');
-          document.getElementById('appRoot').style.backgroundImage = 'none';
-          document.getElementById('appRoot').style.backgroundColor = '#070a12';
-        };
-
-        const creditsData = {
-          credits: "Made by Scott 😛 went through a lot of stress to make this…",
-          updates: "v0.5.4.1: Bug fixes for event bubbling, favorite star binding, JSONBin announcement fallback, and cache purge links.\nv0.5.4.0: Added Eagles PE arcade & quiz game suite, updated Latest app with cache purge instruction modal, fixed JSONBin announcements, and added dynamic background teaser in themes.\nv0.5.3.0: Fixed notifications window toggle bug, added auto-redirect to jsDelivr from statically, un-gated about:blank launcher, and added Eagles PE coming soon tile.\nv0.5.2.1: Full code rewrite for instant cache bypass, updated Credits App, about:blank session launcher for all version codes, and cache optimization.",
-          notes: "Hey, it’s me, it’s Scott 🙃\n\nI went through a lot to make this…\n\n‘EVIL 3ECUR1Y!! U WILL NOT PREVAIL!!’ \n-Saige…\n\nNext update probably like 5 days after the end of Oct.. more code more glitchy\n\nAre you, are you? Coming to the tree? \n*Hes worried and mad but he’s still vibing \n\nOUT OF EARLY ACCESS BY THE NEW YEAR!!! (Hopefully)\n\nHAPPY HALLOWEEN HAHAH 👻 \n\nLeave a review of my website here: https://forms.gle/bhVjPyKyCd5iKfcj7 \n\nHop hop hop…\n\nAre you proud of me…?\n\nWOWWW ITS FINALLY THE BEGINING OF THE WEEK\n\nYou guys taking my retro bowl website still these days… even though it’s not mine\n\nAndy standee be tripping 🥀\n\nBuc-ee’s is coming to KC near the speedway and legends outlets, opens late 2027 (we think)\n\nWhere. Is. My. Dr. P. #costco\n\n‘ok then ima eat my last smint’\n-Nora\nMe: WE GOT MORE COMINGGGGG\n\n“I might’ve sprayed to much peppermint and now that’s all I smell…’\n-Grace \n\n‘Beckman’s voice is so deep…’\n-??? \nMe in my head: MY MICS NOT EVEN ONNN\n\nILL FIND MY WAYS!!!!!!!\n\nI’m so good 😊\n\nTHIS IS THE END\n\n‘Whos tes’ \nMe: Not anyone I know… plus who would name their kid tes?”"
-        };
-
-        function updateCreditsContent() {
-          const val = document.getElementById('creditsSelect').value;
-          document.getElementById('creditsContentBox').textContent = creditsData[val] || '';
-        }
-
-        window.openApp = function(app) {
-          document.getElementById('appsDropdown').classList.remove('open');
-          if (app === 'latest') {
-            document.getElementById('purgeLinkBtn').href = 'https://purge.jsdelivr.net/gh/mathbuddies/leawoodmiddle@main/index.svg?v=' + Date.now();
-            document.getElementById('latestModal').classList.add('open');
-          }
-          if (app === 'settings') document.getElementById('settingsModal').classList.add('open');
-          if (app === 'weather') document.getElementById('weatherModal').classList.add('open');
-          if (app === 'labeling') {
-            updateLabelingStatusUI();
-            document.getElementById('labelingModal').classList.add('open');
-          }
-          if (app === 'version') {
-            versionEnteredCode = '';
-            document.getElementById('versionCodeDisplay').textContent = '____';
-            document.getElementById('versionKeypadSection').style.display = 'block';
-            document.getElementById('versionButtonsPanel').style.display = 'none';
-            document.getElementById('versionModal').classList.add('open');
-          }
-          if (app === 'credits') {
-            document.getElementById('creditsSelect').value = 'credits';
-            updateCreditsContent();
-            document.getElementById('creditsModal').classList.add('open');
-          }
-          if (app === 'profile') {
-            document.getElementById('profileNameInput').value = localStorage.getItem('eagle_user_name') || '';
-            document.getElementById('profileModal').classList.add('open');
-          }
-          if (app === 'schedule') document.getElementById('scheduleModal').classList.add('open');
-          if (app === 'owner') {
-            enteredCode = '';
-            document.getElementById('codeDisplay').textContent = '____';
-            document.getElementById('broadcastPanel').style.display = 'none';
-            document.getElementById('ownerModal').classList.add('open');
-          }
-          if (app === 'bug') document.getElementById('bugModal').classList.add('open');
-        };
-
-        window.closeModal = function(id) {
-          document.getElementById(id).classList.remove('open');
-        };
-
-        window.saveName = function() {
-          const val = document.getElementById('userNameInput').value.trim();
-          if (val) {
-            localStorage.setItem('eagle_user_name', val);
-            localStorage.setItem('eagle_tut', 'true');
-            document.getElementById('nameModal').style.display = 'none';
-            updateProfileUI(val);
-          }
-        };
-
-        window.saveProfile = function() {
-          const nameVal = document.getElementById('profileNameInput').value.trim();
-          if (nameVal) {
-            localStorage.setItem('eagle_user_name', nameVal);
-            updateProfileUI(nameVal);
-          }
-          closeModal('profileModal');
-        };
-
-        function updateProfileUI(name) {
-          document.getElementById('heroGreeting').textContent = 'Welcome back, ' + name + '!';
-        }
-
-        let versionEnteredCode = '';
-        window.pressVersionKey = function(num) {
-          if (versionEnteredCode.length < 4) {
-            versionEnteredCode += num;
-            document.getElementById('versionCodeDisplay').textContent = '•'.repeat(versionEnteredCode.length).padEnd(4, '_');
-            if (versionEnteredCode.length === 4) {
-              const validCodes = ['3166', '2702', '1918', '4625'];
-              if (validCodes.includes(versionEnteredCode)) {
-                document.getElementById('versionKeypadSection').style.display = 'none';
-                document.getElementById('versionButtonsPanel').style.display = 'flex';
-                if (versionEnteredCode === '3166') {
-                  document.getElementById('editorLinkBtn').style.display = 'block';
-                } else {
-                  document.getElementById('editorLinkBtn').style.display = 'none';
-                }
-              } else {
-                alert('Incorrect Code!');
-                versionEnteredCode = '';
-                document.getElementById('versionCodeDisplay').textContent = '____';
-              }
-            }
-          }
-        };
-
-        window.openAboutBlankSession = function() {
-          const win = window.open('about:blank', '_blank');
-          if (win) {
-            const doc = win.document;
-            doc.open();
-            doc.write('<!DOCTYPE html><html><head><title>eagle.io</title><style>body,html{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:#070a12;}iframe{width:100%;height:100%;border:none;}</style></head><body><iframe src="' + window.location.href + '"></iframe></body></html>');
-            doc.close();
-          }
-        };
-
-        window.switchLink = function(type) {
-          if (type === 'statically') {
-            window.location.href = 'https://cdn.statically.io/gh/mathbuddies/leawoodmiddle@main/index.svg?v=' + Date.now();
-          } else if (type === 'jsdelivr') {
-            window.location.href = 'https://cdn.jsdelivr.net/gh/mathbuddies/leawoodmiddle@main/index.svg?v=' + Date.now();
-          } else if (type === 'github') {
-            window.location.href = 'https://raw.githubusercontent.com/mathbuddies/leawoodmiddle/main/index.svg?v=' + Date.now();
-          } else if (type === 'editor') {
-            window.location.href = 'https://github.com/mathbuddies/leawoodmiddle/tree/main';
-          }
-        };
-
-        window.saveWeatherZip = function() {
-          const zip = document.getElementById('weatherZipInput').value.trim();
-          if (zip.length === 5) {
-            localStorage.setItem('eagle_weather_zip', zip);
-            document.getElementById('widgetWeatherLocation').textContent = 'ZIP: ' + zip;
-            closeModal('weatherModal');
-          } else {
-            alert('Please enter a valid 5-digit ZIP code.');
-          }
-        };
-
-        window.toggleLabelingEnabled = function(enabled) {
-          localStorage.setItem('eagle_labeling_enabled', enabled ? 'true' : 'false');
-          updateLabelingStatusUI();
-        };
-
-        function updateLabelingStatusUI() {
-          const enabled = localStorage.getItem('eagle_labeling_enabled') === 'true';
-          const statusEl = document.getElementById('labelingStatus');
-          statusEl.textContent = 'Status: ' + (enabled ? 'Enabled (Active)' : 'Disabled');
-          statusEl.style.color = enabled ? '#22c55e' : '#facc15';
-        }
-
-        let enteredCode = '';
-        window.pressKey = function(num) {
-          if (enteredCode.length < 4) {
-            enteredCode += num;
-            document.getElementById('codeDisplay').textContent = '•'.repeat(enteredCode.length).padEnd(4, '_');
-            if (enteredCode.length === 4) {
-              if (enteredCode === '3166') {
-                document.getElementById('broadcastPanel').style.display = 'flex';
-              } else {
-                alert('Incorrect Code!');
-                enteredCode = '';
-                document.getElementById('codeDisplay').textContent = '____';
-              }
-            }
-          }
-        };
-
-        window.sendBroadcast = async function() {
-          const msg = document.getElementById('broadcastInput').value.trim();
-          if (msg) {
-            try {
-              await fetch('https://api.jsonbin.io/v3/b/6adafef5ac6210605a4b0a6d', {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: msg })
-              });
-              alert('Broadcast published successfully!');
-            } catch (e) {
-              alert('Broadcast published locally.');
-            }
-            document.getElementById('notifContent').textContent = msg;
-            closeModal('ownerModal');
-          }
-        };
-
-        window.submitBug = function() {
-          alert('Bug report submitted successfully!');
-          closeModal('bugModal');
-        };
-
-        let events = JSON.parse(localStorage.getItem('eagle_events') || '[]');
-        window.addEvent = function() {
-          const date = document.getElementById('eventDate').value;
-          const title = document.getElementById('eventTitle').value.trim();
-          if (date && title) {
-            events.push({ date: date, title: title });
-            localStorage.setItem('eagle_events', JSON.stringify(events));
-            renderEvents();
-            document.getElementById('eventTitle').value = '';
-          }
-        };
-
-        window.deleteEvent = function(idx) {
-          events.splice(idx, 1);
-          localStorage.setItem('eagle_events', JSON.stringify(events));
-          renderEvents();
-        };
-
-        function renderEvents() {
-          const list = document.getElementById('eventList');
-          list.innerHTML = '';
-          if (events.length === 0) {
-            list.innerHTML = '<div style="color:#94a3b8;">No scheduled events.</div>';
-            return;
-          }
-          events.sort(function(a, b) { return new Date(a.date) - new Date(b.date); });
-          events.forEach(function(ev, idx) {
-            const item = document.createElement('div');
-            item.style.cssText = 'background:rgba(30,41,59,0.6); padding:8px 12px; border-radius:8px; display:flex; justify-content:space-between; align-items:center;';
-            item.innerHTML = '<span><strong>' + ev.date + ':</strong> ' + ev.title + '</span><button onclick="deleteEvent(' + idx + ')" style="background:none; border:none; color:#ef4444; cursor:pointer; font-weight:bold;">✕</button>';
-            list.appendChild(item);
-          });
-        }
-
-        window.addEventListener('DOMContentLoaded', function() {
-          document.title = 'eagle.io';
-          setAccent(localStorage.getItem('eagle_accent') || '#38bdf8');
-
-          document.getElementById('creditsSelect').onchange = updateCreditsContent;
-
-          const savedBg = localStorage.getItem('eagle_bg');
-          if (savedBg) {
-            document.getElementById('appRoot').style.backgroundImage = 'url(' + savedBg + ')';
-            document.getElementById('appRoot').style.backgroundColor = 'transparent';
-          }
-
-          const bgInput = document.getElementById('bgUploadInput');
-          bgInput.onchange = function(e) {
-            const file = e.target.files[0];
-            if (file) {
-              const reader = new FileReader();
-              reader.onload = function(evt) {
-                const dataUrl = evt.target.result;
-                localStorage.setItem('eagle_bg', dataUrl);
-                document.getElementById('appRoot').style.backgroundImage = 'url(' + dataUrl + ')';
-                document.getElementById('appRoot').style.backgroundColor = 'transparent';
-              };
-              reader.readAsDataURL(file);
-            }
-          };
-
-          const pfpInput = document.getElementById('pfpUploadInput');
-          const savedPfp = localStorage.getItem('eagle_pfp');
-          const navAvatar = document.getElementById('navAvatar');
-          if (savedPfp) {
-            navAvatar.src = savedPfp;
-            navAvatar.style.display = 'block';
-          }
-
-          pfpInput.onchange = function(e) {
-            const file = e.target.files[0];
-            if (file) {
-              const reader = new FileReader();
-              reader.onload = function(evt) {
-                const dataUrl = evt.target.result;
-                localStorage.setItem('eagle_pfp', dataUrl);
-                navAvatar.src = dataUrl;
-                navAvatar.style.display = 'block';
-                alert('Profile picture updated successfully!');
-              };
-              reader.readAsDataURL(file);
-            }
-          };
-
-          const labelingInput = document.getElementById('labelingUploadInput');
-          const savedLabelImg = localStorage.getItem('eagle_label_img');
-          if (savedLabelImg) {
-            document.getElementById('labelingDisplayImg').src = savedLabelImg;
-          }
-
-          labelingInput.onchange = function(e) {
-            const file = e.target.files[0];
-            if (file) {
-              const reader = new FileReader();
-              reader.onload = function(evt) {
-                const dataUrl = evt.target.result;
-                localStorage.setItem('eagle_label_img', dataUrl);
-                document.getElementById('labelingDisplayImg').src = dataUrl;
-                alert('Labeling image saved successfully!');
-              };
-              reader.readAsDataURL(file);
-            }
-          };
-
-          document.addEventListener('visibilitychange', function() {
-            const enabled = localStorage.getItem('eagle_labeling_enabled') === 'true';
-            const overlay = document.getElementById('labelingOverlay');
-            if (enabled && document.hidden) {
-              overlay.style.display = 'flex';
-            } else {
-              overlay.style.display = 'none';
-            }
-          });
-
-          const savedZip = localStorage.getItem('eagle_weather_zip') || '66209';
-          document.getElementById('widgetWeatherLocation').textContent = 'ZIP: ' + savedZip;
-          document.getElementById('weatherZipInput').value = savedZip;
-
-          if (!localStorage.getItem('eagle_tut')) {
-            document.getElementById('nameModal').style.display = 'flex';
-          } else {
-            updateProfileUI(localStorage.getItem('eagle_user_name') || 'Gamer');
-          }
-
-          renderEvents();
-
-          document.querySelectorAll('.game-card .play-btn').forEach(function(btn) {
-            const currentHref = btn.getAttribute('href').split('?')[0];
-            btn.setAttribute('href', currentHref + '?v=' + Date.now());
-          });
-
-          setInterval(function() {
-            const now = new Date();
-            document.getElementById('liveClock').textContent = now.toLocaleTimeString();
-            document.getElementById('widgetClock').textContent = now.toLocaleTimeString();
-            document.getElementById('widgetDate').textContent = now.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-          }, 1000);
-
-          const notes = document.getElementById('quickNotes');
-          notes.value = localStorage.getItem('eagle_notes') || '';
-          notes.oninput = function(e) { localStorage.setItem('eagle_notes', e.target.value); };
-
-          const appsDropdownBtn = document.getElementById('appsDropdownBtn');
-          const appsDropdown = document.getElementById('appsDropdown');
-          appsDropdownBtn.onclick = function(e) { 
-            e.stopPropagation(); 
-            appsDropdown.classList.toggle('open'); 
-            document.getElementById('notifDropdown').classList.remove('open'); 
-          };
-
-          const notifBtn = document.getElementById('notifBtn');
-          const notifDropdown = document.getElementById('notifDropdown');
-          notifBtn.onclick = function(e) { 
-            e.stopPropagation(); 
-            notifDropdown.classList.toggle('open'); 
-            appsDropdown.classList.remove('open'); 
-            document.getElementById('notifBadge').style.display = 'none'; 
-          };
-
-          window.onclick = function() { 
-            appsDropdown.classList.remove('open'); 
-            notifDropdown.classList.remove('open'); 
-          };
-
-          const scrollTopBtn = document.getElementById('scrollTopBtn');
-          const appRoot = document.getElementById('appRoot');
-          scrollTopBtn.onclick = function() {
-            appRoot.scrollTo({ top: 0, behavior: 'smooth' });
-          };
-
-          const navSelect = document.getElementById('mainNavSelect');
-          const hubView = document.getElementById('myHubView');
-          const gamesView = document.getElementById('gamesView');
-
-          navSelect.onchange = function() {
-            if (navSelect.value === 'hub') {
-              hubView.style.display = 'flex';
-              gamesView.style.display = 'none';
-              renderFavorites();
-            } else {
-              hubView.style.display = 'none';
-              gamesView.style.display = 'grid';
-            }
-          };
-
-          let favorites = JSON.parse(localStorage.getItem('eagle_favs') || '[]');
-
-          window.toggleFavorite = function(id) {
-            if (favorites.includes(id)) favorites = favorites.filter(function(f) { return f !== id; });
-            else favorites.push(id);
-            localStorage.setItem('eagle_favs', JSON.stringify(favorites));
-            updateFavUI();
-            if (navSelect.value === 'hub') renderFavorites();
-          };
-
-          function updateFavUI() {
-            document.querySelectorAll('.game-card').forEach(function(card) {
-              const id = card.getAttribute('data-id');
-              const star = card.querySelector('.fav-star');
-              if (favorites.includes(id)) { star.classList.add('active'); star.textContent = '★'; }
-              else { star.classList.remove('active'); star.textContent = '☆'; }
-            });
-          }
-
-          function renderFavorites() {
-            const container = document.getElementById('favoritesGrid');
-            container.innerHTML = '';
-            const allGames = document.querySelectorAll('#gamesView .game-card');
-            let count = 0;
-            allGames.forEach(function(card) {
-              const id = card.getAttribute('data-id');
-              if (favorites.includes(id)) {
-                const clone = card.cloneNode(true);
-                clone.querySelector('.fav-star').onclick = function() { toggleFavorite(id); };
-                container.appendChild(clone);
-                count++;
-              }
-            });
-            if (count === 0) {
-              container.innerHTML = '<div style="color:#94a3b8; font-size:0.9rem; grid-column:1/-1;">No favorite games starred yet! Switch to the Games Library tab to star some.</div>';
-            }
-          }
-
-          updateFavUI();
-          renderFavorites();
-        });
-        ]]>
-      </script>
-
-    </div>
-  </foreignObject>
+<foreignObject width="100%" height="100%">
+<div xmlns="http://www.w3.org/1999/xhtml" id="appRoot" style="width: 100vw; height: 100vh; margin: 0; padding: 0; background: #070a12; font-family: system-ui, -apple-system, sans-serif; color: #f8fafc; display: flex; flex-direction: column; overflow-x: hidden; overflow-y: auto; user-select: none; position: relative; background-size: cover; background-position: center;">
+<style type="text/css">
+<![CDATA[
+* { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+:root {
+--accent-color: #38bdf8;
+--accent-glow: rgba(56, 189, 248, 0.25);
+}
+.navbar {
+width: 100%; padding: 16px 28px; background: rgba(15, 23, 42, 0.92);
+border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+display: flex; justify-content: space-between; align-items: center;
+position: sticky; top: 0; z-index: 100; backdrop-filter: blur(8px);
+}
+.nav-left, .nav-right { display: flex; align-items: center; gap: 14px; position: relative; }
+.liquid-btn {
+background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(255, 255, 255, 0.12);
+color: #f8fafc; padding: 8px 16px; border-radius: 12px; cursor: pointer; font-weight: bold; font-size: 0.9rem;
+display: flex; align-items: center; gap: 8px; transition: 0.2s; text-decoration: none;
+}
+.liquid-btn:hover { background: var(--accent-color); color: #0f172a; border-color: var(--accent-color); }
+.brand { font-weight: 900; font-size: 1.3rem; color: var(--accent-color); letter-spacing: -0.5px; }
+.meta-info { font-size: 0.75rem; color: #94a3b8; font-family: monospace; display: flex; gap: 6px; align-items: center; }
+.early-badge { background: rgba(56, 189, 248, 0.15); border: 1px solid var(--accent-color); color: var(--accent-color); font-size: 0.65rem; padding: 1px 6px; border-radius: 6px; font-weight: 800; }
+.apps-dropdown {
+position: absolute; top: 52px; left: 0; width: 360px; background: rgba(15, 23, 42, 0.96);
+border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 20px; padding: 18px;
+display: none; flex-direction: column; gap: 14px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); z-index: 200; backdrop-filter: blur(12px);
+}
+.apps-dropdown.open { display: flex; }
+.apps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.app-tile {
+background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(255, 255, 255, 0.08);
+border-radius: 12px; padding: 12px 8px; display: flex; flex-direction: column; align-items: center; gap: 6px;
+cursor: pointer; transition: 0.2s; text-align: center; color: #f8fafc; font-size: 0.75rem; font-weight: 700;
+}
+.app-tile:hover { background: var(--accent-color); color: #0f172a; transform: translateY(-2px); }
+.app-tile span:first-child { font-size: 1.4rem; }
+.modal-overlay {
+position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+background: rgba(0, 0, 0, 0.75); z-index: 300; display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px);
+}
+.modal-overlay.open { display: flex; }
+.modal-card {
+background: rgba(15, 23, 42, 0.96); border: 1px solid rgba(255, 255, 255, 0.2);
+border-radius: 20px; padding: 24px; width: 90%; max-width: 460px; display: flex; flex-direction: column; gap: 16px; max-height: 90vh; overflow-y: auto;
+box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+}
+.modal-input {
+width: 100%; background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(255, 255, 255, 0.12);
+color: #f8fafc; padding: 12px; border-radius: 10px; outline: none; font-size: 0.9rem;
+}
+.keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.key-btn { background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(255, 255, 255, 0.12); color: #f8fafc; padding: 14px; border-radius: 10px; font-size: 1.2rem; font-weight: 800; cursor: pointer; text-align: center; }
+.key-btn:hover { background: var(--accent-color); color: #0f172a; }
+.container { max-width: 1200px; width: 100%; margin: 0 auto; padding: 40px 24px; display: flex; flex-direction: column; gap: 30px; }
+.header-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
+.hero-title { font-size: 2.8rem; font-weight: 900; margin: 0; color: var(--accent-color); }
+.select-box { background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(255, 255, 255, 0.12); color: #f8fafc; padding: 10px 18px; border-radius: 14px; font-weight: bold; outline: none; cursor: pointer; }
+.widgets-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+.widget-card { background: rgba(30, 41, 59, 0.45); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 18px; padding: 22px; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
+.widget-title { font-size: 0.9rem; font-weight: 800; color: var(--accent-color); display: flex; align-items: center; gap: 8px; }
+.games-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+.game-card { background: rgba(30, 41, 59, 0.45); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 18px; padding: 24px; display: flex; flex-direction: column; gap: 16px; text-decoration: none; color: inherit; position: relative; transition: 0.2s; }
+.game-card:hover { border-color: var(--accent-color); transform: translateY(-3px); background: rgba(30, 41, 59, 0.65); }
+.play-btn { background: var(--accent-color); color: #0f172a; font-weight: 800; padding: 12px; border-radius: 12px; text-align: center; font-size: 0.95rem; text-decoration: none; }
+.fav-star { position: absolute; top: 20px; right: 20px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.12); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; cursor: pointer; transition: 0.2s; }
+.fav-star:hover { background: rgba(250, 204, 21, 0.2); border-color: #facc15; }
+.fav-star.active { color: #facc15; background: rgba(250, 204, 21, 0.15); border-color: #facc15; }
+.end-of-list { margin-top: 20px; padding: 20px; display: flex; align-items: center; justify-content: center; gap: 12px; color: #94a3b8; font-weight: 700; font-size: 0.90rem; border-top: 1px dashed rgba(255, 255, 255, 0.1); }
+.scroll-top-btn { background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(255, 255, 255, 0.15); color: var(--accent-color); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1rem; transition: 0.2s; }
+.scroll-top-btn:hover { background: var(--accent-color); color: #0f172a; }
+.notif-badge { position: absolute; top: -4px; right: -4px; background: #ef4444; color: #fff; font-size: 0.65rem; font-weight: 900; padding: 2px 6px; border-radius: 10px; display: flex; }
+#labelingOverlay {
+position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; z-index: 9999;
+display: none; align-items: center; justify-content: center; overflow: hidden;
+}
+#labelingOverlay img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.navbar-pfp {
+width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent-color); cursor: pointer; background: #1e293b;
+}
+.credits-content-box {
+background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(255, 255, 255, 0.1);
+border-radius: 12px; padding: 14px; font-size: 0.85rem; color: #cbd5e1; line-height: 1.6; max-height: 240px; overflow-y: auto; white-space: pre-wrap;
+}
+]]>
+</style>
+<!-- Fullscreen Labeling App Active Layer -->
+<div id="labelingOverlay">
+<img id="labelingDisplayImg" src="" alt="Fullscreen Label" />
+</div>
+<!-- First-Visit Name Modal -->
+<div class="modal-overlay" id="nameModal" style="display:none;">
+<div class="modal-card">
+<h2 style="margin:0; color:var(--accent-color);">Welcome to eagle.io</h2>
+<p style="color:#94a3b8; font-size:0.9rem; margin:0;">We have a quick tutorial to show you around. But first, what should we call you?</p>
+<input type="text" class="modal-input" id="userNameInput" placeholder="Enter your name..." />
+<button onclick="saveName()" class="liquid-btn" style="background:var(--accent-color); color:#0f172a; justify-content:center;">Get Started</button>
+</div>
+</div>
+<!-- Latest App / Purge Notice Modal -->
+<div class="modal-overlay" id="latestModal">
+<div class="modal-card">
+<h3 style="margin:0; color:var(--accent-color);">Update to Latest Version</h3>
+<p style="font-size:0.9rem; color:#cbd5e1; line-height:1.5; margin:0;" id="latestModalText">
+This is going to take you to a separate link. When you open it, you can simply close it right after and come back to this page and reload, and you will be updated to the latest version. Click the button below to open the link.
+</p>
+<a id="purgeLinkBtn" href="https://purge.jsdelivr.net/gh/mathbuddies/leawoodmiddle@main/index.svg" target="_blank" class="liquid-btn" style="background:var(--accent-color); color:#0f172a; justify-content:center; text-align:center;">Open Purge Link</a>
+<button onclick="closeModal('latestModal')" class="liquid-btn" style="justify-content:center; margin-top:4px;">Close</button>
+</div>
+</div>
+<!-- Settings / Theme & Background Modal -->
+<div class="modal-overlay" id="settingsModal">
+<div class="modal-card">
+<h3 style="margin:0; color:var(--accent-color);">Themes and Background</h3>
+<div style="display:flex; flex-direction:column; gap:10px;">
+<span style="font-size:0.9rem; font-weight:bold; color:#f8fafc;">Primary Accent Color:</span>
+<div style="display:flex; gap:12px;">
+<button class="liquid-btn" onclick="setAccent('#38bdf8')" style="background:#38bdf8; width:36px; height:36px; padding:0; border-radius:50%;" title="Blue"></button>
+<button class="liquid-btn" onclick="setAccent('#22c55e')" style="background:#22c55e; width:36px; height:36px; padding:0; border-radius:50%;" title="Green"></button>
+<button class="liquid-btn" onclick="setAccent('#facc15')" style="background:#facc15; width:36px; height:36px; padding:0; border-radius:50%;" title="Yellow"></button>
+<button class="liquid-btn" onclick="setAccent('#ef4444')" style="background:#ef4444; width:36px; height:36px; padding:0; border-radius:50%;" title="Red"></button>
+<button class="liquid-btn" onclick="setAccent('#c084fc')" style="background:#c084fc; width:36px; height:36px; padding:0; border-radius:50%;" title="Purple"></button>
+</div>
+</div>
+<div style="display:flex; flex-direction:column; gap:10px; margin-top:10px;">
+<span style="font-size:0.9rem; font-weight:bold; color:#f8fafc;">Custom Background Image:</span>
+<input type="file" id="bgUploadInput" accept="image/*" class="modal-input" style="padding:8px;" />
+<div style="font-size:0.8rem; color:#38bdf8; font-weight:700; margin-top:2px;">Dynamic backgrounds coming soon!</div>
+<button onclick="clearBackground()" class="liquid-btn" style="justify-content:center; background:rgba(239,68,68,0.2); color:#ef4444; border-color:rgba(239,68,68,0.4);">Reset Background</button>
+</div>
+<button onclick="closeModal('settingsModal')" class="liquid-btn" style="justify-content:center; margin-top:10px;">Close Settings</button>
+</div>
+</div>
+<!-- Profile Modal -->
+<div class="modal-overlay" id="profileModal">
+<div class="modal-card">
+<h3 style="margin:0; color:var(--accent-color);">Profile and Avatar</h3>
+<div style="display:flex; flex-direction:column; gap:12px;">
+<span style="font-size:0.85rem; color:#94a3b8;">Your Name:</span>
+<input type="text" class="modal-input" id="profileNameInput" placeholder="Enter name..." />
+<span style="font-size:0.85rem; color:#94a3b8;">Profile Picture (PFP):</span>
+<input type="file" id="pfpUploadInput" accept="image/*" class="modal-input" style="padding:8px;" />
+<button onclick="saveProfile()" class="liquid-btn" style="background:var(--accent-color); color:#0f172a; justify-content:center;">Save Profile</button>
+</div>
+<button onclick="closeModal('profileModal')" class="liquid-btn" style="justify-content:center; margin-top:10px;">Close Profile</button>
+</div>
+</div>
+<!-- Version App Modal -->
+<div class="modal-overlay" id="versionModal">
+<div class="modal-card">
+<h3 style="margin:0; color:var(--accent-color);">Version Utility</h3>
+<div style="display:flex; flex-direction:column; gap:10px;">
+<button onclick="openAboutBlankSession()" class="liquid-btn" style="justify-content:center; background:#c084fc; color:#0f172a; font-weight:bold;">Launch about:blank Session</button>
+</div>
+<hr style="border:none; border-top:1px solid rgba(255,255,255,0.1); margin:10px 0;" />
+<div id="versionKeypadSection">
+<p style="font-size:0.85rem; color:#94a3b8; margin:0;">Enter developer PIN for advanced links:</p>
+<div id="versionCodeDisplay" style="background:rgba(30,41,59,0.8); color:var(--accent-color); font-size:2rem; font-weight:900; text-align:center; padding:12px; border-radius:12px; letter-spacing:10px;">____</div>
+<div class="keypad" style="margin-top:10px;">
+<button class="key-btn" onclick="pressVersionKey('1')">1</button>
+<button class="key-btn" onclick="pressVersionKey('2')">2</button>
+<button class="key-btn" onclick="pressVersionKey('3')">3</button>
+<button class="key-btn" onclick="pressVersionKey('4')">4</button>
+<button class="key-btn" onclick="pressVersionKey('5')">5</button>
+<button class="key-btn" onclick="pressVersionKey('6')">6</button>
+<button class="key-btn" onclick="pressVersionKey('7')">7</button>
+<button class="key-btn" onclick="pressVersionKey('8')">8</button>
+<button class="key-btn" onclick="pressVersionKey('9')">9</button>
+<button class="key-btn" onclick="pressVersionKey('0')" style="grid-column: 2;">0</button>
+</div>
+</div>
+<div id="versionButtonsPanel" style="display:none; flex-direction:column; gap:10px;">
+<button onclick="switchLink('statically')" class="liquid-btn" style="justify-content:center;">Switch to Statically link</button>
+<button onclick="switchLink('jsdelivr')" class="liquid-btn" style="justify-content:center; background:var(--accent-color); color:#0f172a;">Switch to jsDelivr link (recommended)</button>
+<button onclick="switchLink('github')" class="liquid-btn" style="justify-content:center;">Switch to GitHub link</button>
+<button id="editorLinkBtn" onclick="switchLink('editor')" class="liquid-btn" style="justify-content:center; background:#22c55e; color:#0f172a; display:none;">Open Editor Link</button>
+</div>
+<button onclick="closeModal('versionModal')" class="liquid-btn" style="justify-content:center; margin-top:10px;">Close App</button>
+</div>
+</div>
+<!-- Unified Credits App Modal -->
+<div class="modal-overlay" id="creditsModal">
+<div class="modal-card">
+<h3 style="margin:0; color:var(--accent-color);">Credits and Information</h3>
+<div style="display:flex; flex-direction:column; gap:10px;">
+<select class="select-box" id="creditsSelect" style="width:100%;">
+<option value="credits">Credits</option>
+<option value="updates">Update Logs</option>
+<option value="notes">Creator's Notes</option>
+</select>
+<div id="creditsContentBox" class="credits-content-box"></div>
+</div>
+<button onclick="closeModal('creditsModal')" class="liquid-btn" style="justify-content:center; margin-top:6px;">Close Credits</button>
+</div>
+</div>
+<!-- Weather App Modal -->
+<div class="modal-overlay" id="weatherModal">
+<div class="modal-card">
+<h3 style="margin:0; color:var(--accent-color);">Weather Settings (ZIP Code)</h3>
+<div style="display:flex; flex-direction:column; gap:10px;">
+<span style="font-size:0.85rem; color:#94a3b8;">Enter ZIP Code (Default: 66209):</span>
+<input type="text" class="modal-input" id="weatherZipInput" placeholder="66209" maxlength="5" />
+<button onclick="saveWeatherZip()" class="liquid-btn" style="background:var(--accent-color); color:#0f172a; justify-content:center;">Update ZIP Code</button>
+</div>
+<button onclick="closeModal('weatherModal')" class="liquid-btn" style="justify-content:center; margin-top:10px;">Close Weather</button>
+</div>
+</div>
+<!-- Labeling App Modal -->
+<div class="modal-overlay" id="labelingModal">
+<div class="modal-card">
+<h3 style="margin:0; color:var(--accent-color);">Labeling App Setup</h3>
+<p style="font-size:0.85rem; color:#94a3b8; margin:0;">Select a photo to display in full-screen whenever you look away or leave this tab.</p>
+<div style="display:flex; flex-direction:column; gap:10px;">
+<input type="file" id="labelingUploadInput" accept="image/*" class="modal-input" style="padding:8px;" />
+<div style="display:flex; gap:10px;">
+<button onclick="toggleLabelingEnabled(true)" class="liquid-btn" style="flex:1; justify-content:center; background:#22c55e; color:#0f172a;">Enable App</button>
+<button onclick="toggleLabelingEnabled(false)" class="liquid-btn" style="flex:1; justify-content:center; background:#ef4444; color:#fff;">Disable App</button>
+</div>
+<div id="labelingStatus" style="font-size:0.8rem; font-weight:bold; color:#facc15; text-align:center;">Status: Disabled</div>
+</div>
+<button onclick="closeModal('labelingModal')" class="liquid-btn" style="justify-content:center; margin-top:10px;">Close App</button>
+</div>
+</div>
+<!-- Schedule Modal -->
+<div class="modal-overlay" id="scheduleModal">
+<div class="modal-card">
+<h3 style="margin:0; color:var(--accent-color);">Schedule and Events (Up to 2030)</h3>
+<div style="display:flex; gap:10px;">
+<input type="date" class="modal-input" id="eventDate" min="2024-01-01" max="2030-12-31" />
+<input type="text" class="modal-input" id="eventTitle" placeholder="Event description..." />
+</div>
+<button onclick="addEvent()" class="liquid-btn" style="background:var(--accent-color); color:#0f172a; justify-content:center;">Add Event</button>
+<div id="eventList" style="max-height:180px; overflow-y:auto; display:flex; flex-direction:column; gap:8px; font-size:0.85rem;"></div>
+<button onclick="closeModal('scheduleModal')" class="liquid-btn" style="justify-content:center; margin-top:6px;">Close Schedule</button>
+</div>
+</div>
+<!-- Owner Modal -->
+<div class="modal-overlay" id="ownerModal">
+<div class="modal-card">
+<h3 style="margin:0; color:#facc15;">Owner Access Console</h3>
+<div id="codeDisplay" style="background:rgba(30,41,59,0.8); color:var(--accent-color); font-size:2rem; font-weight:900; text-align:center; padding:12px; border-radius:12px; letter-spacing:10px;">____</div>
+<div class="keypad">
+<button class="key-btn" onclick="pressKey('1')">1</button>
+<button class="key-btn" onclick="pressKey('2')">2</button>
+<button class="key-btn" onclick="pressKey('3')">3</button>
+<button class="key-btn" onclick="pressKey('4')">4</button>
+<button class="key-btn" onclick="pressKey('5')">5</button>
+<button class="key-btn" onclick="pressKey('6')">6</button>
+<button class="key-btn" onclick="pressKey('7')">7</button>
+<button class="key-btn" onclick="pressKey('8')">8</button>
+<button class="key-btn" onclick="pressKey('9')">9</button>
+<button class="key-btn" onclick="pressKey('0')" style="grid-column: 2;">0</button>
+</div>
+<div id="broadcastPanel" style="display:none; flex-direction:column; gap:10px; border-top:1px solid rgba(255,255,255,0.1); padding-top:12px;">
+<div style="color:#22c55e; font-size:0.85rem; font-weight:bold;">Access Granted! Broadcast Global Notification:</div>
+<input type="text" class="modal-input" id="broadcastInput" placeholder="Type notification message..." />
+<button onclick="sendBroadcast()" class="liquid-btn" style="background:#22c55e; color:#0f172a; justify-content:center;">Publish Broadcast</button>
+</div>
+<button onclick="closeModal('ownerModal')" class="liquid-btn" style="justify-content:center; margin-top:6px;">Close Console</button>
+</div>
+</div>
+<!-- Bug Modal -->
+<div class="modal-overlay" id="bugModal">
+<div class="modal-card">
+<h3 style="margin:0; color:var(--accent-color);">Report a Bug</h3>
+<input type="text" class="modal-input" id="bugInput" placeholder="Describe the bug or issue..." />
+<div style="display:flex; justify-content:flex-end; gap:10px;">
+<button onclick="closeModal('bugModal')" class="liquid-btn">Cancel</button>
+<button onclick="submitBug()" class="liquid-btn" style="background:var(--accent-color); color:#0f172a;">Submit Bug</button>
+</div>
+</div>
+</div>
+<!-- Navbar -->
+<div class="navbar">
+<div class="nav-left">
+<button class="liquid-btn" id="appsDropdownBtn">Apps Menu</button>
+<div class="apps-dropdown" id="appsDropdown">
+<div style="font-weight:900; color:var(--accent-color); font-size:0.85rem; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:6px;">App Suite Tray</div>
+<div class="apps-grid">
+<div class="app-tile" onclick="openApp('latest')"><span>🚀</span><span>Latest</span></div>
+<div class="app-tile" onclick="openApp('schedule')"><span>📅</span><span>Schedule</span></div>
+<div class="app-tile" onclick="openApp('weather')"><span>⛅</span><span>Weather</span></div>
+<div class="app-tile" onclick="openApp('labeling')"><span>🖼️</span><span>Labeling</span></div>
+<div class="app-tile" onclick="openApp('version')"><span>🔗</span><span>Version</span></div>
+<div class="app-tile" onclick="openApp('settings')"><span>🎨</span><span>Themes</span></div>
+<div class="app-tile" onclick="openApp('profile')"><span>👤</span><span>Profile</span></div>
+<div class="app-tile" onclick="openApp('credits')"><span>📜</span><span>Credits</span></div>
+<div class="app-tile" onclick="openApp('owner')"><span>🔒</span><span>Owner</span></div>
+<div class="app-tile" onclick="openApp('bug')"><span>🐛</span><span>Bugs</span></div>
+</div>
+</div>
+<div>
+<div class="brand">eagle.io</div>
+<div class="meta-info">v0.5.5 <span class="early-badge">Early Access</span> • <span id="liveClock">00:00:00</span></div>
+</div>
+</div>
+<div class="nav-right">
+<div style="display:flex; align-items:center; gap:12px;">
+<img id="navAvatar" src="" class="navbar-pfp" onclick="openApp('profile')" title="Open Profile" style="display:none;" />
+<div style="position:relative;">
+<button class="liquid-btn" id="notifBtn" style="padding:8px 12px; font-size:1.1rem;">🔔<span class="notif-badge" id="notifBadge">1</span></button>
+<div class="apps-dropdown" id="notifDropdown" style="right:0; left:auto; width:280px; top:48px;">
+<div style="font-weight:900; color:var(--accent-color); font-size:0.85rem; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:6px;">Global Announcements</div>
+<div id="notifContent" style="font-size:0.85rem; color:#f8fafc; line-height:1.4; margin-top:6px;">Welcome to early release v0.5.5!</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Main Hub Container -->
+<div class="container" id="topContainer">
+<div class="header-row">
+<h1 class="hero-title" id="heroGreeting">My Hub</h1>
+<select class="select-box" id="mainNavSelect">
+<option value="hub">My Hub Dashboard</option>
+<option value="games">Games Library</option>
+</select>
+</div>
+<!-- My Hub View Dashboard -->
+<div id="myHubView" style="display:flex; flex-direction:column; gap:24px;">
+<div class="widgets-grid">
+<div class="widget-card">
+<div class="widget-title">Local Device Time</div>
+<div style="font-size:1.8rem; font-weight:900; color:#f8fafc;" id="widgetClock">00:00:00</div>
+<div style="font-size:0.8rem; color:#94a3b8;" id="widgetDate">Loading date...</div>
+</div>
+<div class="widget-card">
+<div class="widget-title">Weather Widget</div>
+<div style="font-size:1.8rem; font-weight:900; color:#7dd3fc;" id="widgetWeatherTemp">56°F Clear</div>
+<div style="font-size:0.8rem; color:#94a3b8;" id="widgetWeatherLocation">ZIP: 66209 (Leawood, KS)</div>
+</div>
+<div class="widget-card">
+<div class="widget-title">Quick Personal Notes</div>
+<textarea id="quickNotes" class="modal-input" placeholder="Type personal notes here..." style="height:70px; resize:none; font-size:0.85rem;"></textarea>
+</div>
+</div>
+<h3 style="margin:0; color:var(--accent-color);">Favorite Game Shortcuts</h3>
+<div class="games-grid" id="favoritesGrid"></div>
+</div>
+<!-- Games Library View -->
+<div id="gamesView" class="games-grid" style="display:none;">
+<div class="game-card" data-id="pro-flashcards">
+<div class="fav-star" onclick="toggleFavorite('pro-flashcards')">★</div>
+<div style="font-size:2.5rem;">🗂️</div>
+<div style="font-size:1.2rem; font-weight:800;">Pro Flashcards</div>
+<div style="color:#94a3b8; font-size:0.9rem;">Study custom decks with 3D card flips, local storage persistence, and score tracking.</div>
+<a class="play-btn" href="pro-flashcards.svg">Launch Flashcards</a>
+</div>
+<div class="game-card" data-id="eagles-pe">
+<div class="fav-star" onclick="toggleFavorite('eagles-pe')">★</div>
+<div style="font-size:2.5rem;">🏐</div>
+<div style="font-size:1.2rem; font-weight:800;">Eagles PE Suite</div>
+<div style="color:#94a3b8; font-size:0.9rem;">Play Dodgeball Dash arcade action or test your skills in the PE Quiz Challenge!</div>
+<a class="play-btn" href="eagles-pe.svg">Play PE Arena</a>
+</div>
+<div class="game-card" data-id="geometry-eagle">
+<div class="fav-star" onclick="toggleFavorite('geometry-eagle')">★</div>
+<div style="font-size:2.5rem;">🟩</div>
+<div style="font-size:1.2rem; font-weight:800;">Geometry Eagle</div>
+<div style="color:#94a3b8; font-size:0.9rem;">Time your jumps to leap over spikes in this rhythm platformer.</div>
+<a class="play-btn" href="geometry-eagle.svg">Play Game</a>
+</div>
+<div class="game-card" data-id="eagle-clicker">
+<div class="fav-star" onclick="toggleFavorite('eagle-clicker')">★</div>
+<div style="font-size:2.5rem;">🦅</div>
+<div style="font-size:1.2rem; font-weight:800;">Eagle Clicker</div>
+<div style="color:#94a3b8; font-size:0.9rem;">Gather feathers and buy nest upgrades for passive income.</div>
+<a class="play-btn" href="eagle-clicker.svg">Play Game</a>
+</div>
+<div class="game-card" data-id="to-the-eagles">
+<div class="fav-star" onclick="toggleFavorite('to-the-eagles')">★</div>
+<div style="font-size:2.5rem;">☁️</div>
+<div style="font-size:1.2rem; font-weight:800;">To the Eagles</div>
+<div style="color:#94a3b8; font-size:0.9rem;">Bounce across moving clouds and climb as high as possible.</div>
+<a class="play-btn" href="to-the-eagles.svg">Play Game</a>
+</div>
+<div class="game-card" data-id="eagle-pizza">
+<div class="fav-star" onclick="toggleFavorite('eagle-pizza')">★</div>
+<div style="font-size:2.5rem;">🍕</div>
+<div style="font-size:1.2rem; font-weight:800;">Eagle Pizza</div>
+<div style="color:#94a3b8; font-size:0.9rem;">Assemble custom orders and manage your pizza shop.</div>
+<a class="play-btn" href="eagle-pizza.svg">Play Game</a>
+</div>
+<div class="game-card" data-id="teachers-quiz">
+<div class="fav-star" onclick="toggleFavorite('teachers-quiz')">★</div>
+<div style="font-size:2.5rem;">📚</div>
+<div style="font-size:1.2rem; font-weight:800;">Teachers Quiz</div>
+<div style="color:#94a3b8; font-size:0.9rem;">Test your knowledge on Leawood Middle teachers and school trivia!</div>
+<a class="play-btn" href="teachers-quiz.svg">Play Quiz</a>
+</div>
+<div class="game-card" data-id="eagle-pong">
+<div class="fav-star" onclick="toggleFavorite('eagle-pong')">★</div>
+<div style="font-size:2.5rem;">🏓</div>
+<div style="font-size:1.2rem; font-weight:800;">Eagle Pong</div>
+<div style="color:#94a3b8; font-size:0.9rem;">Classic retro paddle arcade game against an AI opponent.</div>
+<a class="play-btn" href="eagle-pong.svg">Play Game</a>
+</div>
+<div class="game-card" data-id="eagle-stack">
+<div class="fav-star" onclick="toggleFavorite('eagle-stack')">★</div>
+<div style="font-size:2.5rem;">🧱</div>
+<div style="font-size:1.2rem; font-weight:800;">Eagle Stack Tower</div>
+<div style="color:#94a3b8; font-size:0.9rem;">Precision-time your drops to stack blocks and reach the sky!</div>
+<a class="play-btn" href="eagle-stack.svg">Play Game</a>
+</div>
+<div class="game-card" data-id="eagle-blocks">
+<div class="fav-star" onclick="toggleFavorite('eagle-blocks')">★</div>
+<div style="font-size:2.5rem;">🟨</div>
+<div style="font-size:1.2rem; font-weight:800;">Eagle Blocks</div>
+<div style="color:#94a3b8; font-size:0.9rem;">Clear full rows and columns with yellow, white, and gold blocks.</div>
+<a class="play-btn" href="eagle-blocks.svg">Play Game</a>
+</div>
+<div class="game-card" data-id="flappy-eagle">
+<div class="fav-star" onclick="toggleFavorite('flappy-eagle')">★</div>
+<div style="font-size:2.5rem;">🦅</div>
+<div style="font-size:1.2rem; font-weight:800;">Flappy Eagle</div>
+<div style="color:#94a3b8; font-size:0.9rem;">Auto-moves forward! Press spacebar or click to jump and dodge narrow pathways.</div>
+<a class="play-btn" href="flappy-eagle.svg">Play Game</a>
+</div>
+<div class="game-card" data-id="feather-catcher">
+<div class="fav-star" onclick="toggleFavorite('feather-catcher')">★</div>
+<div style="font-size:2.5rem;">🪶</div>
+<div style="font-size:1.2rem; font-weight:800;">Feather Catcher</div>
+<div style="color:#94a3b8; font-size:0.9rem;">Catch falling golden feathers and dodge heavy rocks to beat your high score!</div>
+<a class="play-btn" href="feather-catcher.svg">Play Game</a>
+</div>
+<div class="game-card" data-id="eagle-jump">
+<div class="fav-star" onclick="toggleFavorite('eagle-jump')">★</div>
+<div style="font-size:2.5rem;">☁️</div>
+<div style="font-size:1.2rem; font-weight:800;">Eagle Jump</div>
+<div style="color:#94a3b8; font-size:0.9rem;">Bounce higher and higher across moving cloud platforms!</div>
+<a class="play-btn" href="eagle-jump.svg">Play Game</a>
+</div>
+<div class="game-card" data-id="eagle-hopper">
+<div class="fav-star" onclick="toggleFavorite('eagle-hopper')">★</div>
+<div style="font-size:2.5rem;">🛣️</div>
+<div style="font-size:1.2rem; font-weight:800;">Eagle Hopper</div>
+<div style="color:#94a3b8; font-size:0.9rem;">Hop forward across busy roads and roaring rivers safely!</div>
+<a class="play-btn" href="eagle-hopper.svg">Play Game</a>
+</div>
+</div>
+<div class="end-of-list">
+<span>End of list. Go back to top?</span>
+<button class="scroll-top-btn" id="scrollTopBtn" title="Back to Top">⬆</button>
+</div>
+</div>
+<script type="text/javascript">
+<![CDATA[
+if (window.location.hostname.includes('statically')) {
+window.location.href = 'https://cdn.jsdelivr.net/gh/mathbuddies/leawoodmiddle@main/index.svg?v=' + Date.now();
+}
+window.setAccent = function(color) {
+document.documentElement.style.setProperty('--accent-color', color);
+document.documentElement.style.setProperty('--accent-glow', color + '40');
+localStorage.setItem('eagle_accent', color);
+};
+window.clearBackground = function() {
+localStorage.removeItem('eagle_bg');
+document.getElementById('appRoot').style.backgroundImage = 'none';
+document.getElementById('appRoot').style.backgroundColor = '#070a12';
+};
+const creditsData = {
+credits: "Made by Scott 😛 went through a lot of stress to make this…",
+updates: "v0.5.5: Integrated Pro Flashcards modular app tile with 3D flip support and bug fixes.\nv0.5.4.1: Bug fixes for event bubbling, favorite star binding, JSONBin announcement fallback, and cache purge links.\nv0.5.4.0: Added Eagles PE arcade & quiz game suite, updated Latest app with cache purge instruction modal, fixed JSONBin announcements, and added dynamic background teaser in themes.\nv0.5.3.0: Fixed notifications window toggle bug, added auto-redirect to jsDelivr from statically, un-gated about:blank launcher, and added Eagles PE coming soon tile.\nv0.5.2.1: Full code rewrite for instant cache bypass, updated Credits App, about:blank session launcher for all version codes, and cache optimization.",
+notes: "Hey, it’s me, it’s Scott 🙃\n\nI went through a lot to make this…\n\n‘EVIL 3ECUR1Y!! U WILL NOT PREVAIL!!’ \n-Saige…\n\nNext update probably like 5 days after the end of Oct.. more code more glitchy\n\nAre you, are you? Coming to the tree? \n*Hes worried and mad but he’s still vibing \n\nOUT OF EARLY ACCESS BY THE NEW YEAR!!! (Hopefully)\n\nHAPPY HALLOWEEN HAHAH 👻 \n\nLeave a review of my website here: https://forms.gle/bhVjPyKyCd5iKfcj7 \n\nHop hop hop…\n\nAre you proud of me…?\n\nWOWWW ITS FINALLY THE BEGINING OF THE WEEK\n\nYou guys taking my retro bowl website still these days… even though it’s not mine\n\nAndy standee be tripping 🥀\n\nBuc-ee’s is coming to KC near the speedway and legends outlets, opens late 2027 (we think)\n\nWhere. Is. My. Dr. P. #costco\n\n‘ok then ima eat my last smint’\n-Nora\nMe: WE GOT MORE COMINGGGGG\n\n“I might’ve sprayed to much peppermint and now that’s all I smell…’\n-Grace \n\n‘Beckman’s voice is so deep…’\n-??? \nMe in my head: MY MICS NOT EVEN ONNN\n\nILL FIND MY WAYS!!!!!!!\n\nI’m so good 😊\n\nTHIS IS THE END\n\n‘Whos tes’ \nMe: Not anyone I know… plus who would name their kid tes?”"
+};
+function updateCreditsContent() {
+const val = document.getElementById('creditsSelect').value;
+document.getElementById('creditsContentBox').textContent = creditsData[val] || '';
+}
+window.openApp = function(app) {
+document.getElementById('appsDropdown').classList.remove('open');
+if (app === 'latest') {
+document.getElementById('purgeLinkBtn').href = 'https://purge.jsdelivr.net/gh/mathbuddies/leawoodmiddle@main/index.svg?v=' + Date.now();
+document.getElementById('latestModal').classList.add('open');
+}
+if (app === 'settings') document.getElementById('settingsModal').classList.add('open');
+if (app === 'weather') document.getElementById('weatherModal').classList.add('open');
+if (app === 'labeling') {
+updateLabelingStatusUI();
+document.getElementById('labelingModal').classList.add('open');
+}
+if (app === 'version') {
+versionEnteredCode = '';
+document.getElementById('versionCodeDisplay').textContent = '';
+document.getElementById('versionKeypadSection').style.display = 'block';
+document.getElementById('versionButtonsPanel').style.display = 'none';
+document.getElementById('versionModal').classList.add('open');
+}
+if (app === 'credits') {
+document.getElementById('creditsSelect').value = 'credits';
+updateCreditsContent();
+document.getElementById('creditsModal').classList.add('open');
+}
+if (app === 'profile') {
+document.getElementById('profileNameInput').value = localStorage.getItem('eagle_user_name') || '';
+document.getElementById('profileModal').classList.add('open');
+}
+if (app === 'schedule') document.getElementById('scheduleModal').classList.add('open');
+if (app === 'owner') {
+enteredCode = '';
+document.getElementById('codeDisplay').textContent = '';
+document.getElementById('broadcastPanel').style.display = 'none';
+document.getElementById('ownerModal').classList.add('open');
+}
+if (app === 'bug') document.getElementById('bugModal').classList.add('open');
+};
+window.closeModal = function(id) {
+document.getElementById(id).classList.remove('open');
+};
+window.saveName = function() {
+const val = document.getElementById('userNameInput').value.trim();
+if (val) {
+localStorage.setItem('eagle_user_name', val);
+localStorage.setItem('eagle_tut', 'true');
+document.getElementById('nameModal').style.display = 'none';
+updateProfileUI(val);
+}
+};
+window.saveProfile = function() {
+const nameVal = document.getElementById('profileNameInput').value.trim();
+if (nameVal) {
+localStorage.setItem('eagle_user_name', nameVal);
+updateProfileUI(nameVal);
+}
+closeModal('profileModal');
+};
+function updateProfileUI(name) {
+document.getElementById('heroGreeting').textContent = 'Welcome back, ' + name + '!';
+}
+let versionEnteredCode = '';
+window.pressVersionKey = function(num) {
+if (versionEnteredCode.length < 4) {
+versionEnteredCode += num;
+document.getElementById('versionCodeDisplay').textContent = '•'.repeat(versionEnteredCode.length).padEnd(4, '');
+if (versionEnteredCode.length === 4) {
+const validCodes = ['3166', '2702', '1918', '4625'];
+if (validCodes.includes(versionEnteredCode)) {
+document.getElementById('versionKeypadSection').style.display = 'none';
+document.getElementById('versionButtonsPanel').style.display = 'flex';
+if (versionEnteredCode === '3166') {
+document.getElementById('editorLinkBtn').style.display = 'block';
+} else {
+document.getElementById('editorLinkBtn').style.display = 'none';
+}
+} else {
+alert('Incorrect Code!');
+versionEnteredCode = '';
+document.getElementById('versionCodeDisplay').textContent = '___';
+}
+}
+}
+};
+window.openAboutBlankSession = function() {
+const win = window.open('about:blank', '_blank');
+if (win) {
+const doc = win.document;
+doc.open();
+doc.write('<!DOCTYPE html><html><head><title>eagle.io</title><style>body,html{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:#070a12;}iframe{width:100%;height:100%;border:none;}</style></head><body><iframe src="' + window.location.href + '"></iframe></body></html>');
+doc.close();
+}
+};
+window.switchLink = function(type) {
+if (type === 'statically') {
+window.location.href = 'https://cdn.statically.io/gh/mathbuddies/leawoodmiddle@main/index.svg?v=' + Date.now();
+} else if (type === 'jsdelivr') {
+window.location.href = 'https://cdn.jsdelivr.net/gh/mathbuddies/leawoodmiddle@main/index.svg?v=' + Date.now();
+} else if (type === 'github') {
+window.location.href = 'https://raw.githubusercontent.com/mathbuddies/leawoodmiddle/main/index.svg?v=' + Date.now();
+} else if (type === 'editor') {
+window.location.href = 'https://github.com/mathbuddies/leawoodmiddle/tree/main';
+}
+};
+window.saveWeatherZip = function() {
+const zip = document.getElementById('weatherZipInput').value.trim();
+if (zip.length === 5) {
+localStorage.setItem('eagle_weather_zip', zip);
+document.getElementById('widgetWeatherLocation').textContent = 'ZIP: ' + zip;
+closeModal('weatherModal');
+} else {
+alert('Please enter a valid 5-digit ZIP code.');
+}
+};
+window.toggleLabelingEnabled = function(enabled) {
+localStorage.setItem('eagle_labeling_enabled', enabled ? 'true' : 'false');
+updateLabelingStatusUI();
+};
+function updateLabelingStatusUI() {
+const enabled = localStorage.getItem('eagle_labeling_enabled') === 'true';
+const statusEl = document.getElementById('labelingStatus');
+statusEl.textContent = 'Status: ' + (enabled ? 'Enabled (Active)' : 'Disabled');
+statusEl.style.color = enabled ? '#22c55e' : '#facc15';
+}
+let enteredCode = '';
+window.pressKey = function(num) {
+if (enteredCode.length < 4) {
+enteredCode += num;
+document.getElementById('codeDisplay').textContent = '•'.repeat(enteredCode.length).padEnd(4, '');
+if (enteredCode.length === 4) {
+if (enteredCode === '3166') {
+document.getElementById('broadcastPanel').style.display = 'flex';
+} else {
+alert('Incorrect Code!');
+enteredCode = '';
+document.getElementById('codeDisplay').textContent = '___';
+}
+}
+}
+};
+window.sendBroadcast = async function() {
+const msg = document.getElementById('broadcastInput').value.trim();
+if (msg) {
+try {
+await fetch('https://api.jsonbin.io/v3/b/6adafef5ac6210605a4b0a6d', {
+method: 'PUT',
+headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify({ message: msg })
+});
+alert('Broadcast published successfully!');
+} catch (e) {
+alert('Broadcast published locally.');
+}
+document.getElementById('notifContent').textContent = msg;
+closeModal('ownerModal');
+}
+};
+window.submitBug = function() {
+alert('Bug report submitted successfully!');
+closeModal('bugModal');
+};
+let events = JSON.parse(localStorage.getItem('eagle_events') || '[]');
+window.addEvent = function() {
+const date = document.getElementById('eventDate').value;
+const title = document.getElementById('eventTitle').value.trim();
+if (date && title) {
+events.push({ date: date, title: title });
+localStorage.setItem('eagle_events', JSON.stringify(events));
+renderEvents();
+document.getElementById('eventTitle').value = '';
+}
+};
+window.deleteEvent = function(idx) {
+events.splice(idx, 1);
+localStorage.setItem('eagle_events', JSON.stringify(events));
+renderEvents();
+};
+function renderEvents() {
+const list = document.getElementById('eventList');
+list.innerHTML = '';
+if (events.length === 0) {
+list.innerHTML = '<div style="color:#94a3b8;">No scheduled events.</div>';
+return;
+}
+events.sort(function(a, b) { return new Date(a.date) - new Date(b.date); });
+events.forEach(function(ev, idx) {
+const item = document.createElement('div');
+item.style.cssText = 'background:rgba(30,41,59,0.6); padding:8px 12px; border-radius:8px; display:flex; justify-content:space-between; align-items:center;';
+item.innerHTML = '<span><strong>' + ev.date + ':</strong> ' + ev.title + '</span><button onclick="deleteEvent(' + idx + ')" style="background:none; border:none; color:#ef4444; cursor:pointer; font-weight:bold;">✕</button>';
+list.appendChild(item);
+});
+}
+window.addEventListener('DOMContentLoaded', function() {
+document.title = 'eagle.io';
+setAccent(localStorage.getItem('eagle_accent') || '#38bdf8');
+document.getElementById('creditsSelect').onchange = updateCreditsContent;
+const savedBg = localStorage.getItem('eagle_bg');
+if (savedBg) {
+document.getElementById('appRoot').style.backgroundImage = 'url(' + savedBg + ')';
+document.getElementById('appRoot').style.backgroundColor = 'transparent';
+}
+const bgInput = document.getElementById('bgUploadInput');
+bgInput.onchange = function(e) {
+const file = e.target.files[0];
+if (file) {
+const reader = new FileReader();
+reader.onload = function(evt) {
+const dataUrl = evt.target.result;
+localStorage.setItem('eagle_bg', dataUrl);
+document.getElementById('appRoot').style.backgroundImage = 'url(' + dataUrl + ')';
+document.getElementById('appRoot').style.backgroundColor = 'transparent';
+};
+reader.readAsDataURL(file);
+}
+};
+const pfpInput = document.getElementById('pfpUploadInput');
+const savedPfp = localStorage.getItem('eagle_pfp');
+const navAvatar = document.getElementById('navAvatar');
+if (savedPfp) {
+navAvatar.src = savedPfp;
+navAvatar.style.display = 'block';
+}
+pfpInput.onchange = function(e) {
+const file = e.target.files[0];
+if (file) {
+const reader = new FileReader();
+reader.onload = function(evt) {
+const dataUrl = evt.target.result;
+localStorage.setItem('eagle_pfp', dataUrl);
+navAvatar.src = dataUrl;
+navAvatar.style.display = 'block';
+alert('Profile picture updated successfully!');
+};
+reader.readAsDataURL(file);
+}
+};
+const labelingInput = document.getElementById('labelingUploadInput');
+const savedLabelImg = localStorage.getItem('eagle_label_img');
+if (savedLabelImg) {
+document.getElementById('labelingDisplayImg').src = savedLabelImg;
+}
+labelingInput.onchange = function(e) {
+const file = e.target.files[0];
+if (file) {
+const reader = new FileReader();
+reader.onload = function(evt) {
+const dataUrl = evt.target.result;
+localStorage.setItem('eagle_label_img', dataUrl);
+document.getElementById('labelingDisplayImg').src = dataUrl;
+alert('Labeling image saved successfully!');
+};
+reader.readAsDataURL(file);
+}
+};
+document.addEventListener('visibilitychange', function() {
+const enabled = localStorage.getItem('eagle_labeling_enabled') === 'true';
+const overlay = document.getElementById('labelingOverlay');
+if (enabled && document.hidden) {
+overlay.style.display = 'flex';
+} else {
+overlay.style.display = 'none';
+}
+});
+const savedZip = localStorage.getItem('eagle_weather_zip') || '66209';
+document.getElementById('widgetWeatherLocation').textContent = 'ZIP: ' + savedZip;
+document.getElementById('weatherZipInput').value = savedZip;
+if (!localStorage.getItem('eagle_tut')) {
+document.getElementById('nameModal').style.display = 'flex';
+} else {
+updateProfileUI(localStorage.getItem('eagle_user_name') || 'Gamer');
+}
+renderEvents();
+document.querySelectorAll('.game-card .play-btn').forEach(function(btn) {
+const currentHref = btn.getAttribute('href').split('?')[0];
+btn.setAttribute('href', currentHref + '?v=' + Date.now());
+});
+setInterval(function() {
+const now = new Date();
+document.getElementById('liveClock').textContent = now.toLocaleTimeString();
+document.getElementById('widgetClock').textContent = now.toLocaleTimeString();
+document.getElementById('widgetDate').textContent = now.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+}, 1000);
+const notes = document.getElementById('quickNotes');
+notes.value = localStorage.getItem('eagle_notes') || '';
+notes.oninput = function(e) { localStorage.setItem('eagle_notes', e.target.value); };
+const appsDropdownBtn = document.getElementById('appsDropdownBtn');
+const appsDropdown = document.getElementById('appsDropdown');
+appsDropdownBtn.onclick = function(e) {
+e.stopPropagation();
+appsDropdown.classList.toggle('open');
+document.getElementById('notifDropdown').classList.remove('open');
+};
+const notifBtn = document.getElementById('notifBtn');
+const notifDropdown = document.getElementById('notifDropdown');
+notifBtn.onclick = function(e) {
+e.stopPropagation();
+notifDropdown.classList.toggle('open');
+appsDropdown.classList.remove('open');
+document.getElementById('notifBadge').style.display = 'none';
+};
+window.onclick = function() {
+appsDropdown.classList.remove('open');
+notifDropdown.classList.remove('open');
+};
+const scrollTopBtn = document.getElementById('scrollTopBtn');
+const appRoot = document.getElementById('appRoot');
+scrollTopBtn.onclick = function() {
+appRoot.scrollTo({ top: 0, behavior: 'smooth' });
+};
+const navSelect = document.getElementById('mainNavSelect');
+const hubView = document.getElementById('myHubView');
+const gamesView = document.getElementById('gamesView');
+navSelect.onchange = function() {
+if (navSelect.value === 'hub') {
+hubView.style.display = 'flex';
+gamesView.style.display = 'none';
+renderFavorites();
+} else {
+hubView.style.display = 'none';
+gamesView.style.display = 'grid';
+}
+};
+let favorites = JSON.parse(localStorage.getItem('eagle_favs') || '[]');
+window.toggleFavorite = function(id) {
+if (favorites.includes(id)) favorites = favorites.filter(function(f) { return f !== id; });
+else favorites.push(id);
+localStorage.setItem('eagle_favs', JSON.stringify(favorites));
+updateFavUI();
+if (navSelect.value === 'hub') renderFavorites();
+};
+function updateFavUI() {
+document.querySelectorAll('.game-card').forEach(function(card) {
+const id = card.getAttribute('data-id');
+const star = card.querySelector('.fav-star');
+if (favorites.includes(id)) { star.classList.add('active'); star.textContent = '★'; }
+else { star.classList.remove('active'); star.textContent = '☆'; }
+});
+}
+function renderFavorites() {
+const container = document.getElementById('favoritesGrid');
+container.innerHTML = '';
+const allGames = document.querySelectorAll('#gamesView .game-card');
+let count = 0;
+allGames.forEach(function(card) {
+const id = card.getAttribute('data-id');
+if (favorites.includes(id)) {
+const clone = card.cloneNode(true);
+clone.querySelector('.fav-star').onclick = function() { toggleFavorite(id); };
+container.appendChild(clone);
+count++;
+}
+});
+if (count === 0) {
+container.innerHTML = '<div style="color:#94a3b8; font-size:0.9rem; grid-column:1/-1;">No favorite games starred yet! Switch to the Games Library tab to star some.</div>';
+}
+}
+updateFavUI();
+renderFavorites();
+});
+]]>
+</script>
+</div>
+</foreignObject>
 </svg>
