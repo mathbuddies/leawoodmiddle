@@ -313,7 +313,7 @@
 
           <div>
             <div class="brand">eagle.io</div>
-            <div class="meta-info">v0.5.2.0 <span class="early-badge">Early Access</span> • <span id="liveClock">00:00:00</span></div>
+            <div class="meta-info">v0.5.2.1 <span class="early-badge">Early Access</span> • <span id="liveClock">00:00:00</span></div>
           </div>
         </div>
 
@@ -486,7 +486,7 @@
 
         const creditsData = {
           credits: "Made by Scott 😛 went through a lot of stress to make this…",
-          updates: "v0.5.2.0: Added unified Credits App, about:blank session launcher for all version codes, and removed standalone updates app.\nv0.5.1.0: Removed unnecessary ampersands, added profile picture upload with top-right navbar avatar, and added secure Version app.\nv0.5.0.2: Chromebook performance optimizations and ZIP code weather lookup (default 66209).\nv0.5.0.1: Added accent color theme buttons, early release announcements, masked owner PIN entry, and fixed JSONBin bugs.\nv49: Added Labeling App (fullscreen distraction blocker when leaving tab) and Weather App customization.\nv48: Brought back custom background image uploader.",
+          updates: "v0.5.2.1: Full code rewrite for instant cache bypass, updated Credits App, about:blank session launcher for all version codes, and cache optimization.\nv0.5.1.0: Removed unnecessary ampersands, added profile picture upload with top-right navbar avatar, and added secure Version app.\nv0.5.0.2: Chromebook performance optimizations and ZIP code weather lookup (default 66209).\nv0.5.0.1: Added accent color theme buttons, early release announcements, masked owner PIN entry, and fixed JSONBin bugs.\nv49: Added Labeling App (fullscreen distraction blocker when leaving tab) and Weather App customization.\nv48: Brought back custom background image uploader.",
           notes: "Hey, it’s me, it’s Scott 🙃\n\nI went through a lot to make this…\n\n‘EVIL 3ECUR1Y!! U WILL NOT PREVAIL!!’ \n-Saige…\n\nNext update probably like 5 days after the end of Oct.. more code more glitchy\n\nAre you, are you? Coming to the tree? \n*Hes worried and mad but he’s still vibing \n\nOUT OF EARLY ACCESS BY THE NEW YEAR!!! (Hopefully)\n\nHAPPY HALLOWEEN HAHAH 👻 \n\nLeave a review of my website here: https://forms.gle/bhVjPyKyCd5iKfcj7 \n\nHop hop hop…\n\nAre you proud of me…?\n\nWOWWW ITS FINALLY THE BEGINING OF THE WEEK\n\nYou guys taking my retro bowl website still these days… even though it’s not mine\n\nAndy standee be tripping 🥀\n\nBuc-ee’s is coming to KC near the speedway and legends outlets, opens late 2027 (we think)\n\nWhere. Is. My. Dr. P. #costco\n\n‘ok then ima eat my last smint’\n-Nora\nMe: WE GOT MORE COMINGGGGG\n\n“I might’ve sprayed to much peppermint and now that’s all I smell…’\n-Grace \n\n‘Beckman’s voice is so deep…’\n-??? \nMe in my head: MY MICS NOT EVEN ONNN\n\nILL FIND MY WAYS!!!!!!!\n\nI’m so good 😊\n\nTHIS IS THE END\n\n‘Whos tes’ \nMe: Not anyone I know… plus who would name their kid tes?”"
         };
 
@@ -822,7 +822,7 @@
 
           const notifBtn = document.getElementById('notifBtn');
           const notifDropdown = document.getElementById('notifDropdown');
-          notifBtn.onclick = function(e) { e.stopPropagation(); notifDropdown.classList.toggle('open'); appsDropdown.classList.remove('open'); document.getElementById('notifBadge').style.display = 'none'; };
+          notifBtn.onclick = function(e) { e.stopPropagation(); notifDropdown.classList.remove('open'); appsDropdown.classList.remove('open'); document.getElementById('notifBadge').style.display = 'none'; };
 
           window.onclick = function() { appsDropdown.classList.remove('open'); notifDropdown.classList.remove('open'); };
 
