@@ -343,7 +343,7 @@
 
           <div>
             <div class="brand">eagle.io</div>
-            <div class="meta-info">v0.6.1.0 <span class="early-badge">Early Access 2</span> • <span id="liveClock">00:00:00</span></div>
+            <div class="meta-info">v0.6.1.1 <span class="early-badge">Early Access 2</span> • <span id="liveClock">00:00:00</span></div>
           </div>
         </div>
 
@@ -543,7 +543,7 @@
 
         const creditsData = {
           credits: "Made by Scott 😛 went through a lot of stress to make this…",
-          updates: "v0.6.1.0: Added Notes and Cloaking apps, Tools coming soon, updated creator notes with paragraph spacing, and fixed notification sync bugs.",
+          updates: "v0.6.1.1: Minor performance fixes, full cloaking app migration, and expanded color themes.",
           notes: "The GitHub repo stress be like…\n\nLet’s get this show on the road…🎪",
           pics: "Pics dropdown coming soon! Stay tuned for awesome gallery photos."
         };
@@ -788,7 +788,7 @@
           document.getElementById('creditsSelect').onchange = updateCreditsContent;
 
           // Fetch JSONBin announcement for persistent notifications
-          fetch('https://api.jsonbin.io/v3/b/6adafef5ac6210605a4b0a6d/latest', { headers: { 'X-Master-Key': '' } })
+          fetch('https://api.jsonbin.io/v3/b/6adafef5ac6210605a4b0a6d/latest')
             .then(res => res.json())
             .then(data => {
               if (data && data.record && data.record.message) {
