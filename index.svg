@@ -4,14 +4,14 @@
       
       <style type="text/css">
         <![CDATA[
-        * { box-sizing: border-box; }
+        * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
         :root { 
           --accent-color: #38bdf8; 
           --accent-glow: rgba(56, 189, 248, 0.25); 
         }
 
         .navbar {
-          width: 100%; padding: 16px 28px; background: rgba(15, 23, 42, 0.9);
+          width: 100%; padding: 16px 28px; background: rgba(15, 23, 42, 0.92);
           border-bottom: 1px solid rgba(255, 255, 255, 0.1);
           display: flex; justify-content: space-between; align-items: center;
           position: sticky; top: 0; z-index: 100; backdrop-filter: blur(8px);
@@ -30,7 +30,7 @@
         .early-badge { background: rgba(56, 189, 248, 0.15); border: 1px solid var(--accent-color); color: var(--accent-color); font-size: 0.65rem; padding: 1px 6px; border-radius: 6px; font-weight: 800; }
 
         .apps-dropdown {
-          position: absolute; top: 52px; left: 0; width: 360px; background: rgba(15, 23, 42, 0.95);
+          position: absolute; top: 52px; left: 0; width: 360px; background: rgba(15, 23, 42, 0.96);
           border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 20px; padding: 18px;
           display: none; flex-direction: column; gap: 14px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); z-index: 200; backdrop-filter: blur(12px);
         }
@@ -51,7 +51,7 @@
         }
         .modal-overlay.open { display: flex; }
         .modal-card {
-          background: rgba(15, 23, 42, 0.95); border: 1px solid rgba(255, 255, 255, 0.2);
+          background: rgba(15, 23, 42, 0.96); border: 1px solid rgba(255, 255, 255, 0.2);
           border-radius: 20px; padding: 24px; width: 90%; max-width: 440px; display: flex; flex-direction: column; gap: 16px; max-height: 90vh; overflow-y: auto;
           box-shadow: 0 15px 35px rgba(0,0,0,0.6);
         }
@@ -138,11 +138,11 @@
       <!-- Weather App Modal -->
       <div class="modal-overlay" id="weatherModal">
         <div class="modal-card">
-          <h3 style="margin:0; color:var(--accent-color);">Weather Settings</h3>
+          <h3 style="margin:0; color:var(--accent-color);">Weather Settings (ZIP Code)</h3>
           <div style="display:flex; flex-direction:column; gap:10px;">
-            <span style="font-size:0.85rem; color:#94a3b8;">Enter your city or location name:</span>
-            <input type="text" class="modal-input" id="weatherLocationInput" placeholder="e.g. Leawood, KS" />
-            <button onclick="saveWeatherLocation()" class="liquid-btn" style="background:var(--accent-color); color:#0f172a; justify-content:center;">Update Location</button>
+            <span style="font-size:0.85rem; color:#94a3b8;">Enter ZIP Code (Default: 66209):</span>
+            <input type="text" class="modal-input" id="weatherZipInput" placeholder="66209" maxlength="5" />
+            <button onclick="saveWeatherZip()" class="liquid-btn" style="background:var(--accent-color); color:#0f172a; justify-content:center;">Update ZIP Code</button>
           </div>
           <button onclick="closeModal('weatherModal')" class="liquid-btn" style="justify-content:center; margin-top:10px;">Close Weather</button>
         </div>
@@ -170,9 +170,8 @@
         <div class="modal-card">
           <h3 style="margin:0; color:var(--accent-color);">Update Log</h3>
           <div style="font-size:0.85rem; color:#94a3b8; line-height:1.5; display:flex; flex-direction:column; gap:10px;">
-            <div><strong>v0.5.0.1:</strong> Added back accent color theme buttons, early release announcements, masked owner PIN entry, and fixed JSONBin bugs.</div>
-            <div><strong>v49:</strong> Added Labeling App (fullscreen blocker when leaving tab) and Weather App customization.</div>
-            <div><strong>v48:</strong> Brought back custom background image uploader.</div>
+            <div><strong>v0.5.0.2:</strong> Chromebook performance optimizations, ZIP code weather lookup (default 66209), and minor bug fixes.</div>
+            <div><strong>v0.5.0.1:</strong> Added accent color theme buttons, early release announcements, masked owner PIN entry, and fixed JSONBin bugs.</div>
           </div>
           <button onclick="closeModal('updateLogModal')" class="liquid-btn" style="justify-content:center; margin-top:10px;">Close Updates</button>
         </div>
@@ -253,7 +252,7 @@
 
           <div>
             <div class="brand">eagle.io</div>
-            <div class="meta-info">v0.5.0.1 <span class="early-badge">Early Access</span> • <span id="liveClock">00:00:00</span></div>
+            <div class="meta-info">v0.5.0.2 <span class="early-badge">Early Access</span> • <span id="liveClock">00:00:00</span></div>
           </div>
         </div>
 
@@ -289,7 +288,7 @@
             <div class="widget-card">
               <div class="widget-title">Weather Widget</div>
               <div style="font-size:1.8rem; font-weight:900; color:#7dd3fc;" id="widgetWeatherTemp">56°F Clear</div>
-              <div style="font-size:0.8rem; color:#94a3b8;" id="widgetWeatherLocation">Leawood, Kansas area.</div>
+              <div style="font-size:0.8rem; color:#94a3b8;" id="widgetWeatherLocation">ZIP: 66209 (Leawood, KS)</div>
             </div>
             <div class="widget-card">
               <div class="widget-title">Quick Personal Notes</div>
@@ -462,13 +461,15 @@
           document.getElementById('heroGreeting').textContent = 'Welcome back, ' + name + '!';
         }
 
-        // Weather Logic
-        window.saveWeatherLocation = function() {
-          const loc = document.getElementById('weatherLocationInput').value.trim();
-          if (loc) {
-            localStorage.setItem('eagle_weather_loc', loc);
-            document.getElementById('widgetWeatherLocation').textContent = loc;
+        // Weather ZIP Code Logic
+        window.saveWeatherZip = function() {
+          const zip = document.getElementById('weatherZipInput').value.trim();
+          if (zip.length === 5) {
+            localStorage.setItem('eagle_weather_zip', zip);
+            document.getElementById('widgetWeatherLocation').textContent = 'ZIP: ' + zip;
             closeModal('weatherModal');
+          } else {
+            alert('Please enter a valid 5-digit ZIP code.');
           }
         };
 
@@ -489,7 +490,6 @@
         window.pressKey = function(num) {
           if (enteredCode.length < 4) {
             enteredCode += num;
-            // Mask PIN code with bullet characters
             document.getElementById('codeDisplay').textContent = '•'.repeat(enteredCode.length).padEnd(4, '_');
             if (enteredCode.length === 4) {
               if (enteredCode === '3166') {
@@ -617,12 +617,10 @@
             }
           });
 
-          // Weather location restore
-          const savedLoc = localStorage.getItem('eagle_weather_loc');
-          if (savedLoc) {
-            document.getElementById('widgetWeatherLocation').textContent = savedLoc;
-            document.getElementById('weatherLocationInput').value = savedLoc;
-          }
+          // Weather ZIP restore
+          const savedZip = localStorage.getItem('eagle_weather_zip') || '66209';
+          document.getElementById('widgetWeatherLocation').textContent = 'ZIP: ' + savedZip;
+          document.getElementById('weatherZipInput').value = savedZip;
 
           if (!localStorage.getItem('eagle_tut')) {
             document.getElementById('nameModal').style.display = 'flex';
