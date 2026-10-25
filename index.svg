@@ -239,7 +239,7 @@
               <button onclick="toggleCloakingEnabled(true)" class="liquid-btn" style="flex:1; justify-content:center; background:#22c55e; color:#0f172a;">Enable Stealth</button>
               <button onclick="toggleCloakingEnabled(false)" class="liquid-btn" style="flex:1; justify-content:center; background:#ef4444; color:#fff;">Disable Stealth</button>
             </div>
-            <div id="cloakingStatus" style="font-size:0.8rem; font-weight:bold; color:#facc15; text-align:center;">Status: Disabled</div>
+            <div id="cloakingStatus" style="font-size:0.80rem; font-weight:bold; color:#facc15; text-align:center;">Status: Disabled</div>
           </div>
           <button onclick="closeModal('cloakingModal')" class="liquid-btn" style="justify-content:center; margin-top:10px;">Close App</button>
         </div>
@@ -535,7 +535,7 @@
 
         const creditsData = {
           credits: "Made by Scott 😛 went through a lot of stress to make this…",
-          updates: "v0.6.2.0: Restored unified creator notes, removed Teachers Quiz, and added robust performance improvements.",
+          updates: "v0.6.2.0: Connected to new JSONBin ID, fully integrated Notes & Cloaking suites, and removed Teachers Quiz.",
           notes: "Hey, it’s me, it’s Scott 🙃\n\nI went through a lot to make this…\n\n‘EVIL 3ECUR1Y!! U WILL NOT PREVAIL!!’ \n-Saige…\n\nNext update probably like 5 days after the end of Oct.. more code more glitchy\n\nAre you, are you? Coming to the tree? \n*Hes worried and mad but he’s still vibing \n\nOUT OF EARLY ACCESS BY THE NEW YEAR!!! (Hopefully)\n\nHAPPY HALLOWEEN HAHAH 👻 \n\nLeave a review of my website here: https://forms.gle/bhVjPyKyCd5iKfcj7 \n\nHop hop hop…\n\nAre you proud of me…?\n\nWOWWW ITS FINALLY THE BEGINING OF THE WEEK\n\nYou guys taking my retro bowl website still these days… even though it’s not mine\n\nAndy standee be tripping 🥀\n\nBuc-ee’s is coming to KC near the speedway and legends outlets, opens late 2027 (we think)\n\nWhere. Is. My. Dr. P. #costco\n\n‘ok then ima eat my last smint’\n-Nora\nMe: WE GOT MORE COMINGGGGG\n\n“I might’ve sprayed to much peppermint and now that’s all I smell…’\n-Grace \n\n‘Beckman’s voice is so deep…’\n-??? \nMe in my head: MY MICS NOT EVEN ONNN\n\nILL FIND MY WAYS!!!!!!!\n\nI’m so good 😊\n\nTHIS IS THE END\n\n‘Whos tes’ \nMe: Not anyone I know… plus who would name their kid tes?\n\nNot me waiting\nthrottled: true,\nthrottlingReset: 165\n\nThe GitHub repo stress be like…\n\nLet’s get this show on the road…🎪",
           pics: "Pics dropdown coming soon! Stay tuned for awesome gallery photos."
         };
@@ -718,7 +718,7 @@
           const msg = document.getElementById('broadcastInput').value.trim();
           if (msg) {
             try {
-              await fetch('https://api.jsonbin.io/v3/b/6adafef5ac6210605a4b0a6d', {
+              await fetch('https://api.jsonbin.io/v3/b/6ade824bac6210605a51b40a', {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ message: msg })
@@ -779,8 +779,8 @@
 
           document.getElementById('creditsSelect').onchange = updateCreditsContent;
 
-          // Fetch JSONBin announcement for persistent notifications
-          fetch('https://api.jsonbin.io/v3/b/6adafef5ac6210605a4b0a6d/latest')
+          // Fetch JSONBin announcement using new Bin ID
+          fetch('https://api.jsonbin.io/v3/b/6ade824bac6210605a51b40a/latest')
             .then(res => res.json())
             .then(data => {
               if (data && data.record && data.record.message) {
