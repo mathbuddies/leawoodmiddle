@@ -21,7 +21,7 @@
         .liquid-btn {
           background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(255, 255, 255, 0.12);
           color: #f8fafc; padding: 8px 16px; border-radius: 12px; cursor: pointer; font-weight: bold; font-size: 0.9rem;
-          display: flex; align-items: center; gap: 8px; transition: 0.2s;
+          display: flex; align-items: center; gap: 8px; transition: 0.2s; text-decoration: none;
         }
         .liquid-btn:hover { background: var(--accent-color); color: #0f172a; border-color: var(--accent-color); }
 
@@ -76,8 +76,7 @@
         .games-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
         .game-card { background: rgba(30, 41, 59, 0.45); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 18px; padding: 24px; display: flex; flex-direction: column; gap: 16px; text-decoration: none; color: inherit; position: relative; transition: 0.2s; }
         .game-card:hover { border-color: var(--accent-color); transform: translateY(-3px); background: rgba(30, 41, 59, 0.65); }
-        .play-btn { background: var(--accent-color); color: #0f172a; font-weight: 800; padding: 12px; border-radius: 12px; text-align: center; font-size: 0.95rem; }
-        .play-btn.disabled { background: rgba(255, 255, 255, 0.15); color: #94a3b8; cursor: not-allowed; pointer-events: none; }
+        .play-btn { background: var(--accent-color); color: #0f172a; font-weight: 800; padding: 12px; border-radius: 12px; text-align: center; font-size: 0.95rem; text-decoration: none; }
         
         .fav-star { position: absolute; top: 20px; right: 20px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.12); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; cursor: pointer; transition: 0.2s; }
         .fav-star:hover { background: rgba(250, 204, 21, 0.2); border-color: #facc15; }
@@ -89,14 +88,12 @@
 
         .notif-badge { position: absolute; top: -4px; right: -4px; background: #ef4444; color: #fff; font-size: 0.65rem; font-weight: 900; padding: 2px 6px; border-radius: 10px; display: flex; }
 
-        /* Fullscreen Labeling App Overlay */
         #labelingOverlay {
           position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; z-index: 9999;
           display: none; align-items: center; justify-content: center; overflow: hidden;
         }
         #labelingOverlay img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
-        /* Navbar Profile Avatar */
         .navbar-pfp {
           width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent-color); cursor: pointer; background: #1e293b;
         }
@@ -123,6 +120,18 @@
         </div>
       </div>
 
+      <!-- Latest App / Purge Notice Modal -->
+      <div class="modal-overlay" id="latestModal">
+        <div class="modal-card">
+          <h3 style="margin:0; color:var(--accent-color);">Update to Latest Version</h3>
+          <p style="font-size:0.9rem; color:#cbd5e1; line-height:1.5; margin:0;" id="latestModalText">
+            This is going to take you to a separate link. When you open it, you can simply close it right after and come back to this page and reload, and you will be updated to the latest version. Click the button below to open the link.
+          </p>
+          <a id="purgeLinkBtn" href="https://purge.jsdelivr.net/gh/mathbuddies/leawoodmiddle@main/index.svg" target="_blank" class="liquid-btn" style="background:var(--accent-color); color:#0f172a; justify-content:center; text-align:center;">Open Purge Link</a>
+          <button onclick="closeModal('latestModal')" class="liquid-btn" style="justify-content:center; margin-top:4px;">Close</button>
+        </div>
+      </div>
+
       <!-- Settings / Theme & Background Modal -->
       <div class="modal-overlay" id="settingsModal">
         <div class="modal-card">
@@ -140,6 +149,7 @@
           <div style="display:flex; flex-direction:column; gap:10px; margin-top:10px;">
             <span style="font-size:0.9rem; font-weight:bold; color:#f8fafc;">Custom Background Image:</span>
             <input type="file" id="bgUploadInput" accept="image/*" class="modal-input" style="padding:8px;" />
+            <div style="font-size:0.8rem; color:#38bdf8; font-weight:700; margin-top:2px;">Dynamic backgrounds coming soon!</div>
             <button onclick="clearBackground()" class="liquid-btn" style="justify-content:center; background:rgba(239,68,68,0.2); color:#ef4444; border-color:rgba(239,68,68,0.4);">Reset Background</button>
           </div>
           <button onclick="closeModal('settingsModal')" class="liquid-btn" style="justify-content:center; margin-top:10px;">Close Settings</button>
@@ -165,14 +175,10 @@
       <div class="modal-overlay" id="versionModal">
         <div class="modal-card">
           <h3 style="margin:0; color:var(--accent-color);">Version Utility</h3>
-          
-          <!-- Always Accessible about:blank session Launcher -->
           <div style="display:flex; flex-direction:column; gap:10px;">
             <button onclick="openAboutBlankSession()" class="liquid-btn" style="justify-content:center; background:#c084fc; color:#0f172a; font-weight:bold;">Launch about:blank Session</button>
           </div>
-          
           <hr style="border:none; border-top:1px solid rgba(255,255,255,0.1); margin:10px 0;" />
-
           <div id="versionKeypadSection">
             <p style="font-size:0.85rem; color:#94a3b8; margin:0;">Enter developer PIN for advanced links:</p>
             <div id="versionCodeDisplay" style="background:rgba(30,41,59,0.8); color:var(--accent-color); font-size:2rem; font-weight:900; text-align:center; padding:12px; border-radius:12px; letter-spacing:10px;">____</div>
@@ -302,7 +308,6 @@
         <div class="nav-left">
           <button class="liquid-btn" id="appsDropdownBtn">Apps Menu</button>
           
-          <!-- Apps Dropdown Suite Tray -->
           <div class="apps-dropdown" id="appsDropdown">
             <div style="font-weight:900; color:var(--accent-color); font-size:0.85rem; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:6px;">App Suite Tray</div>
             <div class="apps-grid">
@@ -321,19 +326,18 @@
 
           <div>
             <div class="brand">eagle.io</div>
-            <div class="meta-info">v0.5.3.0 <span class="early-badge">Early Access</span> • <span id="liveClock">00:00:00</span></div>
+            <div class="meta-info">v0.5.4.0 <span class="early-badge">Early Access</span> • <span id="liveClock">00:00:00</span></div>
           </div>
         </div>
 
         <div class="nav-right">
           <div style="display:flex; align-items:center; gap:12px;">
-            <!-- Top Right Navbar Profile Avatar -->
             <img id="navAvatar" src="" class="navbar-pfp" onclick="openApp('profile')" title="Open Profile" style="display:none;" />
             <div style="position:relative;">
               <button class="liquid-btn" id="notifBtn" style="padding:8px 12px; font-size:1.1rem;">🔔<span class="notif-badge" id="notifBadge">1</span></button>
               <div class="apps-dropdown" id="notifDropdown" style="right:0; left:auto; width:280px; top:48px;">
                 <div style="font-weight:900; color:var(--accent-color); font-size:0.85rem; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:6px;">Global Announcements</div>
-                <div id="notifContent" style="font-size:0.85rem; color:#f8fafc; line-height:1.4; margin-top:6px;">Welcome to early release v0.5.3.0!</div>
+                <div id="notifContent" style="font-size:0.85rem; color:#f8fafc; line-height:1.4; margin-top:6px;">Welcome to early release v0.5.4.0!</div>
               </div>
             </div>
           </div>
@@ -375,13 +379,13 @@
         <!-- Games Library View -->
         <div id="gamesView" class="games-grid" style="display:none;">
           
-          <!-- Upcoming PE Game Tile -->
+          <!-- Eagles PE Game Tile with Active Link -->
           <div class="game-card" data-id="eagles-pe">
             <div class="fav-star" onclick="toggleFavorite('eagles-pe')">★</div>
             <div style="font-size:2.5rem;">🏐</div>
-            <div style="font-size:1.2rem; font-weight:800;">Eagles PE - Coming soon!</div>
-            <div style="color:#94a3b8; font-size:0.9rem;">Get ready for physical education arcade games, dodgeball challenges, and gym activities!</div>
-            <a class="play-btn disabled" href="#">Coming Soon</a>
+            <div style="font-size:1.2rem; font-weight:800;">Eagles PE Suite</div>
+            <div style="color:#94a3b8; font-size:0.9rem;">Play Dodgeball Dash arcade action or test your skills in the PE Quiz Challenge!</div>
+            <a class="play-btn" href="eagles-pe.svg">Play PE Arena</a>
           </div>
 
           <div class="game-card" data-id="geometry-eagle">
@@ -481,7 +485,6 @@
           </div>
         </div>
 
-        <!-- Back to Top Row -->
         <div class="end-of-list">
           <span>End of list. Go back to top?</span>
           <button class="scroll-top-btn" id="scrollTopBtn" title="Back to Top">⬆</button>
@@ -490,7 +493,6 @@
 
       <script type="text/javascript">
         <![CDATA[
-        // Automatic redirect if loaded via statically or non-jsdelivr host
         if (window.location.hostname.includes('statically')) {
           window.location.href = 'https://cdn.jsdelivr.net/gh/mathbuddies/leawoodmiddle@main/index.svg?v=' + Date.now();
         }
@@ -509,7 +511,7 @@
 
         const creditsData = {
           credits: "Made by Scott 😛 went through a lot of stress to make this…",
-          updates: "v0.5.3.0: Fixed notifications window toggle bug, added auto-redirect to jsDelivr from statically, un-gated about:blank launcher, and added Eagles PE coming soon tile.\nv0.5.2.1: Full code rewrite for instant cache bypass, updated Credits App, about:blank session launcher for all version codes, and cache optimization.\nv0.5.1.0: Removed unnecessary ampersands, added profile picture upload with top-right navbar avatar, and added secure Version app.\nv0.5.0.2: Chromebook performance optimizations and ZIP code weather lookup (default 66209).\nv0.5.0.1: Added accent color theme buttons, early release announcements, masked owner PIN entry, and fixed JSONBin bugs.\nv49: Added Labeling App (fullscreen distraction blocker when leaving tab) and Weather App customization.\nv48: Brought back custom background image uploader.",
+          updates: "v0.5.4.0: Added Eagles PE arcade & quiz game suite, updated Latest app with cache purge instruction modal, fixed JSONBin announcements, and added dynamic background teaser in themes.\nv0.5.3.0: Fixed notifications window toggle bug, added auto-redirect to jsDelivr from statically, un-gated about:blank launcher, and added Eagles PE coming soon tile.\nv0.5.2.1: Full code rewrite for instant cache bypass, updated Credits App, about:blank session launcher for all version codes, and cache optimization.\nv0.5.1.0: Removed unnecessary ampersands, added profile picture upload with top-right navbar avatar, and added secure Version app.\nv0.5.0.2: Chromebook performance optimizations and ZIP code weather lookup (default 66209).",
           notes: "Hey, it’s me, it’s Scott 🙃\n\nI went through a lot to make this…\n\n‘EVIL 3ECUR1Y!! U WILL NOT PREVAIL!!’ \n-Saige…\n\nNext update probably like 5 days after the end of Oct.. more code more glitchy\n\nAre you, are you? Coming to the tree? \n*Hes worried and mad but he’s still vibing \n\nOUT OF EARLY ACCESS BY THE NEW YEAR!!! (Hopefully)\n\nHAPPY HALLOWEEN HAHAH 👻 \n\nLeave a review of my website here: https://forms.gle/bhVjPyKyCd5iKfcj7 \n\nHop hop hop…\n\nAre you proud of me…?\n\nWOWWW ITS FINALLY THE BEGINING OF THE WEEK\n\nYou guys taking my retro bowl website still these days… even though it’s not mine\n\nAndy standee be tripping 🥀\n\nBuc-ee’s is coming to KC near the speedway and legends outlets, opens late 2027 (we think)\n\nWhere. Is. My. Dr. P. #costco\n\n‘ok then ima eat my last smint’\n-Nora\nMe: WE GOT MORE COMINGGGGG\n\n“I might’ve sprayed to much peppermint and now that’s all I smell…’\n-Grace \n\n‘Beckman’s voice is so deep…’\n-??? \nMe in my head: MY MICS NOT EVEN ONNN\n\nILL FIND MY WAYS!!!!!!!\n\nI’m so good 😊\n\nTHIS IS THE END\n\n‘Whos tes’ \nMe: Not anyone I know… plus who would name their kid tes?”"
         };
 
@@ -520,7 +522,10 @@
 
         window.openApp = function(app) {
           document.getElementById('appsDropdown').classList.remove('open');
-          if (app === 'latest') window.location.href = 'https://cdn.jsdelivr.net/gh/mathbuddies/leawoodmiddle@main/index.svg?v=' + Date.now();
+          if (app === 'latest') {
+            document.getElementById('purgeLinkBtn').href = 'https://purge.jsdelivr.net/gh/mathbuddies/leawoodmiddle@main/index.svg?v=' + Date.now();
+            document.getElementById('latestModal').classList.add('open');
+          }
           if (app === 'settings') document.getElementById('settingsModal').classList.add('open');
           if (app === 'weather') document.getElementById('weatherModal').classList.add('open');
           if (app === 'labeling') {
@@ -580,7 +585,6 @@
           document.getElementById('heroGreeting').textContent = 'Welcome back, ' + name + '!';
         }
 
-        // Version App Keypad & Link Switching Logic
         let versionEnteredCode = '';
         window.pressVersionKey = function(num) {
           if (versionEnteredCode.length < 4) {
@@ -605,7 +609,6 @@
           }
         };
 
-        // Ungated about:blank launcher
         window.openAboutBlankSession = function() {
           const win = window.open('about:blank', '_blank');
           if (win) {
@@ -628,7 +631,6 @@
           }
         };
 
-        // Weather ZIP Code Logic
         window.saveWeatherZip = function() {
           const zip = document.getElementById('weatherZipInput').value.trim();
           if (zip.length === 5) {
@@ -640,7 +642,6 @@
           }
         };
 
-        // Labeling App Logic
         window.toggleLabelingEnabled = function(enabled) {
           localStorage.setItem('eagle_labeling_enabled', enabled ? 'true' : 'false');
           updateLabelingStatusUI();
@@ -732,7 +733,6 @@
 
           document.getElementById('creditsSelect').onchange = updateCreditsContent;
 
-          // Background setup
           const savedBg = localStorage.getItem('eagle_bg');
           if (savedBg) {
             document.getElementById('appRoot').style.backgroundImage = 'url(' + savedBg + ')';
@@ -754,7 +754,6 @@
             }
           };
 
-          // Profile Picture (PFP) Upload Setup
           const pfpInput = document.getElementById('pfpUploadInput');
           const savedPfp = localStorage.getItem('eagle_pfp');
           const navAvatar = document.getElementById('navAvatar');
@@ -778,7 +777,6 @@
             }
           };
 
-          // Labeling App Upload Setup
           const labelingInput = document.getElementById('labelingUploadInput');
           const savedLabelImg = localStorage.getItem('eagle_label_img');
           if (savedLabelImg) {
@@ -799,7 +797,6 @@
             }
           };
 
-          // Visibility / Focus Listener for Labeling App
           document.addEventListener('visibilitychange', function() {
             const enabled = localStorage.getItem('eagle_labeling_enabled') === 'true';
             const overlay = document.getElementById('labelingOverlay');
@@ -810,7 +807,6 @@
             }
           });
 
-          // Weather ZIP restore
           const savedZip = localStorage.getItem('eagle_weather_zip') || '66209';
           document.getElementById('widgetWeatherLocation').textContent = 'ZIP: ' + savedZip;
           document.getElementById('weatherZipInput').value = savedZip;
@@ -823,8 +819,7 @@
 
           renderEvents();
 
-          // Auto-update game links
-          document.querySelectorAll('.game-card .play-btn:not(.disabled)').forEach(function(btn) {
+          document.querySelectorAll('.game-card .play-btn').forEach(function(btn) {
             const currentHref = btn.getAttribute('href').split('?')[0];
             btn.setAttribute('href', currentHref + '?v=' + Date.now());
           });
@@ -848,7 +843,6 @@
             document.getElementById('notifDropdown').classList.remove('open'); 
           };
 
-          // Fixed Notification Dropdown Window Bug
           const notifBtn = document.getElementById('notifBtn');
           const notifDropdown = document.getElementById('notifDropdown');
           notifBtn.onclick = function(e) { 
