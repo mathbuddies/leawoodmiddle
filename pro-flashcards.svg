@@ -1,0 +1,352 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+  <foreignObject width="100%" height="100%">
+    <div xmlns="http://www.w3.org/1999/xhtml" id="cardsRoot" style="width: 100vw; height: 100vh; margin: 0; padding: 0; background: #070a12; font-family: system-ui, -apple-system, sans-serif; color: #f8fafc; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; overflow-x: hidden; overflow-y: auto; user-select: none; position: relative;">
+      
+      <style type="text/css">
+        <![CDATA[
+        * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+        
+        .nav-header {
+          width: 100%; padding: 16px 28px; background: rgba(15, 23, 42, 0.92);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+          display: flex; justify-content: space-between; align-items: center;
+          position: sticky; top: 0; z-index: 100; backdrop-filter: blur(8px);
+        }
+
+        .back-btn {
+          background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(255, 255, 255, 0.12);
+          color: #38bdf8; padding: 8px 16px; border-radius: 12px; font-weight: bold; font-size: 0.9rem;
+          cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: 0.2s;
+        }
+        .back-btn:hover { background: #38bdf8; color: #0f172a; border-color: #38bdf8; }
+
+        .app-title { font-size: 1.3rem; font-weight: 900; color: #38bdf8; letter-spacing: -0.5px; }
+
+        .container {
+          width: 100%; max-width: 800px; padding: 30px 20px;
+          display: flex; flex-direction: column; align-items: center; gap: 24px;
+        }
+
+        .toolbar {
+          width: 100%; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
+          background: rgba(30, 41, 59, 0.45); border: 1px solid rgba(255,255,255,0.08); padding: 12px 18px; border-radius: 16px;
+        }
+
+        .btn {
+          background: #38bdf8; color: #0f172a; font-weight: 800; font-size: 0.9rem;
+          padding: 10px 18px; border-radius: 12px; border: none; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; gap: 6px;
+        }
+        .btn:hover { transform: translateY(-2px); background: #7dd3fc; }
+        .btn-sec { background: rgba(30, 41, 59, 0.8); color: #f8fafc; border: 1px solid rgba(255,255,255,0.15); }
+        .btn-sec:hover { background: rgba(255,255,255,0.15); }
+        .btn-danger { background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.4); }
+        .btn-danger:hover { background: #ef4444; color: #fff; }
+
+        /* 3D Flashcard Container */
+        .card-perspective {
+          width: 100%; max-width: 520px; height: 300px; perspective: 1000px; cursor: pointer;
+        }
+        .flashcard {
+          width: 100%; height: 100%; position: relative; transform-style: preserve-3d;
+          transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+          border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+        }
+        .flashcard.flipped { transform: rotateY(180deg); }
+
+        .card-face {
+          position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
+          border-radius: 20px; padding: 28px; display: flex; flex-direction: column;
+          align-items: center; justify-content: center; text-align: center;
+          border: 1px solid rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px);
+        }
+        .card-front {
+          background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
+          color: #f8fafc;
+        }
+        .card-back {
+          background: linear-gradient(135deg, rgba(14, 165, 233, 0.2), rgba(15, 23, 42, 0.95));
+          color: #38bdf8; transform: rotateY(180deg); border-color: rgba(56, 189, 248, 0.4);
+        }
+
+        .card-label {
+          position: absolute; top: 16px; left: 20px; font-size: 0.75rem; font-weight: 800;
+          text-transform: uppercase; letter-spacing: 1px; color: #94a3b8;
+        }
+        .card-text { font-size: 1.35rem; font-weight: 700; line-height: 1.5; word-break: break-word; }
+
+        .card-controls { display: flex; gap: 14px; align-items: center; margin-top: 10px; }
+
+        /* Modal styling */
+        .modal-overlay {
+          position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+          background: rgba(0, 0, 0, 0.8); z-index: 300; display: none; align-items: center; justify-content: center; backdrop-filter: blur(6px);
+        }
+        .modal-overlay.open { display: flex; }
+        .modal-card {
+          background: rgba(15, 23, 42, 0.96); border: 1px solid rgba(255, 255, 255, 0.2);
+          border-radius: 20px; padding: 24px; width: 90%; max-width: 480px; display: flex; flex-direction: column; gap: 16px;
+          box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+        }
+        .modal-input {
+          width: 100%; background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(255, 255, 255, 0.12);
+          color: #f8fafc; padding: 12px; border-radius: 10px; outline: none; font-size: 0.9rem; font-family: inherit;
+        }
+        ]]>
+      </style>
+
+      <!-- Navigation Header -->
+      <div class="nav-header">
+        <a class="back-btn" id="backToHubBtn" href="https://cdn.jsdelivr.net/gh/mathbuddies/leawoodmiddle@main/index.svg">
+          ⬅ Back to Hub
+        </a>
+        <div class="app-title">📝 Pro Flashcards</div>
+        <div style="font-size:0.85rem; color:#94a3b8; font-weight:bold;" id="deckProgress">Card 0 of 0</div>
+      </div>
+
+      <!-- Main App Container -->
+      <div class="container">
+        
+        <!-- Toolbar -->
+        <div class="toolbar">
+          <div style="display:flex; gap:10px; align-items:center;">
+            <select id="deckSelect" class="modal-input" style="padding:8px 14px; width:auto; font-weight:bold; cursor:pointer;" onchange="switchDeck()"></select>
+            <button class="btn btn-sec" onclick="openNewDeckModal()">+ New Deck</button>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button class="btn btn-sec" onclick="openAddCardModal()">+ Add Card</button>
+            <button class="btn btn-danger" onclick="deleteCurrentCard()">Delete Card</button>
+          </div>
+        </div>
+
+        <!-- 3D Flippable Card -->
+        <div class="card-perspective" onclick="flipCard()">
+          <div class="flashcard" id="activeFlashcard">
+            <div class="card-face card-front">
+              <div class="card-label">QUESTION (Click to flip)</div>
+              <div class="card-text" id="cardFrontText">No cards in this deck yet! Click "+ Add Card" above to get started.</div>
+            </div>
+            <div class="card-face card-back">
+              <div class="card-label">ANSWER</div>
+              <div class="card-text" id="cardBackText">Answer will show here.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card Switcher & Self-Grade Controls -->
+        <div class="card-controls">
+          <button class="btn btn-sec" onclick="prevCard()">⬅ Previous</button>
+          <button class="btn" style="background:#22c55e; color:#0f172a;" onclick="markMastered()">Got It! ✓</button>
+          <button class="btn btn-sec" onclick="nextCard()">Next ➡</button>
+        </div>
+
+        <!-- Deck Stats -->
+        <div style="font-size:0.85rem; color:#94a3b8; display:flex; gap:20px;">
+          <span>Mastered: <strong id="masteredCount" style="color:#22c55e;">0</strong></span>
+          <span>Remaining: <strong id="remainingCount" style="color:#38bdf8;">0</strong></span>
+        </div>
+
+      </div>
+
+      <!-- Modal: Add New Card -->
+      <div class="modal-overlay" id="addCardModal">
+        <div class="modal-card">
+          <h3 style="margin:0; color:#38bdf8;">Add New Flashcard</h3>
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            <div>
+              <span style="font-size:0.8rem; color:#94a3b8;">Question / Front:</span>
+              <textarea id="newFrontInput" class="modal-input" rows="3" placeholder="e.g. What is the capital of Kansas?"></textarea>
+            </div>
+            <div>
+              <span style="font-size:0.8rem; color:#94a3b8;">Answer / Back:</span>
+              <textarea id="newBackInput" class="modal-input" rows="3" placeholder="e.g. Topeka"></textarea>
+            </div>
+          </div>
+          <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:8px;">
+            <button class="btn btn-sec" onclick="closeModal('addCardModal')">Cancel</button>
+            <button class="btn" onclick="saveNewCard()">Save Card</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal: New Deck -->
+      <div class="modal-overlay" id="newDeckModal">
+        <div class="modal-card">
+          <h3 style="margin:0; color:#38bdf8;">Create New Study Deck</h3>
+          <input type="text" id="newDeckNameInput" class="modal-input" placeholder="Deck Title (e.g. Science Ch. 4)..." />
+          <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:8px;">
+            <button class="btn btn-sec" onclick="closeModal('newDeckModal')">Cancel</button>
+            <button class="btn" onclick="saveNewDeck()">Create Deck</button>
+          </div>
+        </div>
+      </div>
+
+      <script type="text/javascript">
+        <![CDATA[
+        document.getElementById('backToHubBtn').href = 'https://cdn.jsdelivr.net/gh/mathbuddies/leawoodmiddle@main/index.svg?v=' + Date.now();
+
+        const defaultDecks = {
+          "Leawood Middle": [
+            { front: "What is the mascot of Leawood Middle?", back: "The Eagles! 🦅", mastered: false },
+            { front: "What year does Buc-ee's come to KC near Speedway/Legends?", back: "Late 2027!", mastered: false }
+          ],
+          "General Knowledge": [
+            { front: "What is photosynthesis?", back: "The process plants use to convert light into energy.", mastered: false },
+            { front: "What is the powerhouse of the cell?", back: "Mitochondria!", mastered: false }
+          ]
+        };
+
+        let decks = JSON.parse(localStorage.getItem('pro_flashcards_decks') || JSON.stringify(defaultDecks));
+        let currentDeckKey = Object.keys(decks)[0] || "Leawood Middle";
+        let currentIndex = 0;
+        let isFlipped = false;
+
+        function saveStorage() {
+          localStorage.setItem('pro_flashcards_decks', JSON.stringify(decks));
+        }
+
+        function populateDeckSelect() {
+          const select = document.getElementById('deckSelect');
+          select.innerHTML = '';
+          Object.keys(decks).forEach(key => {
+            const opt = document.createElement('option');
+            opt.value = key;
+            opt.textContent = key;
+            if (key === currentDeckKey) opt.selected = true;
+            select.appendChild(opt);
+          });
+        }
+
+        function switchDeck() {
+          currentDeckKey = document.getElementById('deckSelect').value;
+          currentIndex = 0;
+          isFlipped = false;
+          renderCard();
+        }
+
+        function renderCard() {
+          const cardEl = document.getElementById('activeFlashcard');
+          cardEl.classList.remove('flipped');
+          isFlipped = false;
+
+          const deck = decks[currentDeckKey] || [];
+          const progressEl = document.getElementById('deckProgress');
+          const frontEl = document.getElementById('cardFrontText');
+          const backEl = document.getElementById('cardBackText');
+          const masteredCountEl = document.getElementById('masteredCount');
+          const remainingCountEl = document.getElementById('remainingCount');
+
+          if (deck.length === 0) {
+            progressEl.textContent = "Card 0 of 0";
+            frontEl.textContent = 'No cards in this deck yet! Click "+ Add Card" above to add one.';
+            backEl.textContent = 'Answer will show here.';
+            masteredCountEl.textContent = '0';
+            remainingCountEl.textContent = '0';
+            return;
+          }
+
+          if (currentIndex >= deck.length) currentIndex = 0;
+          if (currentIndex < 0) currentIndex = deck.length - 1;
+
+          const card = deck[currentIndex];
+          progressEl.textContent = `Card ${currentIndex + 1} of ${deck.length}`;
+          frontEl.textContent = card.front;
+          backEl.textContent = card.back;
+
+          const mastered = deck.filter(c => c.mastered).length;
+          masteredCountEl.textContent = mastered;
+          remainingCountEl.textContent = deck.length - mastered;
+        }
+
+        function flipCard() {
+          const deck = decks[currentDeckKey] || [];
+          if (deck.length === 0) return;
+          const cardEl = document.getElementById('activeFlashcard');
+          isFlipped = !isFlipped;
+          if (isFlipped) cardEl.classList.add('flipped');
+          else cardEl.classList.remove('flipped');
+        }
+
+        function nextCard() {
+          const deck = decks[currentDeckKey] || [];
+          if (deck.length === 0) return;
+          currentIndex = (currentIndex + 1) % deck.length;
+          renderCard();
+        }
+
+        function prevCard() {
+          const deck = decks[currentDeckKey] || [];
+          if (deck.length === 0) return;
+          currentIndex = (currentIndex - 1 + deck.length) % deck.length;
+          renderCard();
+        }
+
+        function markMastered() {
+          const deck = decks[currentDeckKey] || [];
+          if (deck.length === 0) return;
+          deck[currentIndex].mastered = true;
+          saveStorage();
+          nextCard();
+        }
+
+        function deleteCurrentCard() {
+          const deck = decks[currentDeckKey] || [];
+          if (deck.length === 0) return;
+          deck.splice(currentIndex, 1);
+          saveStorage();
+          if (currentIndex >= deck.length && currentIndex > 0) currentIndex--;
+          renderCard();
+        }
+
+        function openAddCardModal() {
+          document.getElementById('newFrontInput').value = '';
+          document.getElementById('newBackInput').value = '';
+          document.getElementById('addCardModal').classList.add('open');
+        }
+
+        function saveNewCard() {
+          const front = document.getElementById('newFrontInput').value.trim();
+          const back = document.getElementById('newBackInput').value.trim();
+          if (front && back) {
+            if (!decks[currentDeckKey]) decks[currentDeckKey] = [];
+            decks[currentDeckKey].push({ front: front, back: back, mastered: false });
+            saveStorage();
+            currentIndex = decks[currentDeckKey].length - 1;
+            renderCard();
+            closeModal('addCardModal');
+          } else {
+            alert('Please fill out both Question and Answer fields.');
+          }
+        }
+
+        function openNewDeckModal() {
+          document.getElementById('newDeckNameInput').value = '';
+          document.getElementById('newDeckModal').classList.add('open');
+        }
+
+        function saveNewDeck() {
+          const name = document.getElementById('newDeckNameInput').value.trim();
+          if (name) {
+            if (!decks[name]) {
+              decks[name] = [];
+              currentDeckKey = name;
+              saveStorage();
+              populateDeckSelect();
+              renderCard();
+            }
+            closeModal('newDeckModal');
+          }
+        }
+
+        function closeModal(id) {
+          document.getElementById(id).classList.remove('open');
+        }
+
+        populateDeckSelect();
+        renderCard();
+        ]]>
+      </script>
+
+    </div>
+  </foreignObject>
+</svg>
+
