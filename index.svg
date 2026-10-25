@@ -94,6 +94,11 @@
           display: none; align-items: center; justify-content: center; overflow: hidden;
         }
         #labelingOverlay img { max-width: 100%; max-height: 100%; object-fit: contain; }
+
+        /* Navbar Profile Avatar */
+        .navbar-pfp {
+          width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent-color); cursor: pointer; background: #1e293b;
+        }
         ]]>
       </style>
 
@@ -135,6 +140,51 @@
         </div>
       </div>
 
+      <!-- Profile Modal -->
+      <div class="modal-overlay" id="profileModal">
+        <div class="modal-card">
+          <h3 style="margin:0; color:var(--accent-color);">Profile and Avatar</h3>
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            <span style="font-size:0.85rem; color:#94a3b8;">Your Name:</span>
+            <input type="text" class="modal-input" id="profileNameInput" placeholder="Enter name..." />
+            <span style="font-size:0.85rem; color:#94a3b8;">Profile Picture (PFP):</span>
+            <input type="file" id="pfpUploadInput" accept="image/*" class="modal-input" style="padding:8px;" />
+            <button onclick="saveProfile()" class="liquid-btn" style="background:var(--accent-color); color:#0f172a; justify-content:center;">Save Profile</button>
+          </div>
+          <button onclick="closeModal('profileModal')" class="liquid-btn" style="justify-content:center; margin-top:10px;">Close Profile</button>
+        </div>
+      </div>
+
+      <!-- Version App Modal -->
+      <div class="modal-overlay" id="versionModal">
+        <div class="modal-card">
+          <h3 style="margin:0; color:var(--accent-color);">Version &amp; Link Utility</h3>
+          <div id="versionKeypadSection">
+            <p style="font-size:0.85rem; color:#94a3b8; margin:0;">Enter access code:</p>
+            <div id="versionCodeDisplay" style="background:rgba(30,41,59,0.8); color:var(--accent-color); font-size:2rem; font-weight:900; text-align:center; padding:12px; border-radius:12px; letter-spacing:10px;">____</div>
+            <div class="keypad">
+              <button class="key-btn" onclick="pressVersionKey('1')">1</button>
+              <button class="key-btn" onclick="pressVersionKey('2')">2</button>
+              <button class="key-btn" onclick="pressVersionKey('3')">3</button>
+              <button class="key-btn" onclick="pressVersionKey('4')">4</button>
+              <button class="key-btn" onclick="pressVersionKey('5')">5</button>
+              <button class="key-btn" onclick="pressVersionKey('6')">6</button>
+              <button class="key-btn" onclick="pressVersionKey('7')">7</button>
+              <button class="key-btn" onclick="pressVersionKey('8')">8</button>
+              <button class="key-btn" onclick="pressVersionKey('9')">9</button>
+              <button class="key-btn" onclick="pressVersionKey('0')" style="grid-column: 2;">0</button>
+            </div>
+          </div>
+          <div id="versionButtonsPanel" style="display:none; flex-direction:column; gap:10px;">
+            <button onclick="switchLink('statically')" class="liquid-btn" style="justify-content:center;">Switch to Statically link</button>
+            <button onclick="switchLink('jsdelivr')" class="liquid-btn" style="justify-content:center; background:var(--accent-color); color:#0f172a;">Switch to jsDelivr link (recommended)</button>
+            <button onclick="switchLink('github')" class="liquid-btn" style="justify-content:center;">Switch to GitHub link</button>
+            <button id="editorLinkBtn" onclick="switchLink('editor')" class="liquid-btn" style="justify-content:center; background:#22c55e; color:#0f172a; display:none;">Open Editor Link</button>
+          </div>
+          <button onclick="closeModal('versionModal')" class="liquid-btn" style="justify-content:center; margin-top:10px;">Close App</button>
+        </div>
+      </div>
+
       <!-- Weather App Modal -->
       <div class="modal-overlay" id="weatherModal">
         <div class="modal-card">
@@ -170,8 +220,9 @@
         <div class="modal-card">
           <h3 style="margin:0; color:var(--accent-color);">Update Log</h3>
           <div style="font-size:0.85rem; color:#94a3b8; line-height:1.5; display:flex; flex-direction:column; gap:10px;">
-            <div><strong>v0.5.0.2:</strong> Chromebook performance optimizations, ZIP code weather lookup (default 66209), and minor bug fixes.</div>
-            <div><strong>v0.5.0.1:</strong> Added accent color theme buttons, early release announcements, masked owner PIN entry, and fixed JSONBin bugs.</div>
+            <div><strong>v0.5.1.0:</strong> Removed unnecessary ampersands, added profile picture upload with top-right navbar avatar, and added the secure Version app.</div>
+            <div><strong>v0.5.0.2:</strong> Chromebook performance optimizations and ZIP code weather lookup (default 66209).</div>
+            <div><strong>v0.5.0.1:</strong> Added accent color theme buttons and early release announcements.</div>
           </div>
           <button onclick="closeModal('updateLogModal')" class="liquid-btn" style="justify-content:center; margin-top:10px;">Close Updates</button>
         </div>
@@ -242,6 +293,7 @@
               <div class="app-tile" onclick="openApp('schedule')"><span>📅</span><span>Schedule</span></div>
               <div class="app-tile" onclick="openApp('weather')"><span>⛅</span><span>Weather</span></div>
               <div class="app-tile" onclick="openApp('labeling')"><span>🖼️</span><span>Labeling</span></div>
+              <div class="app-tile" onclick="openApp('version')"><span>🔗</span><span>Version</span></div>
               <div class="app-tile" onclick="openApp('settings')"><span>🎨</span><span>Themes</span></div>
               <div class="app-tile" onclick="openApp('profile')"><span>👤</span><span>Profile</span></div>
               <div class="app-tile" onclick="openApp('updates')"><span>📜</span><span>Updates</span></div>
@@ -252,16 +304,20 @@
 
           <div>
             <div class="brand">eagle.io</div>
-            <div class="meta-info">v0.5.0.2 <span class="early-badge">Early Access</span> • <span id="liveClock">00:00:00</span></div>
+            <div class="meta-info">v0.5.1.0 <span class="early-badge">Early Access</span> • <span id="liveClock">00:00:00</span></div>
           </div>
         </div>
 
         <div class="nav-right">
-          <div style="position:relative;">
-            <button class="liquid-btn" id="notifBtn" style="padding:8px 12px; font-size:1.1rem;">🔔<span class="notif-badge" id="notifBadge">1</span></button>
-            <div class="apps-dropdown" id="notifDropdown" style="right:0; left:auto; width:280px; top:48px;">
-              <div style="font-weight:900; color:var(--accent-color); font-size:0.85rem; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:6px;">Global Announcements</div>
-              <div id="notifContent" style="font-size:0.85rem; color:#f8fafc; line-height:1.4; margin-top:6px;">Welcome to early release!</div>
+          <div style="display:flex; align-items:center; gap:12px;">
+            <!-- Top Right Navbar Profile Avatar -->
+            <img id="navAvatar" src="" class="navbar-pfp" onclick="openApp('profile')" title="Open Profile" style="display:none;" />
+            <div style="position:relative;">
+              <button class="liquid-btn" id="notifBtn" style="padding:8px 12px; font-size:1.1rem;">🔔<span class="notif-badge" id="notifBadge">1</span></button>
+              <div class="apps-dropdown" id="notifDropdown" style="right:0; left:auto; width:280px; top:48px;">
+                <div style="font-weight:900; color:var(--accent-color); font-size:0.85rem; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:6px;">Global Announcements</div>
+                <div id="notifContent" style="font-size:0.85rem; color:#f8fafc; line-height:1.4; margin-top:6px;">Welcome to early release!</div>
+              </div>
             </div>
           </div>
         </div>
@@ -428,6 +484,17 @@
             updateLabelingStatusUI();
             document.getElementById('labelingModal').classList.add('open');
           }
+          if (app === 'version') {
+            versionEnteredCode = '';
+            document.getElementById('versionCodeDisplay').textContent = '____';
+            document.getElementById('versionKeypadSection').style.display = 'block';
+            document.getElementById('versionButtonsPanel').style.display = 'none';
+            document.getElementById('versionModal').classList.add('open');
+          }
+          if (app === 'profile') {
+            document.getElementById('profileNameInput').value = localStorage.getItem('eagle_user_name') || '';
+            document.getElementById('profileModal').classList.add('open');
+          }
           if (app === 'schedule') document.getElementById('scheduleModal').classList.add('open');
           if (app === 'updates') document.getElementById('updateLogModal').classList.add('open');
           if (app === 'owner') {
@@ -437,10 +504,6 @@
             document.getElementById('ownerModal').classList.add('open');
           }
           if (app === 'bug') document.getElementById('bugModal').classList.add('open');
-          if (app === 'profile') {
-            const name = prompt('Enter your name:', localStorage.getItem('eagle_user_name') || '');
-            if (name) { localStorage.setItem('eagle_user_name', name); updateGreeting(name); }
-          }
         };
 
         window.closeModal = function(id) {
@@ -453,13 +516,60 @@
             localStorage.setItem('eagle_user_name', val);
             localStorage.setItem('eagle_tut', 'true');
             document.getElementById('nameModal').style.display = 'none';
-            updateGreeting(val);
+            updateProfileUI(val);
           }
         };
 
-        function updateGreeting(name) {
+        window.saveProfile = function() {
+          const nameVal = document.getElementById('profileNameInput').value.trim();
+          if (nameVal) {
+            localStorage.setItem('eagle_user_name', nameVal);
+            updateProfileUI(nameVal);
+          }
+          closeModal('profileModal');
+        };
+
+        function updateProfileUI(name) {
           document.getElementById('heroGreeting').textContent = 'Welcome back, ' + name + '!';
         }
+
+        // Version App Keypad & Link Switching Logic
+        let versionEnteredCode = '';
+        window.pressVersionKey = function(num) {
+          if (versionEnteredCode.length < 4) {
+            versionEnteredCode += num;
+            document.getElementById('versionCodeDisplay').textContent = '•'.repeat(versionEnteredCode.length).padEnd(4, '_');
+            if (versionEnteredCode.length === 4) {
+              const validCodes = ['3166', '2702', '1918', '4625'];
+              if (validCodes.includes(versionEnteredCode)) {
+                document.getElementById('versionKeypadSection').style.display = 'none';
+                document.getElementById('versionButtonsPanel').style.display = 'flex';
+                if (versionEnteredCode === '3166') {
+                  document.getElementById('editorLinkBtn').style.display = 'block';
+                } else {
+                  document.getElementById('editorLinkBtn').style.display = 'none';
+                }
+              } else {
+                alert('Incorrect Code!');
+                versionEnteredCode = '';
+                document.getElementById('versionCodeDisplay').textContent = '____';
+              }
+            }
+          }
+        };
+
+        window.switchLink = function(type) {
+          const basePath = 'https://mathbuddies.github.io/leawoodmiddle/index.svg';
+          if (type === 'statically') {
+            window.location.href = 'https://cdn.statically.io/gh/mathbuddies/leawoodmiddle@main/index.svg?v=' + Date.now();
+          } else if (type === 'jsdelivr') {
+            window.location.href = 'https://cdn.jsdelivr.net/gh/mathbuddies/leawoodmiddle@main/index.svg?v=' + Date.now();
+          } else if (type === 'github') {
+            window.location.href = 'https://raw.githubusercontent.com/mathbuddies/leawoodmiddle/main/index.svg?v=' + Date.now();
+          } else if (type === 'editor') {
+            window.location.href = 'https://github.com/mathbuddies/leawoodmiddle/tree/main';
+          }
+        };
 
         // Weather ZIP Code Logic
         window.saveWeatherZip = function() {
@@ -585,6 +695,30 @@
             }
           };
 
+          // Profile Picture (PFP) Upload Setup
+          const pfpInput = document.getElementById('pfpUploadInput');
+          const savedPfp = localStorage.getItem('eagle_pfp');
+          const navAvatar = document.getElementById('navAvatar');
+          if (savedPfp) {
+            navAvatar.src = savedPfp;
+            navAvatar.style.display = 'block';
+          }
+
+          pfpInput.onchange = function(e) {
+            const file = e.target.files[0];
+            if (file) {
+              const reader = new FileReader();
+              reader.onload = function(evt) {
+                const dataUrl = evt.target.result;
+                localStorage.setItem('eagle_pfp', dataUrl);
+                navAvatar.src = dataUrl;
+                navAvatar.style.display = 'block';
+                alert('Profile picture updated successfully!');
+              };
+              reader.readAsDataURL(file);
+            }
+          };
+
           // Labeling App Upload Setup
           const labelingInput = document.getElementById('labelingUploadInput');
           const savedLabelImg = localStorage.getItem('eagle_label_img');
@@ -625,7 +759,7 @@
           if (!localStorage.getItem('eagle_tut')) {
             document.getElementById('nameModal').style.display = 'flex';
           } else {
-            updateGreeting(localStorage.getItem('eagle_user_name') || 'Gamer');
+            updateProfileUI(localStorage.getItem('eagle_user_name') || 'Gamer');
           }
 
           renderEvents();
