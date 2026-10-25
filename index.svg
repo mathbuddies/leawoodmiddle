@@ -86,8 +86,20 @@
         .scroll-top-btn:hover { background: var(--accent-color); color: #0f172a; }
 
         .notif-badge { position: absolute; top: -4px; right: -4px; background: #ef4444; color: #fff; font-size: 0.65rem; font-weight: 900; padding: 2px 6px; border-radius: 10px; display: none; }
+
+        /* Fullscreen Labeling App Overlay */
+        #labelingOverlay {
+          position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; z-index: 9999;
+          display: none; align-items: center; justify-content: center; overflow: hidden;
+        }
+        #labelingOverlay img { max-width: 100%; max-height: 100%; object-fit: contain; }
         ]]>
       </style>
+
+      <!-- Fullscreen Labeling App Active Layer -->
+      <div id="labelingOverlay">
+        <img id="labelingDisplayImg" src="" alt="Fullscreen Label" />
+      </div>
 
       <!-- First-Visit Name Modal -->
       <div class="modal-overlay" id="nameModal" style="display:none;">
@@ -99,21 +111,11 @@
         </div>
       </div>
 
-      <!-- Settings Modal -->
+      <!-- Settings / Background Modal -->
       <div class="modal-overlay" id="settingsModal">
         <div class="modal-card">
-          <h3 style="margin:0; color:var(--accent-color);">Themes and Settings</h3>
+          <h3 style="margin:0; color:var(--accent-color);">Background Settings</h3>
           <div style="display:flex; flex-direction:column; gap:10px;">
-            <span style="font-size:0.9rem; font-weight:bold; color:#f8fafc;">Primary Accent Color:</span>
-            <div style="display:flex; gap:12px;">
-              <button class="liquid-btn" onclick="setAccent('#38bdf8')" style="background:#38bdf8; width:36px; height:36px; padding:0; border-radius:50%;" title="Blue"></button>
-              <button class="liquid-btn" onclick="setAccent('#22c55e')" style="background:#22c55e; width:36px; height:36px; padding:0; border-radius:50%;" title="Green"></button>
-              <button class="liquid-btn" onclick="setAccent('#facc15')" style="background:#facc15; width:36px; height:36px; padding:0; border-radius:50%;" title="Yellow"></button>
-              <button class="liquid-btn" onclick="setAccent('#ef4444')" style="background:#ef4444; width:36px; height:36px; padding:0; border-radius:50%;" title="Red"></button>
-              <button class="liquid-btn" onclick="setAccent('#c084fc')" style="background:#c084fc; width:36px; height:36px; padding:0; border-radius:50%;" title="Purple"></button>
-            </div>
-          </div>
-          <div style="display:flex; flex-direction:column; gap:10px; margin-top:10px;">
             <span style="font-size:0.9rem; font-weight:bold; color:#f8fafc;">Custom Background Image:</span>
             <input type="file" id="bgUploadInput" accept="image/*" class="modal-input" style="padding:8px;" />
             <button onclick="clearBackground()" class="liquid-btn" style="justify-content:center; background:rgba(239,68,68,0.2); color:#ef4444; border-color:rgba(239,68,68,0.4);">Reset Background</button>
@@ -122,14 +124,44 @@
         </div>
       </div>
 
+      <!-- Weather App Modal -->
+      <div class="modal-overlay" id="weatherModal">
+        <div class="modal-card">
+          <h3 style="margin:0; color:var(--accent-color);">Weather Settings</h3>
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            <span style="font-size:0.85rem; color:#94a3b8;">Enter your city or location name:</span>
+            <input type="text" class="modal-input" id="weatherLocationInput" placeholder="e.g. Leawood, KS" />
+            <button onclick="saveWeatherLocation()" class="liquid-btn" style="background:var(--accent-color); color:#0f172a; justify-content:center;">Update Location</button>
+          </div>
+          <button onclick="closeModal('weatherModal')" class="liquid-btn" style="justify-content:center; margin-top:10px;">Close Weather</button>
+        </div>
+      </div>
+
+      <!-- Labeling App Modal -->
+      <div class="modal-overlay" id="labelingModal">
+        <div class="modal-card">
+          <h3 style="margin:0; color:var(--accent-color);">Labeling App Setup</h3>
+          <p style="font-size:0.85rem; color:#94a3b8; margin:0;">Select a photo to display in full-screen whenever you look away or leave this tab.</p>
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            <input type="file" id="labelingUploadInput" accept="image/*" class="modal-input" style="padding:8px;" />
+            <div style="display:flex; gap:10px;">
+              <button onclick="toggleLabelingEnabled(true)" class="liquid-btn" style="flex:1; justify-content:center; background:#22c55e; color:#0f172a;">Enable App</button>
+              <button onclick="toggleLabelingEnabled(false)" class="liquid-btn" style="flex:1; justify-content:center; background:#ef4444; color:#fff;">Disable App</button>
+            </div>
+            <div id="labelingStatus" style="font-size:0.8rem; font-weight:bold; color:#facc15; text-align:center;">Status: Disabled</div>
+          </div>
+          <button onclick="closeModal('labelingModal')" class="liquid-btn" style="justify-content:center; margin-top:10px;">Close App</button>
+        </div>
+      </div>
+
       <!-- Update Log Modal -->
       <div class="modal-overlay" id="updateLogModal">
         <div class="modal-card">
           <h3 style="margin:0; color:var(--accent-color);">Update Log</h3>
           <div style="font-size:0.85rem; color:#94a3b8; line-height:1.5; display:flex; flex-direction:column; gap:10px;">
-            <div><strong>v48:</strong> Brought back the custom background image uploader in settings and updated the release logs.</div>
+            <div><strong>v49:</strong> Added Labeling App (fullscreen distraction blocker when leaving tab), Weather App customization, and refined settings.</div>
+            <div><strong>v48:</strong> Brought back custom background image uploader and updated release logs.</div>
             <div><strong>v47:</strong> Added game tiles for Feather Catcher, Eagle Jump, and Eagle Hopper with automatic latest-version link routing.</div>
-            <div><strong>v46:</strong> Added Flappy Eagle game link and automatic dynamic latest-version game link updating.</div>
           </div>
           <button onclick="closeModal('updateLogModal')" class="liquid-btn" style="justify-content:center; margin-top:10px;">Close Updates</button>
         </div>
@@ -198,18 +230,19 @@
             <div class="apps-grid">
               <div class="app-tile" onclick="openApp('latest')"><span>🚀</span><span>Latest</span></div>
               <div class="app-tile" onclick="openApp('schedule')"><span>📅</span><span>Schedule</span></div>
-              <div class="app-tile" onclick="openApp('settings')"><span>🎨</span><span>Themes</span></div>
+              <div class="app-tile" onclick="openApp('weather')"><span>⛅</span><span>Weather</span></div>
+              <div class="app-tile" onclick="openApp('labeling')"><span>🖼️</span><span>Labeling</span></div>
+              <div class="app-tile" onclick="openApp('settings')"><span>🎨</span><span>Background</span></div>
               <div class="app-tile" onclick="openApp('profile')"><span>👤</span><span>Profile</span></div>
               <div class="app-tile" onclick="openApp('updates')"><span>📜</span><span>Updates</span></div>
               <div class="app-tile" onclick="openApp('owner')"><span>🔒</span><span>Owner</span></div>
-              <div class="app-tile" onclick="openApp('proxy')"><span>🧙‍♂️</span><span>Proxy</span></div>
               <div class="app-tile" onclick="openApp('bug')"><span>🐛</span><span>Bugs</span></div>
             </div>
           </div>
 
           <div>
             <div class="brand">eagle.io</div>
-            <div class="meta-info">v48 • <span id="liveClock">00:00:00</span></div>
+            <div class="meta-info">v49 • <span id="liveClock">00:00:00</span></div>
           </div>
         </div>
 
@@ -243,9 +276,9 @@
               <div style="font-size:0.8rem; color:#94a3b8;" id="widgetDate">Loading date...</div>
             </div>
             <div class="widget-card">
-              <div class="widget-title">Leawood Weather</div>
-              <div style="font-size:1.8rem; font-weight:900; color:#7dd3fc;">56°F Clear</div>
-              <div style="font-size:0.8rem; color:#94a3b8;">Leawood, Kansas area.</div>
+              <div class="widget-title">Weather Widget</div>
+              <div style="font-size:1.8rem; font-weight:900; color:#7dd3fc;" id="widgetWeatherTemp">56°F Clear</div>
+              <div style="font-size:0.8rem; color:#94a3b8;" id="widgetWeatherLocation">Leawood, Kansas area.</div>
             </div>
             <div class="widget-card">
               <div class="widget-title">Quick Personal Notes</div>
@@ -364,12 +397,6 @@
 
       <script type="text/javascript">
         <![CDATA[
-        window.setAccent = function(color) {
-          document.documentElement.style.setProperty('--accent-color', color);
-          document.documentElement.style.setProperty('--accent-glow', color + '40');
-          localStorage.setItem('eagle_accent', color);
-        };
-
         window.clearBackground = function() {
           localStorage.removeItem('eagle_bg');
           document.getElementById('appRoot').style.backgroundImage = 'none';
@@ -380,6 +407,11 @@
           document.getElementById('appsDropdown').classList.remove('open');
           if (app === 'latest') window.location.href = 'index.svg?' + Date.now();
           if (app === 'settings') document.getElementById('settingsModal').classList.add('open');
+          if (app === 'weather') document.getElementById('weatherModal').classList.add('open');
+          if (app === 'labeling') {
+            updateLabelingStatusUI();
+            document.getElementById('labelingModal').classList.add('open');
+          }
           if (app === 'schedule') document.getElementById('scheduleModal').classList.add('open');
           if (app === 'updates') document.getElementById('updateLogModal').classList.add('open');
           if (app === 'owner') {
@@ -388,7 +420,6 @@
             document.getElementById('broadcastPanel').style.display = 'none';
             document.getElementById('ownerModal').classList.add('open');
           }
-          if (app === 'proxy') alert('Proxy Wizard is currently a placeholder.');
           if (app === 'bug') document.getElementById('bugModal').classList.add('open');
           if (app === 'profile') {
             const name = prompt('Enter your name:', localStorage.getItem('eagle_user_name') || '');
@@ -412,6 +443,29 @@
 
         function updateGreeting(name) {
           document.getElementById('heroGreeting').textContent = 'Welcome back, ' + name + '!';
+        }
+
+        // Weather Logic
+        window.saveWeatherLocation = function() {
+          const loc = document.getElementById('weatherLocationInput').value.trim();
+          if (loc) {
+            localStorage.setItem('eagle_weather_loc', loc);
+            document.getElementById('widgetWeatherLocation').textContent = loc;
+            closeModal('weatherModal');
+          }
+        };
+
+        // Labeling App Logic
+        window.toggleLabelingEnabled = function(enabled) {
+          localStorage.setItem('eagle_labeling_enabled', enabled ? 'true' : 'false');
+          updateLabelingStatusUI();
+        };
+
+        function updateLabelingStatusUI() {
+          const enabled = localStorage.getItem('eagle_labeling_enabled') === 'true';
+          const statusEl = document.getElementById('labelingStatus');
+          statusEl.textContent = 'Status: ' + (enabled ? 'Enabled (Active)' : 'Disabled');
+          statusEl.style.color = enabled ? '#22c55e' : '#facc15';
         }
 
         let enteredCode = '';
@@ -489,8 +543,8 @@
 
         window.addEventListener('DOMContentLoaded', function() {
           document.title = 'eagle.io';
-          setAccent(localStorage.getItem('eagle_accent') || '#38bdf8');
 
+          // Background setup
           const savedBg = localStorage.getItem('eagle_bg');
           if (savedBg) {
             document.getElementById('appRoot').style.backgroundImage = 'url(' + savedBg + ')';
@@ -511,6 +565,45 @@
               reader.readAsDataURL(file);
             }
           };
+
+          // Labeling App Upload Setup
+          const labelingInput = document.getElementById('labelingUploadInput');
+          const savedLabelImg = localStorage.getItem('eagle_label_img');
+          if (savedLabelImg) {
+            document.getElementById('labelingDisplayImg').src = savedLabelImg;
+          }
+
+          labelingInput.onchange = function(e) {
+            const file = e.target.files[0];
+            if (file) {
+              const reader = new FileReader();
+              reader.onload = function(evt) {
+                const dataUrl = evt.target.result;
+                localStorage.setItem('eagle_label_img', dataUrl);
+                document.getElementById('labelingDisplayImg').src = dataUrl;
+                alert('Labeling image saved successfully!');
+              };
+              reader.readAsDataURL(file);
+            }
+          };
+
+          // Visibility / Focus Listener for Labeling App
+          document.addEventListener('visibilitychange', function() {
+            const enabled = localStorage.getItem('eagle_labeling_enabled') === 'true';
+            const overlay = document.getElementById('labelingOverlay');
+            if (enabled && document.hidden) {
+              overlay.style.display = 'flex';
+            } else {
+              overlay.style.display = 'none';
+            }
+          });
+
+          // Weather location restore
+          const savedLoc = localStorage.getItem('eagle_weather_loc');
+          if (savedLoc) {
+            document.getElementById('widgetWeatherLocation').textContent = savedLoc;
+            document.getElementById('weatherLocationInput').value = savedLoc;
+          }
 
           if (!localStorage.getItem('eagle_tut')) {
             document.getElementById('nameModal').style.display = 'flex';
