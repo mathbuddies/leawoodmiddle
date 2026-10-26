@@ -599,7 +599,7 @@
 
         const creditsData = {
           credits: "made by Scott 😛 v0.6.3.4 release",
-          updates: "v0.6.3.4: updated meta-info text layout and bumped minor patch version.",
+          updates: "v0.6.3.4: updated meta-info text layout, maintained mathbuddies repository links, and bumped patch version.",
           notes: "hey, it’s me, it’s Scott 🙃\n\nv0.6.3.4 is rolling out clean!\n\n‘EVIL 3ECUR1Y!! U WILL NOT PREVAIL!!’ \n-Saige…\n\nOUT OF EARLY ACCESS BY THE NEW YEAR!!! (hopefully)\n\nHAPPY HALLOWEEN HAHAH 👻 \n\nleave a review of my website here: https://forms.gle/bhVjPyKyCd5iKfcj7",
           pics: "pics dropdown coming soon! stay tuned for awesome gallery photos."
         };
