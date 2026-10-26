@@ -126,7 +126,7 @@
 
       <!-- Floating Pomodoro Timer -->
       <div id="floatingPomodoro">
-        <div style="font-size:0.75rem; font-weight:800; color:var(--accent-color);">Pomodoro Timer</div>
+        <div style="font-size:0.75rem; font-weight:800; color:var(--accent-color);">pomodoro timer</div>
         <div id="pomoFloatDisplay" style="font-size:1.5rem; font-weight:900; font-family:monospace;">25:00</div>
         <div style="display:flex; gap:6px;">
           <button onclick="togglePomoTimer()" class="liquid-btn" style="padding:4px 8px; font-size:0.75rem;" id="pomoFloatBtn">start</button>
@@ -186,7 +186,7 @@
       <!-- Pomodoro App Modal -->
       <div class="modal-overlay" id="pomodoroModal">
         <div class="modal-card">
-          <h3 style="margin:0; color:var(--accent-color);">Pomodoro timer</h3>
+          <h3 style="margin:0; color:var(--accent-color);">pomodoro timer</h3>
           <p style="font-size:0.85rem; color:#94a3b8; margin:0;">set timer duration (minutes) and toggle floating overlay:</p>
           <div style="display:flex; gap:10px; align-items:center;">
             <input type="number" class="modal-input" id="pomoMinutesInput" value="25" min="1" max="120" style="width:100px;" />
@@ -398,7 +398,7 @@
 
           <div>
             <div class="brand">eagle.io</div>
-            <div class="meta-info">v0.6.3.0 <span class="early-badge">Early Access 2</span> • <span id="liveClock">00:00:00</span></div>
+            <div class="meta-info">v0.6.3.1 <span class="early-badge">Early Access 2</span> • <span id="liveClock">00:00:00</span></div>
           </div>
         </div>
 
@@ -406,10 +406,15 @@
           <div style="display:flex; align-items:center; gap:12px;">
             <img id="navAvatar" src="" class="navbar-pfp" onclick="openApp('profile')" title="Open Profile" style="display:none;" />
             <div style="position:relative;">
-              <button class="liquid-btn" id="notifBtn" style="padding:8px 12px; font-size:1.1rem;">🔔<span class="notif-badge" id="notifBadge">1</span></button>
-              <div class="apps-dropdown" id="notifDropdown" style="right:0; left:auto; width:280px; top:48px;">
-                <div style="font-weight:900; color:var(--accent-color); font-size:0.85rem; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:6px;">global announcements</div>
-                <div id="notifContent" style="font-size:0.85rem; color:#f8fafc; line-height:1.4; margin-top:6px;">V0.6 IS HERE!!!</div>
+              <button class="liquid-btn" id="notifBtn" style="padding:8px 12px; font-size:1.1rem;">🔔<span class="notif-badge" id="notifBadge" style="display:none;">0</span></button>
+              <div class="apps-dropdown" id="notifDropdown" style="right:0; left:auto; width:300px; top:48px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:6px;">
+                  <span style="font-weight:900; color:var(--accent-color); font-size:0.85rem;">global announcements</span>
+                  <button onclick="clearNotifications()" style="background:none; border:none; color:#ef4444; font-size:0.75rem; font-weight:bold; cursor:pointer;">clear history</button>
+                </div>
+                <div id="notifListContainer" style="font-size:0.85rem; color:#f8fafc; display:flex; flex-direction:column; gap:8px; max-height:200px; overflow-y:auto; margin-top:6px;">
+                  <div style="color:#94a3b8;">no announcements yet.</div>
+                </div>
               </div>
             </div>
           </div>
@@ -572,10 +577,10 @@
 
       <script type="text/javascript">
         <![CDATA[
-        // Reset Account Data for v0.6.3.0 Migration
-        if (!localStorage.getItem('eagle_v0.6.3.0_reset')) {
+        // Reset Account Data for v0.6.3.1 Migration
+        if (!localStorage.getItem('eagle_v0.6.3.1_reset')) {
           localStorage.clear();
-          localStorage.setItem('eagle_v0.6.3.0_reset', 'true');
+          localStorage.setItem('eagle_v0.6.3.1_reset', 'true');
         }
 
         if (window.location.hostname.includes('statically')) {
@@ -601,7 +606,7 @@
 
         const creditsData = {
           credits: "made by Scott 😛 went through a lot of stress to make this…",
-          updates: "v0.6.3.0: reset account data, added Pomodoro timer app with floating widget, transparent adaptive accent color, interactive tutorial tour, and bug fixes.",
+          updates: "v0.6.3.1: bug fixes, robust JSONBin error handling, tour update removing developer name references, and persistent notification history.",
           notes: "hey, it’s me, it’s Scott 🙃\n\ni went through a lot to make this…\n\n‘EVIL 3ECUR1Y!! U WILL NOT PREVAIL!!’ \n-Saige…\n\nnext update probably like 5 days after the end of Oct.. more code more glitchy\n\nare you, are you? coming to the tree? \n*Hes worried and mad but he’s still vibing \n\nOUT OF EARLY ACCESS BY THE NEW YEAR!!! (hopefully)\n\nHAPPY HALLOWEEN HAHAH 👻 \n\nleave a review of my website here: https://forms.gle/bhVjPyKyCd5iKfcj7 \n\nhop hop hop…\n\nare you proud of me…?\n\nWOWWW ITS FINALLY THE BEGINING OF THE WEEK\n\nyou guys taking my Retro Bowl website still these days… even though it’s not mine\n\nAndy standee be tripping 🥀\n\nBuc-ee’s is coming to KC near the speedway and legends outlets, opens late 2027 (we think)\n\nwhere. is. my. Dr. P. #costco\n\n‘ok then ima eat my last smint’\n-Nora\nme: WE GOT MORE COMINGGGGG\n\n“i might’ve sprayed to much peppermint and now that’s all i smell…’\n-Grace \n\n‘Beckman’s voice is so deep…’\n-??? \nme in my head: MY MICS NOT EVEN ONNN\n\nILL FIND MY WAYS!!!!!!!\n\ni’m so good 😊\n\nTHIS IS THE END\n\n‘whos tes’ \nme: not anyone i know… plus who would name their kid tes?\n\nnot me waiting\nthrottled: true,\nthrottlingReset: 165\n\nthe GitHub repo stress be like…\n\nlet’s get this show on the road…🎪",
           pics: "pics dropdown coming soon! stay tuned for awesome gallery photos."
         };
@@ -670,8 +675,8 @@
         let currentTourStep = 0;
         const tourSteps = [
           { title: "apps menu", text: "click here to open the app suite tray! you can access your schedule, weather, cloaking tools, pomodoro timer, and settings.", elementId: "appsDropdownBtn" },
-          { title: "g4m3s library", text: "switch views using this dropdown to browse through all arcade g4m3s or star your favorites!", elementId: "mainNavSelect" },
-          { title: "notifications", text: "click the bell icon to check real-time global broadcasts from Scott!", elementId: "notifBtn" },
+          { title: "G4m3s library", text: "switch views using this dropdown to browse through all arcade g4m3s or star your favorites!", elementId: "mainNavSelect" },
+          { title: "notifications", text: "click the bell icon to check real-time global broadcasts.", elementId: "notifBtn" },
           { title: "notes widget", text: "your quick notes live here. click the tile anytime to open the notes manager app!", elementId: "widgetNotesDisplay" }
         ];
 
@@ -748,7 +753,7 @@
               } else {
                 clearInterval(pomoTimerId);
                 isPomoRunning = false;
-                alert('Pomodoro session finished!');
+                alert('pomodoro session finished!');
                 document.getElementById('pomoFloatBtn').textContent = 'start';
               }
             }, 1000);
@@ -903,11 +908,44 @@
             } catch (e) {
               alert('broadcast published locally.');
             }
-            document.getElementById('notifContent').textContent = msg;
-            localStorage.setItem('eagle_announcement', msg);
+            appendNotification(msg);
             closeModal('ownerModal');
           }
         };
+
+        // Persistent Notifications Manager
+        function appendNotification(msg) {
+          let history = JSON.parse(localStorage.getItem('eagle_notif_history') || '[]');
+          if (!history.includes(msg)) {
+            history.unshift(msg);
+            localStorage.setItem('eagle_notif_history', JSON.stringify(history));
+          }
+          renderNotifications();
+        }
+
+        window.clearNotifications = function() {
+          localStorage.removeItem('eagle_notif_history');
+          renderNotifications();
+        };
+
+        function renderNotifications() {
+          const container = document.getElementById('notifListContainer');
+          const history = JSON.parse(localStorage.getItem('eagle_notif_history') || '[]');
+          container.innerHTML = '';
+          if (history.length === 0) {
+            container.innerHTML = '<div style="color:#94a3b8;">no announcements yet.</div>';
+            document.getElementById('notifBadge').style.display = 'none';
+          } else {
+            history.forEach(function(item) {
+              const div = document.createElement('div');
+              div.style.cssText = 'background:rgba(30,41,59,0.5); padding:8px 10px; border-radius:8px; border-left:3px solid var(--accent-color);';
+              div.textContent = item;
+              container.appendChild(div);
+            });
+            document.getElementById('notifBadge').textContent = history.length;
+            document.getElementById('notifBadge').style.display = 'flex';
+          }
+        }
 
         window.submitBug = function() {
           alert('bug report submitted successfully!');
@@ -955,22 +993,24 @@
 
           document.getElementById('creditsSelect').onchange = updateCreditsContent;
 
-          // Fetch JSONBin announcement
+          // Fetch JSONBin announcement with error handling
           fetch('https://api.jsonbin.io/v3/b/6ade824bac6210605a51b40a/latest')
             .then(res => res.json())
             .then(data => {
               if (data && data.record && data.record.message) {
-                const remoteMsg = data.record.message;
-                document.getElementById('notifContent').textContent = remoteMsg;
-                localStorage.setItem('eagle_announcement', remoteMsg);
+                appendNotification(data.record.message);
               }
             })
             .catch(() => {
-              const localAnnounce = localStorage.getItem('eagle_announcement');
-              if (localAnnounce) {
-                document.getElementById('notifContent').textContent = localAnnounce;
+              const history = JSON.parse(localStorage.getItem('eagle_notif_history') || '[]');
+              if (history.length === 0) {
+                appendNotification('V0.6 IS HERE!!!');
+              } else {
+                renderNotifications();
               }
             });
+
+          renderNotifications();
 
           const savedBg = localStorage.getItem('eagle_bg');
           if (savedBg) {
@@ -1087,7 +1127,6 @@
             e.stopPropagation(); 
             notifDropdown.classList.toggle('open'); 
             appsDropdown.classList.remove('open'); 
-            document.getElementById('notifBadge').style.display = 'none'; 
           };
 
           window.onclick = function() { 
