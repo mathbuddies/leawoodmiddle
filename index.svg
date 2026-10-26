@@ -27,7 +27,6 @@
 
         .brand { font-weight: 900; font-size: 1.3rem; color: var(--accent-color); letter-spacing: -0.5px; }
         .meta-info { font-size: 0.75rem; color: #94a3b8; font-family: monospace; display: flex; gap: 6px; align-items: center; }
-        .early-badge { background: rgba(56, 189, 248, 0.15); border: 1px solid var(--accent-color); color: var(--accent-color); font-size: 0.65rem; padding: 1px 6px; border-radius: 6px; font-weight: 800; }
 
         .apps-dropdown {
           position: absolute; top: 52px; left: 0; width: 360px; background: rgba(15, 23, 42, 0.96);
@@ -219,7 +218,7 @@
       <!-- Version App Modal -->
       <div class="modal-overlay" id="versionModal">
         <div class="modal-card">
-          <h3 style="margin:0; color:var(--accent-color);">version utility (v0.6.3.2)</h3>
+          <h3 style="margin:0; color:var(--accent-color);">version utility (v0.6.3.3)</h3>
           <div id="versionKeypadSection">
             <p style="font-size:0.85rem; color:#94a3b8; margin:0;">enter developer PIN for advanced links:</p>
             <div id="versionCodeDisplay" style="background:rgba(30,41,59,0.8); color:var(--accent-color); font-size:2rem; font-weight:900; text-align:center; padding:12px; border-radius:12px; letter-spacing:10px;">____</div>
@@ -398,7 +397,7 @@
 
           <div>
             <div class="brand">eagle.io</div>
-            <div class="meta-info">v0.6.3.2 <span class="early-badge">Bug Fixes</span> • <span id="liveClock">00:00:00</span></div>
+            <div class="meta-info">v0.6.3.3 • Early Access 2 • <span id="liveClock">00:00:00</span></div>
           </div>
         </div>
 
@@ -409,7 +408,7 @@
               <button class="liquid-btn" id="notifBtn" style="padding:8px 12px; font-size:1.1rem;">🔔<span class="notif-badge" id="notifBadge">1</span></button>
               <div class="apps-dropdown" id="notifDropdown" style="right:0; left:auto; width:280px; top:48px;">
                 <div style="font-weight:900; color:var(--accent-color); font-size:0.85rem; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:6px;">global announcements</div>
-                <div id="notifContent" style="font-size:0.85rem; color:#f8fafc; line-height:1.4; margin-top:6px;">V0.6.3.2 BUG FIXES LIVE!</div>
+                <div id="notifContent" style="font-size:0.85rem; color:#f8fafc; line-height:1.4; margin-top:6px;">V0.6.3.3 IS HERE!</div>
               </div>
             </div>
           </div>
@@ -572,9 +571,9 @@
 
       <script type="text/javascript">
         <![CDATA[
-        // Reset Account Data for v0.6.3.2 Migration & Bug Fixes
-        if (!localStorage.getItem('eagle_v0.6.3.2_reset')) {
-          localStorage.setItem('eagle_v0.6.3.2_reset', 'true');
+        // Reset Account Data for v0.6.3.3 Migration
+        if (!localStorage.getItem('eagle_v0.6.3.3_reset')) {
+          localStorage.setItem('eagle_v0.6.3.3_reset', 'true');
         }
 
         if (window.location.hostname.includes('statically')) {
@@ -599,9 +598,9 @@
         };
 
         const creditsData = {
-          credits: "made by Scott 😛 bug-fixed version v0.6.3.2",
-          updates: "v0.6.3.2: applied critical bug fixes, refined local storage fallback safety, stabilized modal rendering, and optimized performance.",
-          notes: "hey, it’s me, it’s Scott 🙃\n\nbug fixes version v0.6.3.2 is locked in!\n\n‘EVIL 3ECUR1Y!! U WILL NOT PREVAIL!!’ \n-Saige…\n\nOUT OF EARLY ACCESS BY THE NEW YEAR!!! (hopefully)\n\nHAPPY HALLOWEEN HAHAH 👻 \n\nleave a review of my website here: https://forms.gle/bhVjPyKyCd5iKfcj7",
+          credits: "made by Scott 😛 v0.6.3.3 release",
+          updates: "v0.6.3.3: updated meta-info display layout to Early Access 2 format, keeping all bug fixes and stability intact.",
+          notes: "hey, it’s me, it’s Scott 🙃\n\nv0.6.3.3 is rolling out clean!\n\n‘EVIL 3ECUR1Y!! U WILL NOT PREVAIL!!’ \n-Saige…\n\nOUT OF EARLY ACCESS BY THE NEW YEAR!!! (hopefully)\n\nHAPPY HALLOWEEN HAHAH 👻 \n\nleave a review of my website here: https://forms.gle/bhVjPyKyCd5iKfcj7",
           pics: "pics dropdown coming soon! stay tuned for awesome gallery photos."
         };
 
