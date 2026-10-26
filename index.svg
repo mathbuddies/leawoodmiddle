@@ -102,6 +102,20 @@
           background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(255, 255, 255, 0.1);
           border-radius: 12px; padding: 14px; font-size: 0.85rem; color: #cbd5e1; line-height: 1.6; max-height: 240px; overflow-y: auto; white-space: pre-wrap;
         }
+
+        /* Floating Pomodoro Widget */
+        #floatingPomodoro {
+          position: fixed; bottom: 20px; right: 20px; width: 180px; background: rgba(15, 23, 42, 0.9);
+          border: 1px solid var(--accent-color); border-radius: 16px; padding: 12px; display: none;
+          flex-direction: column; align-items: center; gap: 6px; box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+          z-index: 1000; backdrop-filter: blur(10px); cursor: move;
+        }
+
+        /* Interactive Tour Overlay */
+        .tour-highlight {
+          position: relative; z-index: 401 !important; box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.75), 0 0 15px var(--accent-color) !important;
+          border-radius: 12px; transition: all 0.3s ease;
+        }
         ]]>
       </style>
 
@@ -110,22 +124,44 @@
         <img id="cloakingDisplayImg" src="" alt="Cloaking Display" />
       </div>
 
-      <!-- First-Visit Name Modal -->
+      <!-- Floating Pomodoro Timer -->
+      <div id="floatingPomodoro">
+        <div style="font-size:0.75rem; font-weight:800; color:var(--accent-color);">Pomodoro Timer</div>
+        <div id="pomoFloatDisplay" style="font-size:1.5rem; font-weight:900; font-family:monospace;">25:00</div>
+        <div style="display:flex; gap:6px;">
+          <button onclick="togglePomoTimer()" class="liquid-btn" style="padding:4px 8px; font-size:0.75rem;" id="pomoFloatBtn">start</button>
+          <button onclick="resetPomoTimer()" class="liquid-btn" style="padding:4px 8px; font-size:0.75rem;">reset</button>
+        </div>
+      </div>
+
+      <!-- First-Visit Name & Tour Modal -->
       <div class="modal-overlay" id="nameModal" style="display:none;">
         <div class="modal-card">
-          <h2 style="margin:0; color:var(--accent-color);">Welcome to eagle.io</h2>
-          <p style="color:#94a3b8; font-size:0.9rem; margin:0;">We have a quick tutorial to show you around. But first, what should we call you?</p>
-          <input type="text" class="modal-input" id="userNameInput" placeholder="Enter your name..." />
-          <button onclick="saveName()" class="liquid-btn" style="background:var(--accent-color); color:#0f172a; justify-content:center;">Get Started</button>
+          <h2 style="margin:0; color:var(--accent-color);">welcome to eagle.io</h2>
+          <p style="color:#94a3b8; font-size:0.9rem; margin:0;">let's get you set up with a quick interactive tour. first, what should we call you?</p>
+          <input type="text" class="modal-input" id="userNameInput" placeholder="enter your name..." />
+          <button onclick="saveName()" class="liquid-btn" style="background:var(--accent-color); color:#0f172a; justify-content:center;">start interactive tour</button>
+        </div>
+      </div>
+
+      <!-- Tour Step Modal -->
+      <div class="modal-overlay" id="tourModal" style="z-index: 500;">
+        <div class="modal-card">
+          <h3 style="margin:0; color:var(--accent-color);" id="tourTitle">interactive tour</h3>
+          <p style="color:#cbd5e1; font-size:0.9rem; margin:0; line-height:1.5;" id="tourText">welcome!</p>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">
+            <span style="font-size:0.8rem; color:#94a3b8;" id="tourStepIndicator">step 1 of 4</span>
+            <button onclick="nextTourStep()" class="liquid-btn" style="background:var(--accent-color); color:#0f172a;" id="tourNextBtn">next</button>
+          </div>
         </div>
       </div>
 
       <!-- Settings / Theme & Background Modal -->
       <div class="modal-overlay" id="settingsModal">
         <div class="modal-card">
-          <h3 style="margin:0; color:var(--accent-color);">Themes and Background</h3>
+          <h3 style="margin:0; color:var(--accent-color);">themes and background</h3>
           <div style="display:flex; flex-direction:column; gap:10px;">
-            <span style="font-size:0.9rem; font-weight:bold; color:#f8fafc;">Primary Accent Color:</span>
+            <span style="font-size:0.9rem; font-weight:bold; color:#f8fafc;">primary accent color:</span>
             <div style="display:flex; gap:12px; flex-wrap:wrap;">
               <button class="liquid-btn" onclick="setAccent('#38bdf8')" style="background:#38bdf8; width:36px; height:36px; padding:0; border-radius:50%;" title="Blue"></button>
               <button class="liquid-btn" onclick="setAccent('#22c55e')" style="background:#22c55e; width:36px; height:36px; padding:0; border-radius:50%;" title="Green"></button>
@@ -135,39 +171,57 @@
               <button class="liquid-btn" onclick="setAccent('#fb923c')" style="background:#fb923c; width:36px; height:36px; padding:0; border-radius:50%;" title="Orange"></button>
               <button class="liquid-btn" onclick="setAccent('#ec4899')" style="background:#ec4899; width:36px; height:36px; padding:0; border-radius:50%;" title="Pink"></button>
               <button class="liquid-btn" onclick="setAccent('#14b8a6')" style="background:#14b8a6; width:36px; height:36px; padding:0; border-radius:50%;" title="Teal"></button>
+              <button class="liquid-btn" onclick="setAccent('transparent')" style="background:rgba(255,255,255,0.2); border:1px dashed #fff; width:36px; height:36px; padding:0; border-radius:50%; color:#fff; font-size:0.6rem; font-weight:bold;" title="Transparent">trans</button>
             </div>
           </div>
           <div style="display:flex; flex-direction:column; gap:10px; margin-top:10px;">
-            <span style="font-size:0.9rem; font-weight:bold; color:#f8fafc;">Custom Background Image:</span>
+            <span style="font-size:0.9rem; font-weight:bold; color:#f8fafc;">custom background image:</span>
             <input type="file" id="bgUploadInput" accept="image/*" class="modal-input" style="padding:8px;" />
-            <div style="font-size:0.8rem; color:#38bdf8; font-weight:700; margin-top:2px;">Dynamic backgrounds coming soon!</div>
-            <button onclick="clearBackground()" class="liquid-btn" style="justify-content:center; background:rgba(239,68,68,0.2); color:#ef4444; border-color:rgba(239,68,68,0.4);">Reset Background</button>
+            <button onclick="clearBackground()" class="liquid-btn" style="justify-content:center; background:rgba(239,68,68,0.2); color:#ef4444; border-color:rgba(239,68,68,0.4);">reset background</button>
           </div>
-          <button onclick="closeModal('settingsModal')" class="liquid-btn" style="justify-content:center; margin-top:10px;">Close Settings</button>
+          <button onclick="closeModal('settingsModal')" class="liquid-btn" style="justify-content:center; margin-top:10px;">close settings</button>
+        </div>
+      </div>
+
+      <!-- Pomodoro App Modal -->
+      <div class="modal-overlay" id="pomodoroModal">
+        <div class="modal-card">
+          <h3 style="margin:0; color:var(--accent-color);">Pomodoro timer</h3>
+          <p style="font-size:0.85rem; color:#94a3b8; margin:0;">set timer duration (minutes) and toggle floating overlay:</p>
+          <div style="display:flex; gap:10px; align-items:center;">
+            <input type="number" class="modal-input" id="pomoMinutesInput" value="25" min="1" max="120" style="width:100px;" />
+            <span style="font-size:0.9rem; color:#f8fafc;">minutes</span>
+            <button onclick="setPomoCustomTime()" class="liquid-btn" style="background:var(--accent-color); color:#0f172a;">set time</button>
+          </div>
+          <div style="display:flex; gap:10px; margin-top:6px;">
+            <button onclick="toggleFloatingPomo(true)" class="liquid-btn" style="flex:1; justify-content:center; background:#22c55e; color:#0f172a;">enable floating timer</button>
+            <button onclick="toggleFloatingPomo(false)" class="liquid-btn" style="flex:1; justify-content:center; background:#ef4444; color:#fff;">hide floating timer</button>
+          </div>
+          <button onclick="closeModal('pomodoroModal')" class="liquid-btn" style="justify-content:center; margin-top:10px;">close app</button>
         </div>
       </div>
 
       <!-- Profile Modal -->
       <div class="modal-overlay" id="profileModal">
         <div class="modal-card">
-          <h3 style="margin:0; color:var(--accent-color);">Profile and Avatar</h3>
+          <h3 style="margin:0; color:var(--accent-color);">profile and avatar</h3>
           <div style="display:flex; flex-direction:column; gap:12px;">
-            <span style="font-size:0.85rem; color:#94a3b8;">Your Name:</span>
-            <input type="text" class="modal-input" id="profileNameInput" placeholder="Enter name..." />
-            <span style="font-size:0.85rem; color:#94a3b8;">Profile Picture (PFP):</span>
+            <span style="font-size:0.85rem; color:#94a3b8;">your name:</span>
+            <input type="text" class="modal-input" id="profileNameInput" placeholder="enter name..." />
+            <span style="font-size:0.85rem; color:#94a3b8;">profile picture (PFP):</span>
             <input type="file" id="pfpUploadInput" accept="image/*" class="modal-input" style="padding:8px;" />
-            <button onclick="saveProfile()" class="liquid-btn" style="background:var(--accent-color); color:#0f172a; justify-content:center;">Save Profile</button>
+            <button onclick="saveProfile()" class="liquid-btn" style="background:var(--accent-color); color:#0f172a; justify-content:center;">save profile</button>
           </div>
-          <button onclick="closeModal('profileModal')" class="liquid-btn" style="justify-content:center; margin-top:10px;">Close Profile</button>
+          <button onclick="closeModal('profileModal')" class="liquid-btn" style="justify-content:center; margin-top:10px;">close profile</button>
         </div>
       </div>
 
       <!-- Version App Modal -->
       <div class="modal-overlay" id="versionModal">
         <div class="modal-card">
-          <h3 style="margin:0; color:var(--accent-color);">Version Utility</h3>
+          <h3 style="margin:0; color:var(--accent-color);">version utility</h3>
           <div id="versionKeypadSection">
-            <p style="font-size:0.85rem; color:#94a3b8; margin:0;">Enter developer PIN for advanced links:</p>
+            <p style="font-size:0.85rem; color:#94a3b8; margin:0;">enter developer PIN for advanced links:</p>
             <div id="versionCodeDisplay" style="background:rgba(30,41,59,0.8); color:var(--accent-color); font-size:2rem; font-weight:900; text-align:center; padding:12px; border-radius:12px; letter-spacing:10px;">____</div>
             <div class="keypad" style="margin-top:10px;">
               <button class="key-btn" onclick="pressVersionKey('1')">1</button>
@@ -183,108 +237,108 @@
             </div>
           </div>
           <div id="versionButtonsPanel" style="display:none; flex-direction:column; gap:10px;">
-            <button onclick="switchLink('statically')" class="liquid-btn" style="justify-content:center;">Switch to Statically link</button>
-            <button onclick="switchLink('jsdelivr')" class="liquid-btn" style="justify-content:center; background:var(--accent-color); color:#0f172a;">Switch to jsDelivr link (recommended)</button>
-            <button onclick="switchLink('github')" class="liquid-btn" style="justify-content:center;">Switch to GitHub link</button>
-            <button id="editorLinkBtn" onclick="switchLink('editor')" class="liquid-btn" style="justify-content:center; background:#22c55e; color:#0f172a; display:none;">Open Editor Link</button>
+            <button onclick="switchLink('statically')" class="liquid-btn" style="justify-content:center;">switch to Statically link</button>
+            <button onclick="switchLink('jsdelivr')" class="liquid-btn" style="justify-content:center; background:var(--accent-color); color:#0f172a;">switch to jsDelivr link (recommended)</button>
+            <button onclick="switchLink('github')" class="liquid-btn" style="justify-content:center;">switch to GitHub link</button>
+            <button id="editorLinkBtn" onclick="switchLink('editor')" class="liquid-btn" style="justify-content:center; background:#22c55e; color:#0f172a; display:none;">open editor link</button>
           </div>
-          <button onclick="closeModal('versionModal')" class="liquid-btn" style="justify-content:center; margin-top:10px;">Close App</button>
+          <button onclick="closeModal('versionModal')" class="liquid-btn" style="justify-content:center; margin-top:10px;">close app</button>
         </div>
       </div>
 
       <!-- Unified Credits App Modal -->
       <div class="modal-overlay" id="creditsModal">
         <div class="modal-card">
-          <h3 style="margin:0; color:var(--accent-color);">Credits and Information</h3>
+          <h3 style="margin:0; color:var(--accent-color);">credits and information</h3>
           <div style="display:flex; flex-direction:column; gap:10px;">
             <select class="select-box" id="creditsSelect" style="width:100%;">
-              <option value="credits">Credits</option>
-              <option value="updates">Update Logs</option>
-              <option value="notes">Creator's Notes</option>
-              <option value="pics">Pics (Coming Soon)</option>
+              <option value="credits">credits</option>
+              <option value="updates">update logs</option>
+              <option value="notes">creator's notes</option>
+              <option value="pics">pics (coming soon)</option>
             </select>
             <div id="creditsContentBox" class="credits-content-box"></div>
           </div>
-          <button onclick="closeModal('creditsModal')" class="liquid-btn" style="justify-content:center; margin-top:6px;">Close Credits</button>
+          <button onclick="closeModal('creditsModal')" class="liquid-btn" style="justify-content:center; margin-top:6px;">close credits</button>
         </div>
       </div>
 
       <!-- Weather App Modal -->
       <div class="modal-overlay" id="weatherModal">
         <div class="modal-card">
-          <h3 style="margin:0; color:var(--accent-color);">Weather Settings (ZIP Code)</h3>
+          <h3 style="margin:0; color:var(--accent-color);">weather settings (ZIP code)</h3>
           <div style="display:flex; flex-direction:column; gap:10px;">
-            <span style="font-size:0.85rem; color:#94a3b8;">Enter ZIP Code (Default: 66209):</span>
+            <span style="font-size:0.85rem; color:#94a3b8;">enter ZIP code (default: 66209):</span>
             <input type="text" class="modal-input" id="weatherZipInput" placeholder="66209" maxlength="5" />
-            <button onclick="saveWeatherZip()" class="liquid-btn" style="background:var(--accent-color); color:#0f172a; justify-content:center;">Update ZIP Code</button>
+            <button onclick="saveWeatherZip()" class="liquid-btn" style="background:var(--accent-color); color:#0f172a; justify-content:center;">update ZIP code</button>
           </div>
-          <button onclick="closeModal('weatherModal')" class="liquid-btn" style="justify-content:center; margin-top:10px;">Close Weather</button>
+          <button onclick="closeModal('weatherModal')" class="liquid-btn" style="justify-content:center; margin-top:10px;">close weather</button>
         </div>
       </div>
 
       <!-- Cloaking App Modal -->
       <div class="modal-overlay" id="cloakingModal">
         <div class="modal-card">
-          <h3 style="margin:0; color:var(--accent-color);">Cloaking App Setup</h3>
-          <p style="font-size:0.85rem; color:#94a3b8; margin:0;">Customize tab title, launch about:blank sessions, or set a full-screen stealth image.</p>
+          <h3 style="margin:0; color:var(--accent-color);">cloaking app setup</h3>
+          <p style="font-size:0.85rem; color:#94a3b8; margin:0;">customize tab title, launch about:blank sessions, or set a full-screen stealth image.</p>
           <div style="display:flex; flex-direction:column; gap:12px;">
-            <span style="font-size:0.85rem; color:#94a3b8;">Custom Tab Title:</span>
-            <input type="text" class="modal-input" id="tabTitleInput" placeholder="Enter custom title..." />
-            <button onclick="saveTabTitle()" class="liquid-btn" style="background:var(--accent-color); color:#0f172a; justify-content:center;">Apply Tab Title</button>
-            <button onclick="openAboutBlankSession()" class="liquid-btn" style="justify-content:center; background:#c084fc; color:#0f172a; font-weight:bold;">Launch about:blank Session</button>
+            <span style="font-size:0.85rem; color:#94a3b8;">custom tab title:</span>
+            <input type="text" class="modal-input" id="tabTitleInput" placeholder="enter custom title..." />
+            <button onclick="saveTabTitle()" class="liquid-btn" style="background:var(--accent-color); color:#0f172a; justify-content:center;">apply tab title</button>
+            <button onclick="openAboutBlankSession()" class="liquid-btn" style="justify-content:center; background:#c084fc; color:#0f172a; font-weight:bold;">launch about:blank session</button>
             <hr style="border:none; border-top:1px solid rgba(255,255,255,0.1); margin:4px 0;" />
-            <span style="font-size:0.85rem; color:#94a3b8;">Stealth Background Photo:</span>
+            <span style="font-size:0.85rem; color:#94a3b8;">stealth background photo:</span>
             <input type="file" id="cloakingUploadInput" accept="image/*" class="modal-input" style="padding:8px;" />
             <div style="display:flex; gap:10px;">
-              <button onclick="toggleCloakingEnabled(true)" class="liquid-btn" style="flex:1; justify-content:center; background:#22c55e; color:#0f172a;">Enable Stealth</button>
-              <button onclick="toggleCloakingEnabled(false)" class="liquid-btn" style="flex:1; justify-content:center; background:#ef4444; color:#fff;">Disable Stealth</button>
+              <button onclick="toggleCloakingEnabled(true)" class="liquid-btn" style="flex:1; justify-content:center; background:#22c55e; color:#0f172a;">enable stealth</button>
+              <button onclick="toggleCloakingEnabled(false)" class="liquid-btn" style="flex:1; justify-content:center; background:#ef4444; color:#fff;">disable stealth</button>
             </div>
-            <div id="cloakingStatus" style="font-size:0.80rem; font-weight:bold; color:#facc15; text-align:center;">Status: Disabled</div>
+            <div id="cloakingStatus" style="font-size:0.80rem; font-weight:bold; color:#facc15; text-align:center;">status: disabled</div>
           </div>
-          <button onclick="closeModal('cloakingModal')" class="liquid-btn" style="justify-content:center; margin-top:10px;">Close App</button>
+          <button onclick="closeModal('cloakingModal')" class="liquid-btn" style="justify-content:center; margin-top:10px;">close app</button>
         </div>
       </div>
 
       <!-- Notes App Modal -->
       <div class="modal-overlay" id="notesModal">
         <div class="modal-card">
-          <h3 style="margin:0; color:var(--accent-color);">Notes Manager</h3>
-          <p style="font-size:0.85rem; color:#94a3b8; margin:0;">Edit your personal notes below. Changes reflect instantly on your hub dashboard widget.</p>
-          <textarea id="appNotesInput" class="modal-input" placeholder="Type notes here..." style="height:140px; resize:none; font-size:0.9rem;"></textarea>
-          <button onclick="saveAppNotes()" class="liquid-btn" style="background:var(--accent-color); color:#0f172a; justify-content:center;">Save Notes</button>
-          <button onclick="closeModal('notesModal')" class="liquid-btn" style="justify-content:center;">Close Notes</button>
+          <h3 style="margin:0; color:var(--accent-color);">notes manager</h3>
+          <p style="font-size:0.85rem; color:#94a3b8; margin:0;">edit your personal notes below. changes reflect instantly on your hub dashboard widget.</p>
+          <textarea id="appNotesInput" class="modal-input" placeholder="type notes here..." style="height:140px; resize:none; font-size:0.9rem;"></textarea>
+          <button onclick="saveAppNotes()" class="liquid-btn" style="background:var(--accent-color); color:#0f172a; justify-content:center;">save notes</button>
+          <button onclick="closeModal('notesModal')" class="liquid-btn" style="justify-content:center;">close notes</button>
         </div>
       </div>
 
       <!-- Tools App Modal (Coming Soon) -->
       <div class="modal-overlay" id="toolsModal">
         <div class="modal-card">
-          <h3 style="margin:0; color:var(--accent-color);">Tools</h3>
+          <h3 style="margin:0; color:var(--accent-color);">tools</h3>
           <p style="font-size:0.9rem; color:#cbd5e1; line-height:1.5; margin:0;">
-            Exciting utility tools are currently under development and coming soon in a future update!
+            exciting utility tools are currently under development and coming soon in a future update!
           </p>
-          <button onclick="closeModal('toolsModal')" class="liquid-btn" style="justify-content:center; margin-top:10px;">Close</button>
+          <button onclick="closeModal('toolsModal')" class="liquid-btn" style="justify-content:center; margin-top:10px;">close</button>
         </div>
       </div>
 
       <!-- Schedule Modal -->
       <div class="modal-overlay" id="scheduleModal">
         <div class="modal-card">
-          <h3 style="margin:0; color:var(--accent-color);">Schedule and Events (Up to 2030)</h3>
+          <h3 style="margin:0; color:var(--accent-color);">schedule and events (up to 2030)</h3>
           <div style="display:flex; gap:10px;">
             <input type="date" class="modal-input" id="eventDate" min="2024-01-01" max="2030-12-31" />
-            <input type="text" class="modal-input" id="eventTitle" placeholder="Event description..." />
+            <input type="text" class="modal-input" id="eventTitle" placeholder="event description..." />
           </div>
-          <button onclick="addEvent()" class="liquid-btn" style="background:var(--accent-color); color:#0f172a; justify-content:center;">Add Event</button>
+          <button onclick="addEvent()" class="liquid-btn" style="background:var(--accent-color); color:#0f172a; justify-content:center;">add event</button>
           <div id="eventList" style="max-height:180px; overflow-y:auto; display:flex; flex-direction:column; gap:8px; font-size:0.85rem;"></div>
-          <button onclick="closeModal('scheduleModal')" class="liquid-btn" style="justify-content:center; margin-top:6px;">Close Schedule</button>
+          <button onclick="closeModal('scheduleModal')" class="liquid-btn" style="justify-content:center; margin-top:6px;">close schedule</button>
         </div>
       </div>
 
       <!-- Owner Modal -->
       <div class="modal-overlay" id="ownerModal">
         <div class="modal-card">
-          <h3 style="margin:0; color:#facc15;">Owner Access Console</h3>
+          <h3 style="margin:0; color:#facc15;">owner access console</h3>
           <div id="codeDisplay" style="background:rgba(30,41,59,0.8); color:var(--accent-color); font-size:2rem; font-weight:900; text-align:center; padding:12px; border-radius:12px; letter-spacing:10px;">____</div>
           <div class="keypad">
             <button class="key-btn" onclick="pressKey('1')">1</button>
@@ -299,22 +353,22 @@
             <button class="key-btn" onclick="pressKey('0')" style="grid-column: 2;">0</button>
           </div>
           <div id="broadcastPanel" style="display:none; flex-direction:column; gap:10px; border-top:1px solid rgba(255,255,255,0.1); padding-top:12px;">
-            <div style="color:#22c55e; font-size:0.85rem; font-weight:bold;">Access Granted! Broadcast Global Notification:</div>
-            <input type="text" class="modal-input" id="broadcastInput" placeholder="Type notification message..." />
-            <button onclick="sendBroadcast()" class="liquid-btn" style="background:#22c55e; color:#0f172a; justify-content:center;">Publish Broadcast</button>
+            <div style="color:#22c55e; font-size:0.85rem; font-weight:bold;">access granted! broadcast global notification:</div>
+            <input type="text" class="modal-input" id="broadcastInput" placeholder="type notification message..." />
+            <button onclick="sendBroadcast()" class="liquid-btn" style="background:#22c55e; color:#0f172a; justify-content:center;">publish broadcast</button>
           </div>
-          <button onclick="closeModal('ownerModal')" class="liquid-btn" style="justify-content:center; margin-top:6px;">Close Console</button>
+          <button onclick="closeModal('ownerModal')" class="liquid-btn" style="justify-content:center; margin-top:6px;">close console</button>
         </div>
       </div>
 
       <!-- Bug Modal -->
       <div class="modal-overlay" id="bugModal">
         <div class="modal-card">
-          <h3 style="margin:0; color:var(--accent-color);">Report a Bug</h3>
-          <input type="text" class="modal-input" id="bugInput" placeholder="Describe the bug or issue..." />
+          <h3 style="margin:0; color:var(--accent-color);">report a bug</h3>
+          <input type="text" class="modal-input" id="bugInput" placeholder="describe the bug or issue..." />
           <div style="display:flex; justify-content:flex-end; gap:10px;">
-            <button onclick="closeModal('bugModal')" class="liquid-btn">Cancel</button>
-            <button onclick="submitBug()" class="liquid-btn" style="background:var(--accent-color); color:#0f172a;">Submit Bug</button>
+            <button onclick="closeModal('bugModal')" class="liquid-btn">cancel</button>
+            <button onclick="submitBug()" class="liquid-btn" style="background:var(--accent-color); color:#0f172a;">submit bug</button>
           </div>
         </div>
       </div>
@@ -322,28 +376,29 @@
       <!-- Navbar -->
       <div class="navbar">
         <div class="nav-left">
-          <button class="liquid-btn" id="appsDropdownBtn">Apps Menu</button>
+          <button class="liquid-btn" id="appsDropdownBtn">apps menu</button>
           
           <div class="apps-dropdown" id="appsDropdown">
-            <div style="font-weight:900; color:var(--accent-color); font-size:0.85rem; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:6px;">App Suite Tray</div>
+            <div style="font-weight:900; color:var(--accent-color); font-size:0.85rem; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:6px;">app suite tray</div>
             <div class="apps-grid">
-              <div class="app-tile" onclick="openApp('schedule')"><span>📅</span><span>Schedule</span></div>
-              <div class="app-tile" onclick="openApp('weather')"><span>⛅</span><span>Weather</span></div>
-              <div class="app-tile" onclick="openApp('cloaking')"><span>🕵️</span><span>Cloaking</span></div>
-              <div class="app-tile" onclick="openApp('notes')"><span>📝</span><span>Notes</span></div>
-              <div class="app-tile" onclick="openApp('tools')"><span>🛠️</span><span>Tools</span></div>
-              <div class="app-tile" onclick="openApp('version')"><span>🔗</span><span>Version</span></div>
-              <div class="app-tile" onclick="openApp('settings')"><span>🎨</span><span>Themes</span></div>
-              <div class="app-tile" onclick="openApp('profile')"><span>👤</span><span>Profile</span></div>
-              <div class="app-tile" onclick="openApp('credits')"><span>📜</span><span>Credits</span></div>
-              <div class="app-tile" onclick="openApp('owner')"><span>🔒</span><span>Owner</span></div>
-              <div class="app-tile" onclick="openApp('bug')"><span>🐛</span><span>Bugs</span></div>
+              <div class="app-tile" onclick="openApp('schedule')"><span>📅</span><span>schedule</span></div>
+              <div class="app-tile" onclick="openApp('weather')"><span>⛅</span><span>weather</span></div>
+              <div class="app-tile" onclick="openApp('cloaking')"><span>🕵️</span><span>cloaking</span></div>
+              <div class="app-tile" onclick="openApp('notes')"><span>📝</span><span>notes</span></div>
+              <div class="app-tile" onclick="openApp('pomodoro')"><span>⏱️</span><span>pomodoro</span></div>
+              <div class="app-tile" onclick="openApp('tools')"><span>🛠️</span><span>tools</span></div>
+              <div class="app-tile" onclick="openApp('version')"><span>🔗</span><span>version</span></div>
+              <div class="app-tile" onclick="openApp('settings')"><span>🎨</span><span>themes</span></div>
+              <div class="app-tile" onclick="openApp('profile')"><span>👤</span><span>profile</span></div>
+              <div class="app-tile" onclick="openApp('credits')"><span>📜</span><span>credits</span></div>
+              <div class="app-tile" onclick="openApp('owner')"><span>🔒</span><span>owner</span></div>
+              <div class="app-tile" onclick="openApp('bug')"><span>🐛</span><span>bugs</span></div>
             </div>
           </div>
 
           <div>
             <div class="brand">eagle.io</div>
-            <div class="meta-info">v0.6.2.0 <span class="early-badge">Early Access 2</span> • <span id="liveClock">00:00:00</span></div>
+            <div class="meta-info">v0.6.3.0 <span class="early-badge">Early Access 2</span> • <span id="liveClock">00:00:00</span></div>
           </div>
         </div>
 
@@ -353,7 +408,7 @@
             <div style="position:relative;">
               <button class="liquid-btn" id="notifBtn" style="padding:8px 12px; font-size:1.1rem;">🔔<span class="notif-badge" id="notifBadge">1</span></button>
               <div class="apps-dropdown" id="notifDropdown" style="right:0; left:auto; width:280px; top:48px;">
-                <div style="font-weight:900; color:var(--accent-color); font-size:0.85rem; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:6px;">Global Announcements</div>
+                <div style="font-weight:900; color:var(--accent-color); font-size:0.85rem; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:6px;">global announcements</div>
                 <div id="notifContent" style="font-size:0.85rem; color:#f8fafc; line-height:1.4; margin-top:6px;">V0.6 IS HERE!!!</div>
               </div>
             </div>
@@ -364,10 +419,10 @@
       <!-- Main Hub Container -->
       <div class="container" id="topContainer">
         <div class="header-row">
-          <h1 class="hero-title" id="heroGreeting">My Hub</h1>
+          <h1 class="hero-title" id="heroGreeting">my hub</h1>
           <select class="select-box" id="mainNavSelect">
-            <option value="hub">My Hub Dashboard</option>
-            <option value="games">G4m3s Library</option>
+            <option value="hub">my hub dashboard</option>
+            <option value="games">G4m3s library</option>
           </select>
         </div>
 
@@ -375,21 +430,21 @@
         <div id="myHubView" style="display:flex; flex-direction:column; gap:24px;">
           <div class="widgets-grid">
             <div class="widget-card">
-              <div class="widget-title">Local Device Time</div>
+              <div class="widget-title">local device time</div>
               <div style="font-size:1.8rem; font-weight:900; color:#f8fafc;" id="widgetClock">00:00:00</div>
-              <div style="font-size:0.8rem; color:#94a3b8;" id="widgetDate">Loading date...</div>
+              <div style="font-size:0.8rem; color:#94a3b8;" id="widgetDate">loading date...</div>
             </div>
             <div class="widget-card">
-              <div class="widget-title">Weather Widget</div>
-              <div style="font-size:1.8rem; font-weight:900; color:#7dd3fc;" id="widgetWeatherTemp">56°F Clear</div>
+              <div class="widget-title">weather widget</div>
+              <div style="font-size:1.8rem; font-weight:900; color:#7dd3fc;" id="widgetWeatherTemp">56°F clear</div>
               <div style="font-size:0.8rem; color:#94a3b8;" id="widgetWeatherLocation">ZIP: 66209 (Leawood, KS)</div>
             </div>
             <div class="widget-card" style="cursor:pointer;" onclick="openApp('notes')">
-              <div class="widget-title">Quick Personal Notes 📝</div>
-              <div id="widgetNotesDisplay" style="font-size:0.85rem; color:#cbd5e1; white-space:pre-wrap; max-height:70px; overflow:hidden;">Click to open Notes app...</div>
+              <div class="widget-title">quick personal notes 📝</div>
+              <div id="widgetNotesDisplay" style="font-size:0.85rem; color:#cbd5e1; white-space:pre-wrap; max-height:70px; overflow:hidden;">click to open notes app...</div>
             </div>
           </div>
-          <h3 style="margin:0; color:var(--accent-color);">Favorite G4m3 Shortcuts</h3>
+          <h3 style="margin:0; color:var(--accent-color);">favorite G4m3 shortcuts</h3>
           <div class="games-grid" id="favoritesGrid"></div>
         </div>
 
@@ -400,130 +455,141 @@
             <div class="fav-star" onclick="toggleFavorite('eagle-airlines')">★</div>
             <div style="font-size:2.5rem;">✈️</div>
             <div style="font-size:1.2rem; font-weight:800;">Eagle Airlines</div>
-            <div style="color:#94a3b8; font-size:0.9rem;">Manage your airline empire, buy jets, unlock U.S. hubs, and dispatch flights!</div>
-            <a class="play-btn" href="eagle-airlines.svg">Play G4m3</a>
+            <div style="color:#94a3b8; font-size:0.9rem;">manage your airline empire, buy jets, unlock U.S. hubs, and dispatch flights!</div>
+            <a class="play-btn" href="eagle-airlines.svg">play G4m3</a>
           </div>
 
           <div class="game-card" data-id="pro-flashcards">
             <div class="fav-star" onclick="toggleFavorite('pro-flashcards')">★</div>
             <div style="font-size:2.5rem;">🗂️</div>
             <div style="font-size:1.2rem; font-weight:800;">Pro Flashcards</div>
-            <div style="color:#94a3b8; font-size:0.9rem;">Study decks with 3D card flips, local storage persistence, and self-grading logic.</div>
-            <a class="play-btn" href="pro-flashcards.svg">Open Flashcards</a>
+            <div style="color:#94a3b8; font-size:0.9rem;">study decks with 3D card flips, local storage persistence, and self-grading logic.</div>
+            <a class="play-btn" href="pro-flashcards.svg">open flashcards</a>
           </div>
           
           <div class="game-card" data-id="eagles-pe">
             <div class="fav-star" onclick="toggleFavorite('eagles-pe')">★</div>
             <div style="font-size:2.5rem;">🏐</div>
             <div style="font-size:1.2rem; font-weight:800;">Eagles PE Suite</div>
-            <div style="color:#94a3b8; font-size:0.9rem;">Play Dodgeball Dash arcade action or test your skills in the PE Quiz Challenge!</div>
-            <a class="play-btn" href="eagles-pe.svg">Play G4m3</a>
+            <div style="color:#94a3b8; font-size:0.9rem;">play Dodgeball Dash arcade action or test your skills in the PE Quiz Challenge!</div>
+            <a class="play-btn" href="eagles-pe.svg">play G4m3</a>
           </div>
 
           <div class="game-card" data-id="geometry-eagle">
             <div class="fav-star" onclick="toggleFavorite('geometry-eagle')">★</div>
             <div style="font-size:2.5rem;">🟩</div>
             <div style="font-size:1.2rem; font-weight:800;">Geometry Eagle</div>
-            <div style="color:#94a3b8; font-size:0.9rem;">Time your jumps to leap over spikes in this rhythm platformer.</div>
-            <a class="play-btn" href="geometry-eagle.svg">Play G4m3</a>
+            <div style="color:#94a3b8; font-size:0.9rem;">time your jumps to leap over spikes in this rhythm platformer.</div>
+            <a class="play-btn" href="geometry-eagle.svg">play G4m3</a>
           </div>
 
           <div class="game-card" data-id="eagle-clicker">
             <div class="fav-star" onclick="toggleFavorite('eagle-clicker')">★</div>
             <div style="font-size:2.5rem;">🦅</div>
             <div style="font-size:1.2rem; font-weight:800;">Eagle Clicker</div>
-            <div style="color:#94a3b8; font-size:0.9rem;">Gather feathers and buy nest upgrades for passive income.</div>
-            <a class="play-btn" href="eagle-clicker.svg">Play G4m3</a>
+            <div style="color:#94a3b8; font-size:0.9rem;">gather feathers and buy nest upgrades for passive income.</div>
+            <a class="play-btn" href="eagle-clicker.svg">play G4m3</a>
           </div>
 
           <div class="game-card" data-id="to-the-eagles">
             <div class="fav-star" onclick="toggleFavorite('to-the-eagles')">★</div>
             <div style="font-size:2.5rem;">☁️</div>
             <div style="font-size:1.2rem; font-weight:800;">To the Eagles</div>
-            <div style="color:#94a3b8; font-size:0.9rem;">Bounce across moving clouds and climb as high as possible.</div>
-            <a class="play-btn" href="to-the-eagles.svg">Play G4m3</a>
+            <div style="color:#94a3b8; font-size:0.9rem;">bounce across moving clouds and climb as high as possible.</div>
+            <a class="play-btn" href="to-the-eagles.svg">play G4m3</a>
           </div>
 
           <div class="game-card" data-id="eagle-pizza">
             <div class="fav-star" onclick="toggleFavorite('eagle-pizza')">★</div>
             <div style="font-size:2.5rem;">🍕</div>
             <div style="font-size:1.2rem; font-weight:800;">Eagle Pizza</div>
-            <div style="color:#94a3b8; font-size:0.9rem;">Assemble custom orders and manage your pizza shop.</div>
-            <a class="play-btn" href="eagle-pizza.svg">Play G4m3</a>
+            <div style="color:#94a3b8; font-size:0.9rem;">assemble custom orders and manage your pizza shop.</div>
+            <a class="play-btn" href="eagle-pizza.svg">play G4m3</a>
           </div>
 
           <div class="game-card" data-id="eagle-pong">
             <div class="fav-star" onclick="toggleFavorite('eagle-pong')">★</div>
             <div style="font-size:2.5rem;">🏓</div>
             <div style="font-size:1.2rem; font-weight:800;">Eagle Pong</div>
-            <div style="color:#94a3b8; font-size:0.9rem;">Classic retro paddle arcade game against an AI opponent.</div>
-            <a class="play-btn" href="eagle-pong.svg">Play G4m3</a>
+            <div style="color:#94a3b8; font-size:0.9rem;">classic retro paddle arcade game against an AI opponent.</div>
+            <a class="play-btn" href="eagle-pong.svg">play G4m3</a>
           </div>
 
           <div class="game-card" data-id="eagle-stack">
             <div class="fav-star" onclick="toggleFavorite('eagle-stack')">★</div>
             <div style="font-size:2.5rem;">🧱</div>
             <div style="font-size:1.2rem; font-weight:800;">Eagle Stack Tower</div>
-            <div style="color:#94a3b8; font-size:0.9rem;">Precision-time your drops to stack blocks and reach the sky!</div>
-            <a class="play-btn" href="eagle-stack.svg">Play G4m3</a>
+            <div style="color:#94a3b8; font-size:0.9rem;">precision-time your drops to stack blocks and reach the sky!</div>
+            <a class="play-btn" href="eagle-stack.svg">play G4m3</a>
           </div>
 
           <div class="game-card" data-id="eagle-blocks">
             <div class="fav-star" onclick="toggleFavorite('eagle-blocks')">★</div>
             <div style="font-size:2.5rem;">🟨</div>
             <div style="font-size:1.2rem; font-weight:800;">Eagle Blocks</div>
-            <div style="color:#94a3b8; font-size:0.9rem;">Clear full rows and columns with yellow, white, and gold blocks.</div>
-            <a class="play-btn" href="eagle-blocks.svg">Play G4m3</a>
+            <div style="color:#94a3b8; font-size:0.9rem;">clear full rows and columns with yellow, white, and gold blocks.</div>
+            <a class="play-btn" href="eagle-blocks.svg">play G4m3</a>
           </div>
 
           <div class="game-card" data-id="flappy-eagle">
             <div class="fav-star" onclick="toggleFavorite('flappy-eagle')">★</div>
             <div style="font-size:2.5rem;">🦅</div>
             <div style="font-size:1.2rem; font-weight:800;">Flappy Eagle</div>
-            <div style="color:#94a3b8; font-size:0.9rem;">Auto-moves forward! Press spacebar or click to jump and dodge narrow pathways.</div>
-            <a class="play-btn" href="flappy-eagle.svg">Play G4m3</a>
+            <div style="color:#94a3b8; font-size:0.9rem;">auto-moves forward! press spacebar or click to jump and dodge narrow pathways.</div>
+            <a class="play-btn" href="flappy-eagle.svg">play G4m3</a>
           </div>
 
           <div class="game-card" data-id="feather-catcher">
             <div class="fav-star" onclick="toggleFavorite('feather-catcher')">★</div>
             <div style="font-size:2.5rem;">🪶</div>
             <div style="font-size:1.2rem; font-weight:800;">Feather Catcher</div>
-            <div style="color:#94a3b8; font-size:0.9rem;">Catch falling golden feathers and dodge heavy rocks to beat your high score!</div>
-            <a class="play-btn" href="feather-catcher.svg">Play G4m3</a>
+            <div style="color:#94a3b8; font-size:0.9rem;">catch falling golden feathers and dodge heavy rocks to beat your high score!</div>
+            <a class="play-btn" href="feather-catcher.svg">play G4m3</a>
           </div>
 
           <div class="game-card" data-id="eagle-jump">
             <div class="fav-star" onclick="toggleFavorite('eagle-jump')">★</div>
             <div style="font-size:2.5rem;">☁️</div>
             <div style="font-size:1.2rem; font-weight:800;">Eagle Jump</div>
-            <div style="color:#94a3b8; font-size:0.9rem;">Bounce higher and higher across moving cloud platforms!</div>
-            <a class="play-btn" href="eagle-jump.svg">Play G4m3</a>
+            <div style="color:#94a3b8; font-size:0.9rem;">bounce higher and higher across moving cloud platforms!</div>
+            <a class="play-btn" href="eagle-jump.svg">play G4m3</a>
           </div>
 
           <div class="game-card" data-id="eagle-hopper">
             <div class="fav-star" onclick="toggleFavorite('eagle-hopper')">★</div>
             <div style="font-size:2.5rem;">🛣️</div>
             <div style="font-size:1.2rem; font-weight:800;">Eagle Hopper</div>
-            <div style="color:#94a3b8; font-size:0.9rem;">Hop forward across busy roads and roaring rivers safely!</div>
-            <a class="play-btn" href="eagle-hopper.svg">Play G4m3</a>
+            <div style="color:#94a3b8; font-size:0.9rem;">hop forward across busy roads and roaring rivers safely!</div>
+            <a class="play-btn" href="eagle-hopper.svg">play G4m3</a>
           </div>
         </div>
 
         <div class="end-of-list">
-          <span>End of list. Go back to top?</span>
+          <span>end of list. go back to top?</span>
           <button class="scroll-top-btn" id="scrollTopBtn" title="Back to Top">⬆</button>
         </div>
       </div>
 
       <script type="text/javascript">
         <![CDATA[
+        // Reset Account Data for v0.6.3.0 Migration
+        if (!localStorage.getItem('eagle_v0.6.3.0_reset')) {
+          localStorage.clear();
+          localStorage.setItem('eagle_v0.6.3.0_reset', 'true');
+        }
+
         if (window.location.hostname.includes('statically')) {
           window.location.href = 'https://cdn.jsdelivr.net/gh/mathbuddies/leawoodmiddle@main/index.svg?v=' + Date.now();
         }
 
         window.setAccent = function(color) {
-          document.documentElement.style.setProperty('--accent-color', color);
-          document.documentElement.style.setProperty('--accent-glow', color + '40');
+          if (color === 'transparent') {
+            document.documentElement.style.setProperty('--accent-color', 'rgba(255, 255, 255, 0.6)');
+            document.documentElement.style.setProperty('--accent-glow', 'rgba(255, 255, 255, 0.15)');
+          } else {
+            document.documentElement.style.setProperty('--accent-color', color);
+            document.documentElement.style.setProperty('--accent-glow', color + '40');
+          }
           localStorage.setItem('eagle_accent', color);
         };
 
@@ -534,10 +600,10 @@
         };
 
         const creditsData = {
-          credits: "Made by Scott 😛 went through a lot of stress to make this…",
-          updates: "v0.6.2.0: Connected to new JSONBin ID, fully integrated Notes & Cloaking suites, and removed Teachers Quiz.",
-          notes: "Hey, it’s me, it’s Scott 🙃\n\nI went through a lot to make this…\n\n‘EVIL 3ECUR1Y!! U WILL NOT PREVAIL!!’ \n-Saige…\n\nNext update probably like 5 days after the end of Oct.. more code more glitchy\n\nAre you, are you? Coming to the tree? \n*Hes worried and mad but he’s still vibing \n\nOUT OF EARLY ACCESS BY THE NEW YEAR!!! (Hopefully)\n\nHAPPY HALLOWEEN HAHAH 👻 \n\nLeave a review of my website here: https://forms.gle/bhVjPyKyCd5iKfcj7 \n\nHop hop hop…\n\nAre you proud of me…?\n\nWOWWW ITS FINALLY THE BEGINING OF THE WEEK\n\nYou guys taking my retro bowl website still these days… even though it’s not mine\n\nAndy standee be tripping 🥀\n\nBuc-ee’s is coming to KC near the speedway and legends outlets, opens late 2027 (we think)\n\nWhere. Is. My. Dr. P. #costco\n\n‘ok then ima eat my last smint’\n-Nora\nMe: WE GOT MORE COMINGGGGG\n\n“I might’ve sprayed to much peppermint and now that’s all I smell…’\n-Grace \n\n‘Beckman’s voice is so deep…’\n-??? \nMe in my head: MY MICS NOT EVEN ONNN\n\nILL FIND MY WAYS!!!!!!!\n\nI’m so good 😊\n\nTHIS IS THE END\n\n‘Whos tes’ \nMe: Not anyone I know… plus who would name their kid tes?\n\nNot me waiting\nthrottled: true,\nthrottlingReset: 165\n\nThe GitHub repo stress be like…\n\nLet’s get this show on the road…🎪",
-          pics: "Pics dropdown coming soon! Stay tuned for awesome gallery photos."
+          credits: "made by Scott 😛 went through a lot of stress to make this…",
+          updates: "v0.6.3.0: reset account data, added Pomodoro timer app with floating widget, transparent adaptive accent color, interactive tutorial tour, and bug fixes.",
+          notes: "hey, it’s me, it’s Scott 🙃\n\ni went through a lot to make this…\n\n‘EVIL 3ECUR1Y!! U WILL NOT PREVAIL!!’ \n-Saige…\n\nnext update probably like 5 days after the end of Oct.. more code more glitchy\n\nare you, are you? coming to the tree? \n*Hes worried and mad but he’s still vibing \n\nOUT OF EARLY ACCESS BY THE NEW YEAR!!! (hopefully)\n\nHAPPY HALLOWEEN HAHAH 👻 \n\nleave a review of my website here: https://forms.gle/bhVjPyKyCd5iKfcj7 \n\nhop hop hop…\n\nare you proud of me…?\n\nWOWWW ITS FINALLY THE BEGINING OF THE WEEK\n\nyou guys taking my Retro Bowl website still these days… even though it’s not mine\n\nAndy standee be tripping 🥀\n\nBuc-ee’s is coming to KC near the speedway and legends outlets, opens late 2027 (we think)\n\nwhere. is. my. Dr. P. #costco\n\n‘ok then ima eat my last smint’\n-Nora\nme: WE GOT MORE COMINGGGGG\n\n“i might’ve sprayed to much peppermint and now that’s all i smell…’\n-Grace \n\n‘Beckman’s voice is so deep…’\n-??? \nme in my head: MY MICS NOT EVEN ONNN\n\nILL FIND MY WAYS!!!!!!!\n\ni’m so good 😊\n\nTHIS IS THE END\n\n‘whos tes’ \nme: not anyone i know… plus who would name their kid tes?\n\nnot me waiting\nthrottled: true,\nthrottlingReset: 165\n\nthe GitHub repo stress be like…\n\nlet’s get this show on the road…🎪",
+          pics: "pics dropdown coming soon! stay tuned for awesome gallery photos."
         };
 
         function updateCreditsContent() {
@@ -548,6 +614,7 @@
         window.openApp = function(app) {
           document.getElementById('appsDropdown').classList.remove('open');
           if (app === 'settings') document.getElementById('settingsModal').classList.add('open');
+          if (app === 'pomodoro') document.getElementById('pomodoroModal').classList.add('open');
           if (app === 'weather') document.getElementById('weatherModal').classList.add('open');
           if (app === 'cloaking') {
             updateCloakingStatusUI();
@@ -593,9 +660,48 @@
           const val = document.getElementById('userNameInput').value.trim();
           if (val) {
             localStorage.setItem('eagle_user_name', val);
-            localStorage.setItem('eagle_tut', 'true');
             document.getElementById('nameModal').style.display = 'none';
             updateProfileUI(val);
+            startInteractiveTour();
+          }
+        };
+
+        // Interactive Tour Controller
+        let currentTourStep = 0;
+        const tourSteps = [
+          { title: "apps menu", text: "click here to open the app suite tray! you can access your schedule, weather, cloaking tools, pomodoro timer, and settings.", elementId: "appsDropdownBtn" },
+          { title: "g4m3s library", text: "switch views using this dropdown to browse through all arcade g4m3s or star your favorites!", elementId: "mainNavSelect" },
+          { title: "notifications", text: "click the bell icon to check real-time global broadcasts from Scott!", elementId: "notifBtn" },
+          { title: "notes widget", text: "your quick notes live here. click the tile anytime to open the notes manager app!", elementId: "widgetNotesDisplay" }
+        ];
+
+        function startInteractiveTour() {
+          currentTourStep = 0;
+          showTourStep(0);
+        }
+
+        function showTourStep(idx) {
+          const step = tourSteps[idx];
+          document.querySelectorAll('.tour-highlight').forEach(el => el.classList.remove('tour-highlight'));
+          if (step.elementId) {
+            const target = document.getElementById(step.elementId);
+            if (target) target.classList.add('tour-highlight');
+          }
+          document.getElementById('tourTitle').textContent = step.title;
+          document.getElementById('tourText').textContent = step.text;
+          document.getElementById('tourStepIndicator').textContent = 'step ' + (idx + 1) + ' of ' + tourSteps.length;
+          document.getElementById('tourNextBtn').textContent = (idx === tourSteps.length - 1) ? 'finish tour' : 'next';
+          document.getElementById('tourModal').classList.add('open');
+        }
+
+        window.nextTourStep = function() {
+          currentTourStep++;
+          if (currentTourStep < tourSteps.length) {
+            showTourStep(currentTourStep);
+          } else {
+            document.querySelectorAll('.tour-highlight').forEach(el => el.classList.remove('tour-highlight'));
+            closeModal('tourModal');
+            localStorage.setItem('eagle_tut', 'true');
           }
         };
 
@@ -609,8 +715,78 @@
         };
 
         function updateProfileUI(name) {
-          document.getElementById('heroGreeting').textContent = 'Welcome back, ' + name + '!';
+          document.getElementById('heroGreeting').textContent = 'welcome back, ' + name + '!';
         }
+
+        // Pomodoro Timer Logic
+        let pomoSeconds = 25 * 60;
+        let pomoTimerId = null;
+        let isPomoRunning = false;
+
+        window.setPomoCustomTime = function() {
+          const mins = parseInt(document.getElementById('pomoMinutesInput').value) || 25;
+          pomoSeconds = mins * 60;
+          updatePomoDisplay();
+        };
+
+        window.toggleFloatingPomo = function(show) {
+          document.getElementById('floatingPomodoro').style.display = show ? 'flex' : 'none';
+        };
+
+        window.togglePomoTimer = function() {
+          if (isPomoRunning) {
+            clearInterval(pomoTimerId);
+            isPomoRunning = false;
+            document.getElementById('pomoFloatBtn').textContent = 'start';
+          } else {
+            isPomoRunning = true;
+            document.getElementById('pomoFloatBtn').textContent = 'pause';
+            pomoTimerId = setInterval(function() {
+              if (pomoSeconds > 0) {
+                pomoSeconds--;
+                updatePomoDisplay();
+              } else {
+                clearInterval(pomoTimerId);
+                isPomoRunning = false;
+                alert('Pomodoro session finished!');
+                document.getElementById('pomoFloatBtn').textContent = 'start';
+              }
+            }, 1000);
+          }
+        };
+
+        window.resetPomoTimer = function() {
+          clearInterval(pomoTimerId);
+          isPomoRunning = false;
+          const mins = parseInt(document.getElementById('pomoMinutesInput').value) || 25;
+          pomoSeconds = mins * 60;
+          updatePomoDisplay();
+          document.getElementById('pomoFloatBtn').textContent = 'start';
+        };
+
+        function updatePomoDisplay() {
+          const m = Math.floor(pomoSeconds / 60);
+          const s = pomoSeconds % 60;
+          document.getElementById('pomoFloatDisplay').textContent = (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+        }
+
+        // Make Pomodoro Widget Draggable
+        const floatEl = document.getElementById('floatingPomodoro');
+        let isDragging = false, dragX = 0, dragY = 0;
+        floatEl.onmousedown = function(e) {
+          isDragging = true;
+          dragX = e.clientX - floatEl.offsetLeft;
+          dragY = e.clientY - floatEl.offsetTop;
+        };
+        document.onmousemove = function(e) {
+          if (isDragging) {
+            floatEl.style.left = (e.clientX - dragX) + 'px';
+            floatEl.style.top = (e.clientY - dragY) + 'px';
+            floatEl.style.right = 'auto';
+            floatEl.style.bottom = 'auto';
+          }
+        };
+        document.onmouseup = function() { isDragging = false; };
 
         let versionEnteredCode = '';
         window.pressVersionKey = function(num) {
@@ -628,7 +804,7 @@
                   document.getElementById('editorLinkBtn').style.display = 'none';
                 }
               } else {
-                alert('Incorrect Code!');
+                alert('incorrect code!');
                 versionEnteredCode = '';
                 document.getElementById('versionCodeDisplay').textContent = '____';
               }
@@ -665,7 +841,7 @@
             document.getElementById('widgetWeatherLocation').textContent = 'ZIP: ' + zip;
             closeModal('weatherModal');
           } else {
-            alert('Please enter a valid 5-digit ZIP code.');
+            alert('please enter a valid 5-digit ZIP code.');
           }
         };
 
@@ -674,7 +850,7 @@
           if (val) {
             document.title = val;
             localStorage.setItem('eagle_tab_title', val);
-            alert('Tab title updated successfully!');
+            alert('tab title updated successfully!');
           }
         };
 
@@ -686,14 +862,14 @@
         function updateCloakingStatusUI() {
           const enabled = localStorage.getItem('eagle_cloaking_enabled') === 'true';
           const statusEl = document.getElementById('cloakingStatus');
-          statusEl.textContent = 'Status: ' + (enabled ? 'Enabled (Active)' : 'Disabled');
+          statusEl.textContent = 'status: ' + (enabled ? 'enabled (active)' : 'disabled');
           statusEl.style.color = enabled ? '#22c55e' : '#facc15';
         }
 
         window.saveAppNotes = function() {
           const val = document.getElementById('appNotesInput').value;
           localStorage.setItem('eagle_notes', val);
-          document.getElementById('widgetNotesDisplay').textContent = val || 'Click to open Notes app...';
+          document.getElementById('widgetNotesDisplay').textContent = val || 'click to open notes app...';
           closeModal('notesModal');
         };
 
@@ -706,7 +882,7 @@
               if (enteredCode === '3166') {
                 document.getElementById('broadcastPanel').style.display = 'flex';
               } else {
-                alert('Incorrect Code!');
+                alert('incorrect code!');
                 enteredCode = '';
                 document.getElementById('codeDisplay').textContent = '____';
               }
@@ -723,9 +899,9 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ message: msg })
               });
-              alert('Broadcast published successfully!');
+              alert('broadcast published successfully!');
             } catch (e) {
-              alert('Broadcast published locally.');
+              alert('broadcast published locally.');
             }
             document.getElementById('notifContent').textContent = msg;
             localStorage.setItem('eagle_announcement', msg);
@@ -734,7 +910,7 @@
         };
 
         window.submitBug = function() {
-          alert('Bug report submitted successfully!');
+          alert('bug report submitted successfully!');
           closeModal('bugModal');
         };
 
@@ -760,7 +936,7 @@
           const list = document.getElementById('eventList');
           list.innerHTML = '';
           if (events.length === 0) {
-            list.innerHTML = '<div style="color:#94a3b8;">No scheduled events.</div>';
+            list.innerHTML = '<div style="color:#94a3b8;">no scheduled events.</div>';
             return;
           }
           events.sort(function(a, b) { return new Date(a.date) - new Date(b.date); });
@@ -779,7 +955,7 @@
 
           document.getElementById('creditsSelect').onchange = updateCreditsContent;
 
-          // Fetch JSONBin announcement using new Bin ID
+          // Fetch JSONBin announcement
           fetch('https://api.jsonbin.io/v3/b/6ade824bac6210605a51b40a/latest')
             .then(res => res.json())
             .then(data => {
@@ -834,7 +1010,7 @@
                 localStorage.setItem('eagle_pfp', dataUrl);
                 navAvatar.src = dataUrl;
                 navAvatar.style.display = 'block';
-                alert('Profile picture updated successfully!');
+                alert('profile picture updated successfully!');
               };
               reader.readAsDataURL(file);
             }
@@ -854,7 +1030,7 @@
                 const dataUrl = evt.target.result;
                 localStorage.setItem('eagle_cloak_img', dataUrl);
                 document.getElementById('cloakingDisplayImg').src = dataUrl;
-                alert('Stealth image saved successfully!');
+                alert('stealth image saved successfully!');
               };
               reader.readAsDataURL(file);
             }
@@ -875,7 +1051,7 @@
           document.getElementById('weatherZipInput').value = savedZip;
 
           const savedNotes = localStorage.getItem('eagle_notes') || '';
-          document.getElementById('widgetNotesDisplay').textContent = savedNotes || 'Click to open Notes app...';
+          document.getElementById('widgetNotesDisplay').textContent = savedNotes || 'click to open notes app...';
 
           if (!localStorage.getItem('eagle_tut')) {
             document.getElementById('nameModal').style.display = 'flex';
@@ -974,7 +1150,7 @@
               }
             });
             if (count === 0) {
-              container.innerHTML = '<div style="color:#94a3b8; font-size:0.9rem; grid-column:1/-1;">No favorite g4m3 shortcuts starred yet! Switch to the G4m3s Library tab to star some.</div>';
+              container.innerHTML = '<div style="color:#94a3b8; font-size:0.9rem; grid-column:1/-1;">no favorite G4m3 shortcuts starred yet! switch to the G4m3s library tab to star some.</div>';
             }
           }
 
