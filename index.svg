@@ -218,7 +218,7 @@
       <!-- Version App Modal -->
       <div class="modal-overlay" id="versionModal">
         <div class="modal-card">
-          <h3 style="margin:0; color:var(--accent-color);">version utility (v0.6.3.3)</h3>
+          <h3 style="margin:0; color:var(--accent-color);">version utility (v0.6.3.4)</h3>
           <div id="versionKeypadSection">
             <p style="font-size:0.85rem; color:#94a3b8; margin:0;">enter developer PIN for advanced links:</p>
             <div id="versionCodeDisplay" style="background:rgba(30,41,59,0.8); color:var(--accent-color); font-size:2rem; font-weight:900; text-align:center; padding:12px; border-radius:12px; letter-spacing:10px;">____</div>
@@ -397,7 +397,7 @@
 
           <div>
             <div class="brand">eagle.io</div>
-            <div class="meta-info">v0.6.3.3 • Early Access 2 • <span id="liveClock">00:00:00</span></div>
+            <div class="meta-info">v0.6.3.4 • Early Access 2 • <span id="liveClock">00:00:00</span></div>
           </div>
         </div>
 
@@ -408,7 +408,7 @@
               <button class="liquid-btn" id="notifBtn" style="padding:8px 12px; font-size:1.1rem;">🔔<span class="notif-badge" id="notifBadge">1</span></button>
               <div class="apps-dropdown" id="notifDropdown" style="right:0; left:auto; width:280px; top:48px;">
                 <div style="font-weight:900; color:var(--accent-color); font-size:0.85rem; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:6px;">global announcements</div>
-                <div id="notifContent" style="font-size:0.85rem; color:#f8fafc; line-height:1.4; margin-top:6px;">V0.6.3.3 IS HERE!</div>
+                <div id="notifContent" style="font-size:0.85rem; color:#f8fafc; line-height:1.4; margin-top:6px;">V0.6.3.4 IS HERE!</div>
               </div>
             </div>
           </div>
@@ -571,9 +571,9 @@
 
       <script type="text/javascript">
         <![CDATA[
-        // Reset Account Data for v0.6.3.3 Migration
-        if (!localStorage.getItem('eagle_v0.6.3.3_reset')) {
-          localStorage.setItem('eagle_v0.6.3.3_reset', 'true');
+        // Reset Account Data for v0.6.3.4 Migration
+        if (!localStorage.getItem('eagle_v0.6.3.4_reset')) {
+          localStorage.setItem('eagle_v0.6.3.4_reset', 'true');
         }
 
         if (window.location.hostname.includes('statically')) {
@@ -598,9 +598,9 @@
         };
 
         const creditsData = {
-          credits: "made by Scott 😛 v0.6.3.3 release",
-          updates: "v0.6.3.3: updated meta-info display layout to Early Access 2 format, keeping all bug fixes and stability intact.",
-          notes: "hey, it’s me, it’s Scott 🙃\n\nv0.6.3.3 is rolling out clean!\n\n‘EVIL 3ECUR1Y!! U WILL NOT PREVAIL!!’ \n-Saige…\n\nOUT OF EARLY ACCESS BY THE NEW YEAR!!! (hopefully)\n\nHAPPY HALLOWEEN HAHAH 👻 \n\nleave a review of my website here: https://forms.gle/bhVjPyKyCd5iKfcj7",
+          credits: "made by Scott 😛 v0.6.3.4 release",
+          updates: "v0.6.3.4: updated meta-info text layout and bumped minor patch version.",
+          notes: "hey, it’s me, it’s Scott 🙃\n\nv0.6.3.4 is rolling out clean!\n\n‘EVIL 3ECUR1Y!! U WILL NOT PREVAIL!!’ \n-Saige…\n\nOUT OF EARLY ACCESS BY THE NEW YEAR!!! (hopefully)\n\nHAPPY HALLOWEEN HAHAH 👻 \n\nleave a review of my website here: https://forms.gle/bhVjPyKyCd5iKfcj7",
           pics: "pics dropdown coming soon! stay tuned for awesome gallery photos."
         };
 
