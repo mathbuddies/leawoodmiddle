@@ -51,7 +51,7 @@
         .modal-overlay.open { display: flex; }
         .modal-card {
           background: rgba(15, 23, 42, 0.96); border: 1px solid rgba(255, 255, 255, 0.2);
-          border-radius: 20px; padding: 24px; width: 90%; max-width: 460px; display: flex; flex-direction: column; gap: 16px; max-height: 90vh; overflow-y: auto;
+          border-radius: 20px; padding: 24px; width: 90%; max-width: 480px; display: flex; flex-direction: column; gap: 16px; max-height: 90vh; overflow-y: auto;
           box-shadow: 0 15px 35px rgba(0,0,0,0.6);
         }
         .modal-input {
@@ -62,6 +62,39 @@
         .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
         .key-btn { background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(255, 255, 255, 0.12); color: #f8fafc; padding: 14px; border-radius: 10px; font-size: 1.2rem; font-weight: 800; cursor: pointer; text-align: center; }
         .key-btn:hover { background: var(--accent-color); color: #0f172a; }
+
+        /* Calculator Styles */
+        .calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+        .calc-btn { background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(255, 255, 255, 0.1); color: #f8fafc; padding: 14px; border-radius: 12px; font-size: 1.1rem; font-weight: 800; cursor: pointer; text-align: center; transition: 0.15s; }
+        .calc-btn:hover { background: rgba(255,255,255,0.15); }
+        .calc-btn.op { color: var(--accent-color); background: rgba(56, 189, 248, 0.1); }
+        .calc-btn.equal { background: var(--accent-color); color: #0f172a; }
+
+        /* AI Chat Styles */
+        .chat-container { display: flex; flex-direction: column; gap: 12px; max-height: 300px; overflow-y: auto; padding-right: 4px; }
+        .chat-bubble { padding: 10px 14px; border-radius: 14px; font-size: 0.85rem; line-height: 1.4; max-width: 85%; word-break: break-word; }
+        .chat-bubble.user { background: var(--accent-color); color: #0f172a; align-self: flex-end; font-weight: 600; }
+        .chat-bubble.ai { background: rgba(30, 41, 59, 0.8); color: #f8fafc; align-self: flex-start; border: 1px solid rgba(255,255,255,0.1); }
+        
+        .chat-input-pill {
+          background: rgba(30, 41, 59, 0.9); border: 1px solid rgba(255, 255, 255, 0.15);
+          border-radius: 24px; padding: 10px 14px; display: flex; flex-direction: column; gap: 8px;
+          position: relative; box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
+        .chat-input-textarea {
+          width: 100%; background: transparent; border: none; color: #f8fafc; font-size: 0.9rem;
+          outline: none; resize: none; font-family: inherit; min-height: 24px; max-height: 80px;
+        }
+        .chat-action-row { display: flex; justify-content: space-between; align-items: center; }
+        
+        .image-preview-chip {
+          display: inline-flex; align-items: center; gap: 6px; background: rgba(15, 23, 42, 0.85);
+          border: 1px solid rgba(255,255,255,0.2); border-radius: 16px; padding: 4px 8px; width: fit-content; max-width: 160px;
+        }
+        .image-preview-chip img { width: 28px; height: 28px; border-radius: 8px; object-fit: cover; }
+        .image-preview-chip span { font-size: 0.7rem; color: #cbd5e1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .image-preview-chip button { background: rgba(255,255,255,0.2); border: none; color: #fff; width: 16px; height: 16px; border-radius: 50%; font-size: 0.6rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .image-preview-chip button:hover { background: #ef4444; }
 
         .container { max-width: 1200px; width: 100%; margin: 0 auto; padding: 40px 24px; display: flex; flex-direction: column; gap: 30px; }
         .header-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
@@ -109,12 +142,6 @@
           flex-direction: column; align-items: center; gap: 6px; box-shadow: 0 10px 25px rgba(0,0,0,0.5);
           z-index: 1000; backdrop-filter: blur(10px); cursor: move;
         }
-
-        /* Interactive Tour Overlay */
-        .tour-highlight {
-          position: relative; z-index: 401 !important; box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.75), 0 0 15px var(--accent-color) !important;
-          border-radius: 12px; transition: all 0.3s ease;
-        }
         ]]>
       </style>
 
@@ -133,25 +160,13 @@
         </div>
       </div>
 
-      <!-- First-Visit Name & Tour Modal -->
+      <!-- First-Visit Name Modal -->
       <div class="modal-overlay" id="nameModal" style="display:none;">
         <div class="modal-card">
           <h2 style="margin:0; color:var(--accent-color);">welcome to eagle.io</h2>
-          <p style="color:#94a3b8; font-size:0.9rem; margin:0;">let's get you set up with a quick interactive tour. first, what should we call you?</p>
+          <p style="color:#94a3b8; font-size:0.9rem; margin:0;">what should we call you?</p>
           <input type="text" class="modal-input" id="userNameInput" placeholder="enter your name..." />
-          <button onclick="saveName()" class="liquid-btn" style="background:var(--accent-color); color:#0f172a; justify-content:center;">start interactive tour</button>
-        </div>
-      </div>
-
-      <!-- Tour Step Modal -->
-      <div class="modal-overlay" id="tourModal" style="z-index: 500;">
-        <div class="modal-card">
-          <h3 style="margin:0; color:var(--accent-color);" id="tourTitle">interactive tour</h3>
-          <p style="color:#cbd5e1; font-size:0.9rem; margin:0; line-height:1.5;" id="tourText">welcome!</p>
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">
-            <span style="font-size:0.8rem; color:#94a3b8;" id="tourStepIndicator">step 1 of 4</span>
-            <button onclick="nextTourStep()" class="liquid-btn" style="background:var(--accent-color); color:#0f172a;" id="tourNextBtn">next</button>
-          </div>
+          <button onclick="saveName()" class="liquid-btn" style="background:var(--accent-color); color:#0f172a; justify-content:center;">get started</button>
         </div>
       </div>
 
@@ -170,7 +185,6 @@
               <button class="liquid-btn" onclick="setAccent('#fb923c')" style="background:#fb923c; width:36px; height:36px; padding:0; border-radius:50%;" title="Orange"></button>
               <button class="liquid-btn" onclick="setAccent('#ec4899')" style="background:#ec4899; width:36px; height:36px; padding:0; border-radius:50%;" title="Pink"></button>
               <button class="liquid-btn" onclick="setAccent('#14b8a6')" style="background:#14b8a6; width:36px; height:36px; padding:0; border-radius:50%;" title="Teal"></button>
-              <button class="liquid-btn" onclick="setAccent('transparent')" style="background:rgba(255,255,255,0.2); border:1px dashed #fff; width:36px; height:36px; padding:0; border-radius:50%; color:#fff; font-size:0.6rem; font-weight:bold;" title="Transparent">trans</button>
             </div>
           </div>
           <div style="display:flex; flex-direction:column; gap:10px; margin-top:10px;">
@@ -179,6 +193,69 @@
             <button onclick="clearBackground()" class="liquid-btn" style="justify-content:center; background:rgba(239,68,68,0.2); color:#ef4444; border-color:rgba(239,68,68,0.4);">reset background</button>
           </div>
           <button onclick="closeModal('settingsModal')" class="liquid-btn" style="justify-content:center; margin-top:10px;">close settings</button>
+        </div>
+      </div>
+
+      <!-- Calculator App Modal -->
+      <div class="modal-overlay" id="calculatorModal">
+        <div class="modal-card" style="max-width:340px;">
+          <h3 style="margin:0; color:var(--accent-color);">calculator</h3>
+          <div id="calcDisplay" style="background:rgba(30,41,59,0.9); border:1px solid rgba(255,255,255,0.12); border-radius:12px; padding:16px; font-size:2rem; font-weight:900; text-align:right; color:#f8fafc; font-family:monospace; overflow:hidden;">0</div>
+          <div class="calc-grid">
+            <button class="calc-btn op" onclick="calcClear()">C</button>
+            <button class="calc-btn op" onclick="calcAppend('%')">%</button>
+            <button class="calc-btn op" onclick="calcAppend('/')">÷</button>
+            <button class="calc-btn op" onclick="calcBack()">⌫</button>
+            <button class="calc-btn" onclick="calcAppend('7')">7</button>
+            <button class="calc-btn" onclick="calcAppend('8')">8</button>
+            <button class="calc-btn" onclick="calcAppend('9')">9</button>
+            <button class="calc-btn op" onclick="calcAppend('*')">×</button>
+            <button class="calc-btn" onclick="calcAppend('4')">4</button>
+            <button class="calc-btn" onclick="calcAppend('5')">5</button>
+            <button class="calc-btn" onclick="calcAppend('6')">6</button>
+            <button class="calc-btn op" onclick="calcAppend('-')">-</button>
+            <button class="calc-btn" onclick="calcAppend('1')">1</button>
+            <button class="calc-btn" onclick="calcAppend('2')">2</button>
+            <button class="calc-btn" onclick="calcAppend('3')">3</button>
+            <button class="calc-btn op" onclick="calcAppend('+')">+</button>
+            <button class="calc-btn" onclick="calcAppend('0')" style="grid-column: span 2;">0</button>
+            <button class="calc-btn" onclick="calcAppend('.')">.</button>
+            <button class="calc-btn equal" onclick="calcEvaluate()">=</button>
+          </div>
+          <button onclick="closeModal('calculatorModal')" class="liquid-btn" style="justify-content:center; margin-top:4px;">close calculator</button>
+        </div>
+      </div>
+
+      <!-- AI Assistant App Modal -->
+      <div class="modal-overlay" id="aiModal">
+        <div class="modal-card" style="max-width:520px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h3 style="margin:0; color:var(--accent-color);">eagle AI assistant</h3>
+            <select class="select-box" id="aiModelSelect" style="padding:6px 12px; font-size:0.8rem;">
+              <option value="local">Eagle Local Bot</option>
+              <option value="gemini">Gemini 1.5 Flash</option>
+              <option value="openai">GPT-4o</option>
+            </select>
+          </div>
+          
+          <div class="chat-container" id="chatContainer">
+            <div class="chat-bubble ai">hello! i'm your eagle.io AI assistant. ask me anything, or attach a picture using the <strong>+</strong> button below!</div>
+          </div>
+
+          <!-- Modern Input Pill -->
+          <div class="chat-input-pill">
+            <div id="chatImagePreviewContainer" style="display:none;"></div>
+            <textarea id="aiPromptInput" class="chat-input-textarea" placeholder="ask a question or type a prompt..."></textarea>
+            <div class="chat-action-row">
+              <label class="liquid-btn" style="padding:6px 10px; font-size:1rem; cursor:pointer; margin:0;" title="Attach Image">
+                +
+                <input type="file" id="aiImageUpload" accept="image/*" style="display:none;" />
+              </label>
+              <button onclick="sendAiMessage()" class="liquid-btn" style="background:var(--accent-color); color:#0f172a; padding:6px 12px; border-radius:50%; font-size:1.1rem; justify-content:center;" title="Send">↑</button>
+            </div>
+          </div>
+
+          <button onclick="closeModal('aiModal')" class="liquid-btn" style="justify-content:center; margin-top:4px;">close AI assistant</button>
         </div>
       </div>
 
@@ -218,7 +295,7 @@
       <!-- Version App Modal -->
       <div class="modal-overlay" id="versionModal">
         <div class="modal-card">
-          <h3 style="margin:0; color:var(--accent-color);">version utility (v0.6.3.4)</h3>
+          <h3 style="margin:0; color:var(--accent-color);">version utility (v0.6.4.0)</h3>
           <div id="versionKeypadSection">
             <p style="font-size:0.85rem; color:#94a3b8; margin:0;">enter developer PIN for advanced links:</p>
             <div id="versionCodeDisplay" style="background:rgba(30,41,59,0.8); color:var(--accent-color); font-size:2rem; font-weight:900; text-align:center; padding:12px; border-radius:12px; letter-spacing:10px;">____</div>
@@ -239,7 +316,6 @@
             <button onclick="switchLink('statically')" class="liquid-btn" style="justify-content:center;">switch to Statically link</button>
             <button onclick="switchLink('jsdelivr')" class="liquid-btn" style="justify-content:center; background:var(--accent-color); color:#0f172a;">switch to jsDelivr link (recommended)</button>
             <button onclick="switchLink('github')" class="liquid-btn" style="justify-content:center;">switch to GitHub link</button>
-            <button id="editorLinkBtn" onclick="switchLink('editor')" class="liquid-btn" style="justify-content:center; background:#22c55e; color:#0f172a; display:none;">open editor link</button>
           </div>
           <button onclick="closeModal('versionModal')" class="liquid-btn" style="justify-content:center; margin-top:10px;">close app</button>
         </div>
@@ -254,7 +330,6 @@
               <option value="credits">credits</option>
               <option value="updates">update logs</option>
               <option value="notes">creator's notes</option>
-              <option value="pics">pics (coming soon)</option>
             </select>
             <div id="creditsContentBox" class="credits-content-box"></div>
           </div>
@@ -302,28 +377,17 @@
       <div class="modal-overlay" id="notesModal">
         <div class="modal-card">
           <h3 style="margin:0; color:var(--accent-color);">notes manager</h3>
-          <p style="font-size:0.85rem; color:#94a3b8; margin:0;">edit your personal notes below. changes reflect instantly on your hub dashboard widget.</p>
+          <p style="font-size:0.85rem; color:#94a3b8; margin:0;">edit your personal notes below.</p>
           <textarea id="appNotesInput" class="modal-input" placeholder="type notes here..." style="height:140px; resize:none; font-size:0.9rem;"></textarea>
           <button onclick="saveAppNotes()" class="liquid-btn" style="background:var(--accent-color); color:#0f172a; justify-content:center;">save notes</button>
           <button onclick="closeModal('notesModal')" class="liquid-btn" style="justify-content:center;">close notes</button>
         </div>
       </div>
 
-      <!-- Tools App Modal (Coming Soon) -->
-      <div class="modal-overlay" id="toolsModal">
-        <div class="modal-card">
-          <h3 style="margin:0; color:var(--accent-color);">tools</h3>
-          <p style="font-size:0.9rem; color:#cbd5e1; line-height:1.5; margin:0;">
-            exciting utility tools are currently under development and coming soon in a future update!
-          </p>
-          <button onclick="closeModal('toolsModal')" class="liquid-btn" style="justify-content:center; margin-top:10px;">close</button>
-        </div>
-      </div>
-
       <!-- Schedule Modal -->
       <div class="modal-overlay" id="scheduleModal">
         <div class="modal-card">
-          <h3 style="margin:0; color:var(--accent-color);">schedule and events (up to 2030)</h3>
+          <h3 style="margin:0; color:var(--accent-color);">schedule and events</h3>
           <div style="display:flex; gap:10px;">
             <input type="date" class="modal-input" id="eventDate" min="2024-01-01" max="2030-12-31" />
             <input type="text" class="modal-input" id="eventTitle" placeholder="event description..." />
@@ -380,12 +444,13 @@
           <div class="apps-dropdown" id="appsDropdown">
             <div style="font-weight:900; color:var(--accent-color); font-size:0.85rem; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:6px;">app suite tray</div>
             <div class="apps-grid">
+              <div class="app-tile" onclick="openApp('ai')"><span>🤖</span><span>eagle AI</span></div>
+              <div class="app-tile" onclick="openApp('calculator')"><span>🧮</span><span>calc</span></div>
               <div class="app-tile" onclick="openApp('schedule')"><span>📅</span><span>schedule</span></div>
               <div class="app-tile" onclick="openApp('weather')"><span>⛅</span><span>weather</span></div>
               <div class="app-tile" onclick="openApp('cloaking')"><span>🕵️</span><span>cloaking</span></div>
               <div class="app-tile" onclick="openApp('notes')"><span>📝</span><span>notes</span></div>
               <div class="app-tile" onclick="openApp('pomodoro')"><span>⏱️</span><span>pomodoro</span></div>
-              <div class="app-tile" onclick="openApp('tools')"><span>🛠️</span><span>tools</span></div>
               <div class="app-tile" onclick="openApp('version')"><span>🔗</span><span>version</span></div>
               <div class="app-tile" onclick="openApp('settings')"><span>🎨</span><span>themes</span></div>
               <div class="app-tile" onclick="openApp('profile')"><span>👤</span><span>profile</span></div>
@@ -397,7 +462,7 @@
 
           <div>
             <div class="brand">eagle.io</div>
-            <div class="meta-info">v0.6.3.4 • Early Access 2 • <span id="liveClock">00:00:00</span></div>
+            <div class="meta-info">v0.6.4.0 • Early Access 2 • <span id="liveClock">00:00:00</span></div>
           </div>
         </div>
 
@@ -408,7 +473,7 @@
               <button class="liquid-btn" id="notifBtn" style="padding:8px 12px; font-size:1.1rem;">🔔<span class="notif-badge" id="notifBadge">1</span></button>
               <div class="apps-dropdown" id="notifDropdown" style="right:0; left:auto; width:280px; top:48px;">
                 <div style="font-weight:900; color:var(--accent-color); font-size:0.85rem; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:6px;">global announcements</div>
-                <div id="notifContent" style="font-size:0.85rem; color:#f8fafc; line-height:1.4; margin-top:6px;">V0.6.3.4 IS HERE!</div>
+                <div id="notifContent" style="font-size:0.85rem; color:#f8fafc; line-height:1.4; margin-top:6px;">V0.6.4.0 IS HERE! AI &amp; CALCULATOR ADDED!</div>
               </div>
             </div>
           </div>
@@ -449,7 +514,6 @@
 
         <!-- Games Library View -->
         <div id="gamesView" class="games-grid" style="display:none;">
-
           <div class="game-card" data-id="eagle-airlines">
             <div class="fav-star" onclick="toggleFavorite('eagle-airlines')">★</div>
             <div style="font-size:2.5rem;">✈️</div>
@@ -457,7 +521,6 @@
             <div style="color:#94a3b8; font-size:0.9rem;">manage your airline empire, buy jets, unlock U.S. hubs, and dispatch flights!</div>
             <a class="play-btn" href="eagle-airlines.svg">play G4m3</a>
           </div>
-
           <div class="game-card" data-id="pro-flashcards">
             <div class="fav-star" onclick="toggleFavorite('pro-flashcards')">★</div>
             <div style="font-size:2.5rem;">🗂️</div>
@@ -465,7 +528,6 @@
             <div style="color:#94a3b8; font-size:0.9rem;">study decks with 3D card flips, local storage persistence, and self-grading logic.</div>
             <a class="play-btn" href="pro-flashcards.svg">open flashcards</a>
           </div>
-          
           <div class="game-card" data-id="eagles-pe">
             <div class="fav-star" onclick="toggleFavorite('eagles-pe')">★</div>
             <div style="font-size:2.5rem;">🏐</div>
@@ -473,7 +535,6 @@
             <div style="color:#94a3b8; font-size:0.9rem;">play Dodgeball Dash arcade action or test your skills in the PE Quiz Challenge!</div>
             <a class="play-btn" href="eagles-pe.svg">play G4m3</a>
           </div>
-
           <div class="game-card" data-id="geometry-eagle">
             <div class="fav-star" onclick="toggleFavorite('geometry-eagle')">★</div>
             <div style="font-size:2.5rem;">🟩</div>
@@ -481,7 +542,6 @@
             <div style="color:#94a3b8; font-size:0.9rem;">time your jumps to leap over spikes in this rhythm platformer.</div>
             <a class="play-btn" href="geometry-eagle.svg">play G4m3</a>
           </div>
-
           <div class="game-card" data-id="eagle-clicker">
             <div class="fav-star" onclick="toggleFavorite('eagle-clicker')">★</div>
             <div style="font-size:2.5rem;">🦅</div>
@@ -489,7 +549,6 @@
             <div style="color:#94a3b8; font-size:0.9rem;">gather feathers and buy nest upgrades for passive income.</div>
             <a class="play-btn" href="eagle-clicker.svg">play G4m3</a>
           </div>
-
           <div class="game-card" data-id="to-the-eagles">
             <div class="fav-star" onclick="toggleFavorite('to-the-eagles')">★</div>
             <div style="font-size:2.5rem;">☁️</div>
@@ -497,7 +556,6 @@
             <div style="color:#94a3b8; font-size:0.9rem;">bounce across moving clouds and climb as high as possible.</div>
             <a class="play-btn" href="to-the-eagles.svg">play G4m3</a>
           </div>
-
           <div class="game-card" data-id="eagle-pizza">
             <div class="fav-star" onclick="toggleFavorite('eagle-pizza')">★</div>
             <div style="font-size:2.5rem;">🍕</div>
@@ -505,7 +563,6 @@
             <div style="color:#94a3b8; font-size:0.9rem;">assemble custom orders and manage your pizza shop.</div>
             <a class="play-btn" href="eagle-pizza.svg">play G4m3</a>
           </div>
-
           <div class="game-card" data-id="eagle-pong">
             <div class="fav-star" onclick="toggleFavorite('eagle-pong')">★</div>
             <div style="font-size:2.5rem;">🏓</div>
@@ -513,7 +570,6 @@
             <div style="color:#94a3b8; font-size:0.9rem;">classic retro paddle arcade game against an AI opponent.</div>
             <a class="play-btn" href="eagle-pong.svg">play G4m3</a>
           </div>
-
           <div class="game-card" data-id="eagle-stack">
             <div class="fav-star" onclick="toggleFavorite('eagle-stack')">★</div>
             <div style="font-size:2.5rem;">🧱</div>
@@ -521,7 +577,6 @@
             <div style="color:#94a3b8; font-size:0.9rem;">precision-time your drops to stack blocks and reach the sky!</div>
             <a class="play-btn" href="eagle-stack.svg">play G4m3</a>
           </div>
-
           <div class="game-card" data-id="eagle-blocks">
             <div class="fav-star" onclick="toggleFavorite('eagle-blocks')">★</div>
             <div style="font-size:2.5rem;">🟨</div>
@@ -529,7 +584,6 @@
             <div style="color:#94a3b8; font-size:0.9rem;">clear full rows and columns with yellow, white, and gold blocks.</div>
             <a class="play-btn" href="eagle-blocks.svg">play G4m3</a>
           </div>
-
           <div class="game-card" data-id="flappy-eagle">
             <div class="fav-star" onclick="toggleFavorite('flappy-eagle')">★</div>
             <div style="font-size:2.5rem;">🦅</div>
@@ -537,7 +591,6 @@
             <div style="color:#94a3b8; font-size:0.9rem;">auto-moves forward! press spacebar or click to jump and dodge narrow pathways.</div>
             <a class="play-btn" href="flappy-eagle.svg">play G4m3</a>
           </div>
-
           <div class="game-card" data-id="feather-catcher">
             <div class="fav-star" onclick="toggleFavorite('feather-catcher')">★</div>
             <div style="font-size:2.5rem;">🪶</div>
@@ -545,7 +598,6 @@
             <div style="color:#94a3b8; font-size:0.9rem;">catch falling golden feathers and dodge heavy rocks to beat your high score!</div>
             <a class="play-btn" href="feather-catcher.svg">play G4m3</a>
           </div>
-
           <div class="game-card" data-id="eagle-jump">
             <div class="fav-star" onclick="toggleFavorite('eagle-jump')">★</div>
             <div style="font-size:2.5rem;">☁️</div>
@@ -553,7 +605,6 @@
             <div style="color:#94a3b8; font-size:0.9rem;">bounce higher and higher across moving cloud platforms!</div>
             <a class="play-btn" href="eagle-jump.svg">play G4m3</a>
           </div>
-
           <div class="game-card" data-id="eagle-hopper">
             <div class="fav-star" onclick="toggleFavorite('eagle-hopper')">★</div>
             <div style="font-size:2.5rem;">🛣️</div>
@@ -571,9 +622,8 @@
 
       <script type="text/javascript">
         <![CDATA[
-        // Reset Account Data for v0.6.3.4 Migration
-        if (!localStorage.getItem('eagle_v0.6.3.4_reset')) {
-          localStorage.setItem('eagle_v0.6.3.4_reset', 'true');
+        if (!localStorage.getItem('eagle_v0.6.4.0_reset')) {
+          localStorage.setItem('eagle_v0.6.4.0_reset', 'true');
         }
 
         if (window.location.hostname.includes('statically')) {
@@ -581,13 +631,8 @@
         }
 
         window.setAccent = function(color) {
-          if (color === 'transparent') {
-            document.documentElement.style.setProperty('--accent-color', 'rgba(255, 255, 255, 0.6)');
-            document.documentElement.style.setProperty('--accent-glow', 'rgba(255, 255, 255, 0.15)');
-          } else {
-            document.documentElement.style.setProperty('--accent-color', color);
-            document.documentElement.style.setProperty('--accent-glow', color + '40');
-          }
+          document.documentElement.style.setProperty('--accent-color', color);
+          document.documentElement.style.setProperty('--accent-glow', color + '40');
           localStorage.setItem('eagle_accent', color);
         };
 
@@ -598,10 +643,9 @@
         };
 
         const creditsData = {
-          credits: "made by Scott 😛 v0.6.3.4 release",
-          updates: "v0.6.3.4: updated meta-info text layout, maintained mathbuddies repository links, and bumped patch version.",
-          notes: "hey, it’s me, it’s Scott 🙃\n\nv0.6.3.4 is rolling out clean!\n\n‘EVIL 3ECUR1Y!! U WILL NOT PREVAIL!!’ \n-Saige…\n\nOUT OF EARLY ACCESS BY THE NEW YEAR!!! (hopefully)\n\nHAPPY HALLOWEEN HAHAH 👻 \n\nleave a review of my website here: https://forms.gle/bhVjPyKyCd5iKfcj7",
-          pics: "pics dropdown coming soon! stay tuned for awesome gallery photos."
+          credits: "made by Scott 😛 v0.6.4.0 release",
+          updates: "v0.6.4.0: introduced the eagle AI assistant with image attachments and a full calculator app!",
+          notes: "hey, it’s me, it’s Scott 🙃\n\nv0.6.4.0 is live with AI and calculator tools!\n\n‘EVIL 3ECUR1Y!! U WILL NOT PREVAIL!!’ \n-Saige…\n\nOUT OF EARLY ACCESS BY THE NEW YEAR!!! (hopefully)"
         };
 
         function updateCreditsContent() {
@@ -612,6 +656,8 @@
         window.openApp = function(app) {
           document.getElementById('appsDropdown').classList.remove('open');
           if (app === 'settings') document.getElementById('settingsModal').classList.add('open');
+          if (app === 'calculator') document.getElementById('calculatorModal').classList.add('open');
+          if (app === 'ai') document.getElementById('aiModal').classList.add('open');
           if (app === 'pomodoro') document.getElementById('pomodoroModal').classList.add('open');
           if (app === 'weather') document.getElementById('weatherModal').classList.add('open');
           if (app === 'cloaking') {
@@ -623,7 +669,6 @@
             document.getElementById('appNotesInput').value = localStorage.getItem('eagle_notes') || '';
             document.getElementById('notesModal').classList.add('open');
           }
-          if (app === 'tools') document.getElementById('toolsModal').classList.add('open');
           if (app === 'version') {
             versionEnteredCode = '';
             document.getElementById('versionCodeDisplay').textContent = '____';
@@ -654,52 +699,106 @@
           document.getElementById(id).classList.remove('open');
         };
 
+        // Calculator Logic
+        let calcExpr = '0';
+        window.calcAppend = function(val) {
+          if (calcExpr === '0' && !['+', '-', '*', '/', '%', '.'].includes(val)) {
+            calcExpr = val;
+          } else {
+            calcExpr += val;
+          }
+          updateCalcDisplay();
+        };
+        window.calcClear = function() {
+          calcExpr = '0';
+          updateCalcDisplay();
+        };
+        window.calcBack = function() {
+          calcExpr = calcExpr.length > 1 ? calcExpr.slice(0, -1) : '0';
+          updateCalcDisplay();
+        };
+        window.calcEvaluate = function() {
+          try {
+            let res = eval(calcExpr.replace(/×/g, '*').replace(/÷/g, '/'));
+            calcExpr = String(res);
+          } catch(e) {
+            calcExpr = 'Error';
+          }
+          updateCalcDisplay();
+        };
+        function updateCalcDisplay() {
+          document.getElementById('calcDisplay').textContent = calcExpr;
+        }
+
+        // AI Assistant & Image Attachment Logic
+        let attachedImageBase64 = null;
+        const aiUpload = document.getElementById('aiImageUpload');
+        aiUpload.onchange = function(e) {
+          const file = e.target.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+              attachedImageBase64 = evt.target.result;
+              const container = document.getElementById('chatImagePreviewContainer');
+              container.style.display = 'block';
+              container.innerHTML = '<div class="image-preview-chip"><img src="' + attachedImageBase64 + '" /><span>' + file.name + '</span><button onclick="removeAttachedImage()">✕</button></div>';
+            };
+            reader.readAsDataURL(file);
+          }
+        };
+
+        window.removeAttachedImage = function() {
+          attachedImageBase64 = null;
+          document.getElementById('chatImagePreviewContainer').style.display = 'none';
+          document.getElementById('chatImagePreviewContainer').innerHTML = '';
+          aiUpload.value = '';
+        };
+
+        window.sendAiMessage = function() {
+          const input = document.getElementById('aiPromptInput');
+          const text = input.value.trim();
+          if (!text && !attachedImageBase64) return;
+
+          const container = document.getElementById('chatContainer');
+          
+          // Append User Bubble
+          let userHtml = '<div class="chat-bubble user">';
+          if (attachedImageBase64) {
+            userHtml += '<img src="' + attachedImageBase64 + '" style="max-width:100%; border-radius:8px; margin-bottom:6px; display:block;" />';
+          }
+          userHtml += escapeHtml(text || 'sent an image') + '</div>';
+          container.insertAdjacentHTML('beforeend', userHtml);
+
+          input.value = '';
+          const imgToProcess = attachedImageBase64;
+          removeAttachedImage();
+          container.scrollTop = container.scrollHeight;
+
+          // Simulated AI response
+          setTimeout(function() {
+            let reply = "i received your prompt! since this is the built-in local assistant, i can help you navigate eagle.io or chat with you.";
+            if (imgToProcess) {
+              reply = "i see the image you attached! that looks super cool.";
+            } else if (text.toLowerCase().includes('hello') || text.toLowerCase().includes('hi')) {
+              reply = "hey there! how can I help you rule eagle.io today?";
+            } else if (text.toLowerCase().includes('version')) {
+              reply = "you are currently running eagle.io v0.6.4.0.";
+            }
+            container.insertAdjacentHTML('beforeend', '<div class="chat-bubble ai">' + reply + '</div>');
+            container.scrollTop = container.scrollHeight;
+          }, 600);
+        };
+
+        function escapeHtml(str) {
+          return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+
         window.saveName = function() {
           const val = document.getElementById('userNameInput').value.trim();
           if (val) {
             localStorage.setItem('eagle_user_name', val);
             document.getElementById('nameModal').style.display = 'none';
             updateProfileUI(val);
-            startInteractiveTour();
-          }
-        };
-
-        // Interactive Tour Controller
-        let currentTourStep = 0;
-        const tourSteps = [
-          { title: "apps menu", text: "click here to open the app suite tray! you can access your schedule, weather, cloaking tools, pomodoro timer, and settings.", elementId: "appsDropdownBtn" },
-          { title: "g4m3s library", text: "switch views using this dropdown to browse through all arcade g4m3s or star your favorites!", elementId: "mainNavSelect" },
-          { title: "notifications", text: "click the bell icon to check real-time global broadcasts from Scott!", elementId: "notifBtn" },
-          { title: "notes widget", text: "your quick notes live here. click the tile anytime to open the notes manager app!", elementId: "widgetNotesDisplay" }
-        ];
-
-        function startInteractiveTour() {
-          currentTourStep = 0;
-          showTourStep(0);
-        }
-
-        function showTourStep(idx) {
-          const step = tourSteps[idx];
-          document.querySelectorAll('.tour-highlight').forEach(el => el.classList.remove('tour-highlight'));
-          if (step.elementId) {
-            const target = document.getElementById(step.elementId);
-            if (target) target.classList.add('tour-highlight');
-          }
-          document.getElementById('tourTitle').textContent = step.title;
-          document.getElementById('tourText').textContent = step.text;
-          document.getElementById('tourStepIndicator').textContent = 'step ' + (idx + 1) + ' of ' + tourSteps.length;
-          document.getElementById('tourNextBtn').textContent = (idx === tourSteps.length - 1) ? 'finish tour' : 'next';
-          document.getElementById('tourModal').classList.add('open');
-        }
-
-        window.nextTourStep = function() {
-          currentTourStep++;
-          if (currentTourStep < tourSteps.length) {
-            showTourStep(currentTourStep);
-          } else {
-            document.querySelectorAll('.tour-highlight').forEach(el => el.classList.remove('tour-highlight'));
-            closeModal('tourModal');
-            localStorage.setItem('eagle_tut', 'true');
           }
         };
 
@@ -768,7 +867,6 @@
           document.getElementById('pomoFloatDisplay').textContent = (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
         }
 
-        // Make Pomodoro Widget Draggable
         const floatEl = document.getElementById('floatingPomodoro');
         let isDragging = false, dragX = 0, dragY = 0;
         floatEl.onmousedown = function(e) {
@@ -792,15 +890,9 @@
             versionEnteredCode += num;
             document.getElementById('versionCodeDisplay').textContent = '•'.repeat(versionEnteredCode.length).padEnd(4, '_');
             if (versionEnteredCode.length === 4) {
-              const validCodes = ['3166', '2702', '1918', '4625'];
-              if (validCodes.includes(versionEnteredCode)) {
+              if (versionEnteredCode === '3166') {
                 document.getElementById('versionKeypadSection').style.display = 'none';
                 document.getElementById('versionButtonsPanel').style.display = 'flex';
-                if (versionEnteredCode === '3166') {
-                  document.getElementById('editorLinkBtn').style.display = 'block';
-                } else {
-                  document.getElementById('editorLinkBtn').style.display = 'none';
-                }
               } else {
                 alert('incorrect code!');
                 versionEnteredCode = '';
@@ -827,8 +919,6 @@
             window.location.href = 'https://cdn.jsdelivr.net/gh/mathbuddies/leawoodmiddle@main/index.svg?v=' + Date.now();
           } else if (type === 'github') {
             window.location.href = 'https://raw.githubusercontent.com/mathbuddies/leawoodmiddle/main/index.svg?v=' + Date.now();
-          } else if (type === 'editor') {
-            window.location.href = 'https://github.com/mathbuddies/leawoodmiddle/tree/main';
           }
         };
 
@@ -897,10 +987,7 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ message: msg })
               });
-              alert('broadcast published successfully!');
-            } catch (e) {
-              alert('broadcast published locally.');
-            }
+            } catch (e) {}
             document.getElementById('notifContent').textContent = msg;
             localStorage.setItem('eagle_announcement', msg);
             closeModal('ownerModal');
@@ -952,23 +1039,6 @@
           setAccent(localStorage.getItem('eagle_accent') || '#38bdf8');
 
           document.getElementById('creditsSelect').onchange = updateCreditsContent;
-
-          // Fetch JSONBin announcement
-          fetch('https://api.jsonbin.io/v3/b/6ade824bac6210605a51b40a/latest')
-            .then(res => res.json())
-            .then(data => {
-              if (data && data.record && data.record.message) {
-                const remoteMsg = data.record.message;
-                document.getElementById('notifContent').textContent = remoteMsg;
-                localStorage.setItem('eagle_announcement', remoteMsg);
-              }
-            })
-            .catch(() => {
-              const localAnnounce = localStorage.getItem('eagle_announcement');
-              if (localAnnounce) {
-                document.getElementById('notifContent').textContent = localAnnounce;
-              }
-            });
 
           const savedBg = localStorage.getItem('eagle_bg');
           if (savedBg) {
@@ -1051,10 +1121,10 @@
           const savedNotes = localStorage.getItem('eagle_notes') || '';
           document.getElementById('widgetNotesDisplay').textContent = savedNotes || 'click to open notes app...';
 
-          if (!localStorage.getItem('eagle_tut')) {
+          if (!localStorage.getItem('eagle_user_name')) {
             document.getElementById('nameModal').style.display = 'flex';
           } else {
-            updateProfileUI(localStorage.getItem('eagle_user_name') || 'Gamer');
+            updateProfileUI(localStorage.getItem('eagle_user_name'));
           }
 
           renderEvents();
