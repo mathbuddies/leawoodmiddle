@@ -645,7 +645,7 @@
         const creditsData = {
           credits: "made by Scott 😛 v0.6.4.0 release",
           updates: "v0.6.4.0: introduced the eagle AI assistant with image attachments and a full calculator app!",
-          notes: "hey, it’s me, it’s Scott 🙃\n\nv0.6.4.0 is live with AI and calculator tools!\n\n‘EVIL 3ECUR1Y!! U WILL NOT PREVAIL!!’ \n-Saige…\n\nOUT OF EARLY ACCESS BY THE NEW YEAR!!! (hopefully)"
+          notes: "hey, it’s me, it’s Scott 🙃\n\nv0.6.4.0 is live with AI and calculator tools!\n\n‘EVIL 3ECUR1Y!! U WILL NOT PREVAIL!!’ \n-Saige…\n\nOUT OF EARLY ACCESS BY THE NEW YEAR!!! (hopefully)\n\n Parker was here 💩"
         };
 
         function updateCreditsContent() {
